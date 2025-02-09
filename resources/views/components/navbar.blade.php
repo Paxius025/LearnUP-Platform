@@ -10,6 +10,21 @@
             <a href="{{ route('user.posts.index') }}" class="hover:underline">📖 My Posts</a>
             <a href="{{ route('user.posts.create') }}" class="hover:underline">📝 Create Post</a>
         @endif
+
+        <!-- 🔔 แสดงไอคอนแจ้งเตือน -->
+        <a href="{{ route('notifications.index') }}" class="relative hover:underline">
+            🔔 Notifications
+            @php
+                $unreadCount = App\Models\Notification::where('user_id', auth()->id())
+                    ->where('is_read', false)
+                    ->count();
+            @endphp
+            @if ($unreadCount > 0)
+                <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs absolute top-0 right-0">
+                    {{ $unreadCount }}
+                </span>
+            @endif
+        </a>
     </div>
     <form action="{{ route('logout') }}" method="POST">
         @csrf

@@ -2,8 +2,13 @@
 
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+
+// Auth Controllers
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+
+// User Controllers
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\PostController;
 
@@ -12,6 +17,7 @@ use App\Http\Controllers\Admin\PostApprovalController;
 use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardManagementController;
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
@@ -22,7 +28,7 @@ Route::post('/register', [RegisterController::class, 'register']);
 // Login User
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 // User Dashboard
 Route::middleware(['auth'])->group(function () {

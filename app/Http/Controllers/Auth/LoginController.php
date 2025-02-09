@@ -25,7 +25,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
-
+            logAction('login', "User {$user->name} ({$user->email}) logged in.");
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } else {

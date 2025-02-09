@@ -62,19 +62,3 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/posts/{post}/approve', [PostApprovalController::class, 'approve'])->name('posts.approve');
     Route::post('/posts/{post}/reject', [PostApprovalController::class, 'reject'])->name('posts.reject');
 });
-
-use App\Http\Controllers\NotificationController;
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
-    Route::post('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-});
-
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/notifications/send', function () {
-        return view('admin.notifications.send');
-    })->name('notifications.create');
-
-    Route::post('/admin/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
-});

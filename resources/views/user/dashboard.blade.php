@@ -12,10 +12,7 @@
 
     <!-- Content -->
     <div class="max-w-4xl mx-auto mt-10">
-        <h2 class="text-3xl font-bold text-gray-800">Welcome, {{ auth()->user()->name }}!</h2>
-        <p class="text-gray-600 mt-2">This is your dashboard where you can see all approved posts.</p>
-
-        <!-- แสดงโพสต์ที่ถูกอนุมัติแล้ว -->
+               <!-- แสดงโพสต์ที่ถูกอนุมัติแล้ว -->
         <div class="mt-6 space-y-4">
             @foreach ($posts as $post)
                 <div class="p-4 bg-white shadow rounded-lg">

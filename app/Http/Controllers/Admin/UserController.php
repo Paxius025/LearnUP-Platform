@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -35,13 +36,12 @@ class UserController extends Controller
 
         if (Auth::id() === $user->id) {
             Auth::logout();
+            $user = User::find($user->id); 
             Auth::login($user);
-            session()->regenerate(); 
+            session()->regenerate();
         }
-
         return redirect()->route('admin.users')->with('success', 'User updated successfully.');
     }
-
 
     public function destroy(User $user)
     {

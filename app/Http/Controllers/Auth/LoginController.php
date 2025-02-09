@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -15,18 +16,21 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // ตรวจสอบข้อมูล
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
-
-        // พยายามเข้าสู่ระบบ
         $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember'); // ตรวจสอบ Remember Me
+        $remember = $request->has('remember'); 
 
         if (Auth::attempt($credentials, $remember)) {
-            return redirect()->route('user.dashboard');
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('user.dashboard');
+            }
         }
 
         return back()->with('error', 'Invalid email or password');

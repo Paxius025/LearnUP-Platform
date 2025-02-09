@@ -8,7 +8,7 @@ use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-
+use App\Models\Log;
 
 class PostController extends Controller
 {
@@ -48,13 +48,15 @@ class PostController extends Controller
 
         $status = in_array(Auth::user()->role, ['admin', 'writer']) ? 'approved' : 'pending';
 
-        Post::create([
+        $post = Post::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
             'pdf_file' => $pdfPath,
             'status' => $status,
-        ]);    
+        ]);
+
+        logAction('create_post', "Created post: {$post->title}");
 
         return redirect()->route('user.posts.index')->with('success', 'Post created successfully.');
     }
@@ -92,6 +94,9 @@ class PostController extends Controller
         if ($post->user_id !== Auth::id()) {
             abort(403);
         } 
+
+        logAction('delete_post', "Deleted post: {$post->title}");
+        
         if ($post->pdf_file) {
             Storage::delete("public/{$post->pdf_file}");
         }
@@ -129,6 +134,8 @@ class PostController extends Controller
         if ($post->status !== 'approved' && $post->user_id !== auth()->id()) {
             abort(403, 'You are not authorized to view this post.');
         }
+        
+        logAction('create_post', "Created post: {$post->title}");
 
         return view('user.posts.detail', compact('post'));
     }

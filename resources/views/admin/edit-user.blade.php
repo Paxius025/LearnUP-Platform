@@ -30,7 +30,8 @@
                 <select id="role" name="role" class="w-full p-3 border rounded-lg">
                     <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
                     <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
-                </select>
+                    <option value="writer" {{ $user->role === 'writer' ? 'selected' : '' }}>Writer</option>
+                </select>                
             </div>
 
             <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg">Update</button>

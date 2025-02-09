@@ -121,4 +121,14 @@ class PostController extends Controller
         return view('user.posts.show', compact('post'));
     }
 
+    public function detail(Post $post)
+    {
+        // ตรวจสอบว่าโพสต์ถูกอนุมัติหรือเป็นเจ้าของโพสต์
+        if ($post->status !== 'approved' && $post->user_id !== auth()->id()) {
+            abort(403, 'You are not authorized to view this post.');
+        }
+
+        return view('user.posts.detail', compact('post'));
+    }
+
 }

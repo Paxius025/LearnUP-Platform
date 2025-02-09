@@ -33,5 +33,6 @@ Route::middleware(['auth'])->prefix('posts')->name('user.posts.')->group(functio
     Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
     Route::post('/update/{post}', [PostController::class, 'update'])->name('update');
     Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('delete');
-    Route::get('/{post}', [PostController::class, 'show'])->name('show'); // Route สำหรับแสดงโพสต์เดี่ยว
+    Route::get('/{post}', [PostController::class, 'show'])->name('show');
+    Route::get('/posts/{post}', [PostController::class, 'detail'])->name('detail');
 });

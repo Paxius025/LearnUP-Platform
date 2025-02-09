@@ -34,8 +34,59 @@
                     🗑️ Delete
                 </button>
             </form>
+
+            <!-- ฟอร์มแสดงความคิดเห็น -->
+            <form action="{{ route('comment.store', $post->id) }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <textarea name="content" rows="3" class="w-full p-3 border rounded-lg" placeholder="Write a comment..." required></textarea>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg">Post Comment</button>
+            </form>
+            <!-- แสดงความคิดเห็น -->
+            @foreach ($post->comments()->whereNull('parent_id')->latest()->get() as $comment)
+            <div class="mt-4 p-4 bg-gray-100 rounded-lg">
+                <p class="font-bold">{{ $comment->user->name }}</p>
+                <p class="text-gray-600">{{ $comment->content }}</p>
+
+                <!-- ปุ่มลบคอมเมนต์ -->
+                @if (auth()->id() === $comment->user_id || auth()->user()->isAdmin())
+                    <form action="{{ route('comment.destroy', $comment->id) }}" method="POST" class="mt-2">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-500 hover:underline">Delete</button>
+                    </form>
+                @endif
+
+                <!-- ปุ่มตอบกลับ -->
+                <button onclick="showReplyForm({{ $comment->id }})" class="text-blue-600 hover:underline">Reply</button>
+
+                <!-- ฟอร์มตอบกลับ -->
+                <form action="{{ route('comment.store', $post->id) }}" method="POST" id="reply-form-{{ $comment->id }}" class="hidden mt-2">
+                    @csrf
+                    <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                    <textarea name="content" rows="2" class="w-full p-2 border rounded-lg" placeholder="Write a reply..." required></textarea>
+                    <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">Reply</button>
+                </form>
+
+                <!-- แสดงการตอบกลับ -->
+                @foreach ($comment->replies as $reply)
+                    <div class="ml-8 mt-2 p-3 bg-gray-200 rounded-lg">
+                        <p class="font-bold">{{ $reply->user->name }}</p>
+                        <p class="text-gray-600">{{ $reply->content }}</p>
+                    </div>
+                @endforeach
+            </div>
+            @endforeach
+
         </div>
     </div>
 
 </body>
+<script>
+    function showReplyForm(commentId) {
+        document.getElementById("reply-form-" + commentId).classList.toggle("hidden");
+    }
+</script>
+
 </html>

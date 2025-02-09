@@ -18,6 +18,10 @@ use App\Http\Controllers\Admin\LogController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardManagementController;
 
+// Comment Controller
+use App\Http\Controllers\CommentController;
+
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
@@ -61,4 +65,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/posts/{post}', [PostApprovalController::class, 'detail'])->name('posts.detail');
     Route::post('/posts/{post}/approve', [PostApprovalController::class, 'approve'])->name('posts.approve');
     Route::post('/posts/{post}/reject', [PostApprovalController::class, 'reject'])->name('posts.reject');
+});
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 });

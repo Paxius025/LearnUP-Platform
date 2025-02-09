@@ -5,7 +5,7 @@
             <a href="{{ route('admin.dashboard') }}" class="hover:underline">🏠 Admin Dashboard</a>
             <a href="{{ route('admin.logs') }}" class="hover:underline">📜 Logs</a>
             <a href="{{ route('admin.users') }}" class="hover:underline">👥 Manage Users</a>
-        @else
+            @else
             <a href="{{ route('user.dashboard') }}" class="hover:underline">🏠 Dashboard</a>
             <a href="{{ route('user.posts.index') }}" class="hover:underline">📖 My Posts</a>
             <a href="{{ route('user.posts.create') }}" class="hover:underline">📝 Create Post</a>

@@ -19,7 +19,6 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardManagementController;
 
 // Comment Controller
-use App\Http\Controllers\CommentController;
 
 
 // Home

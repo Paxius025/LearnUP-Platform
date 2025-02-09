@@ -46,13 +46,15 @@ class PostController extends Controller
             $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
         }
 
+        $status = in_array(Auth::user()->role, ['admin', 'writer']) ? 'approved' : 'pending';
+
         Post::create([
             'user_id' => Auth::id(),
             'title' => $request->title,
             'content' => $request->content,
             'pdf_file' => $pdfPath,
-            'status' => 'pending',
-        ]);
+            'status' => $status,
+        ]);    
 
         return redirect()->route('user.posts.index')->with('success', 'Post created successfully.');
     }

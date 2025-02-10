@@ -16,8 +16,8 @@
     <div class="space-x-6 flex items-center">
         @if (auth()->user()->role === 'admin')
             <a href="{{ route('admin.dashboard') }}" class="hover:text-green-200 transition-colors">🏠 Admin Dashboard</a>
-            <a href="{{ route('admin.logs') }}" class="hover:text-green-200 transition-colors">📜 Logs</a>
             <a href="{{ route('admin.users') }}" class="hover:text-green-200 transition-colors">👥 Manage Users</a>
+            <a href="{{ route('admin.logs') }}" class="hover:text-green-200 transition-colors">📜 Logs</a>
         @else
             <a href="{{ route('user.dashboard') }}" class="hover:text-green-200 transition-colors">🏠 Dashboard</a>
             <a href="{{ route('user.posts.create') }}" class="hover:text-green-200 transition-colors">📝 Create Post</a>
@@ -30,11 +30,11 @@
                                        ->where('is_read', false)
                                        ->count();
         @endphp
-        <a href="{{ route('notifications.index') }}" class="relative hover:text-green-200 transition-colors">
-            🔔 Notifications
+        <a href="{{ route('notifications.index') }}" class="relative flex items-center hover:text-green-200 transition-colors">
+            🔔 Notifications&nbsp;&nbsp;&nbsp;&nbsp;
             @if ($unreadCount > 0)
-                <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                    {{ $unreadCount }}
+                <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full -mr-2 -mt-2">
+                    {{  $unreadCount }}
                 </span>
             @endif
         </a>
@@ -52,5 +52,3 @@
 
 </body>
 </html>
-
-</nav>

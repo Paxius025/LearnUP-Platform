@@ -11,7 +11,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-4xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="max-w-4xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
         @foreach ($posts as $post)
             <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-72">
                 <!-- 🔹 รูปภาพ (แสดงแค่ 1 ภาพ และทำให้มีอัตราส่วน 4:3) -->

@@ -53,13 +53,17 @@ class NotificationController extends Controller
 
     public function deleteReadNotifications()
     {
-        Notification::where('user_id', Auth::id())
-                    ->where('is_read', true)
-                    ->delete();
+        $deletedCount = Notification::where('user_id', Auth::id())
+                                    ->where('is_read', true)
+                                    ->delete();
 
         logAction('delete_all_read_notifications', "User " . Auth::user()->username . " ลบแจ้งเตือนที่อ่านแล้วทั้งหมด");
 
-        return response()->json(['success' => true, 'message' => 'ลบแจ้งเตือนที่อ่านแล้วทั้งหมดสำเร็จ']);
+        return response()->json([
+            'success' => true,
+            'message' => "ลบแจ้งเตือนที่อ่านแล้วสำเร็จ ({$deletedCount} รายการ)"
+        ]);
     }
+
 
 }

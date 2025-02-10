@@ -20,7 +20,8 @@
             <ul class="space-y-4" id="notification-list">
                 @foreach ($notifications as $notification)
                     <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
-                        data-id="{{ $notification->id }}"
+                        data-id="{{ $notification->id }}" data-read="{{ $notification->is_read ? 'true' : 'false' }}" <!-- ✅
+                        ใช้ data-read -->
                         style="background-color: {{ $notification->is_read ? '#f3f4f6' : '#c3daf8' }};">
 
                         <span class="text-gray-800">
@@ -96,7 +97,7 @@
             if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแจ้งเตือนที่อ่านแล้วทั้งหมด?')) return;
 
             try {
-                let response = await fetch('/notifications/delete-read', {
+                let response = await fetch("{{ route('notifications.deleteRead') }}", {
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -107,10 +108,11 @@
                 let data = await response.json();
                 if (data.success) {
                     document.querySelectorAll('.notification-item').forEach(item => {
-                        if (item.style.backgroundColor === 'rgb(243, 244, 246)') { // เช็คสี background ของ "อ่านแล้ว"
+                        if (item.dataset.read === "true") {
                             item.remove();
                         }
                     });
+                    alert(data.message);
                     updateNotificationCount();
                 }
             } catch (error) {

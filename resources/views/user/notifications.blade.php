@@ -19,7 +19,7 @@
 
                     <div class="space-x-2">
                         @if (!$notification->is_read)
-                            <button onclick="markAsRead({{ $notification->id }})"
+                            <button id="mark-read-{{ $notification->id }}" onclick="markAsRead({{ $notification->id }})"
                                 class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
                                 ✔️ อ่านแล้ว
                             </button>
@@ -37,7 +37,7 @@
 </div>
 
 <script>
-    async function markAsRead(id) {
+   async function markAsRead(id) {
         try {
             let response = await fetch(`/notifications/${id}/read`, {
                 method: 'PATCH',
@@ -48,7 +48,17 @@
             });
 
             if (response.ok) {
-                document.querySelector(`[data-id='${id}']`).style.backgroundColor = '#f3f4f6';
+                let notificationItem = document.querySelector(`[data-id='${id}']`);
+                if (notificationItem) {
+                    // เปลี่ยนพื้นหลังให้เป็นแจ้งเตือนที่อ่านแล้ว
+                    notificationItem.style.backgroundColor = '#f3f4f6';
+                    
+                    // ซ่อนปุ่ม "✔️ อ่านแล้ว"
+                    let markReadButton = document.getElementById(`mark-read-${id}`);
+                    if (markReadButton) {
+                        markReadButton.remove();
+                    }
+                }
                 updateNotificationCount();
             }
         } catch (error) {

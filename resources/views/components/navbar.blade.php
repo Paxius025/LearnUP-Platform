@@ -18,6 +18,7 @@
             <a href="{{ route('admin.dashboard') }}" class="hover:text-green-200 transition-colors">🏠 Admin Dashboard</a>
             <a href="{{ route('admin.users') }}" class="hover:text-green-200 transition-colors">👥 Manage Users</a>
             <a href="{{ route('admin.logs') }}" class="hover:text-green-200 transition-colors">📜 Logs</a>
+            <a href="{{ route('admin.stat') }}" class="hover:text-green-200 transition-colors">📊 Log Statistics</a>
         @else
             <a href="{{ route('user.dashboard') }}" class="hover:text-green-200 transition-colors">🏠 Dashboard</a>
             <a href="{{ route('user.posts.create') }}" class="hover:text-green-200 transition-colors">📝 Create Post</a>

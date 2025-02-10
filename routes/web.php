@@ -58,6 +58,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/dashboard', [DashboardManagementController::class, 'index'])->name('dashboard');
     Route::get('/approvals', [PostApprovalController::class, 'index'])->name('approval');
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
+    Route::get('/stat', [LogController::class, 'stat'])->name('stat');
     
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');

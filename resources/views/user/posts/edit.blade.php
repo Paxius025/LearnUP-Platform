@@ -9,7 +9,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 min-h-screen">
-
+    @include('components.navbar')
     <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold">Edit Post</h2>
 

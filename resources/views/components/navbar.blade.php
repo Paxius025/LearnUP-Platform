@@ -8,8 +8,8 @@
             <a href="{{ route('admin.users') }}" class="hover:underline">👥 Manage Users</a>
         @else
             <a href="{{ route('user.dashboard') }}" class="hover:underline">🏠 Dashboard</a>
-            <a href="{{ route('user.posts.index') }}" class="hover:underline">📖 My Posts</a>
             <a href="{{ route('user.posts.create') }}" class="hover:underline">📝 Create Post</a>
+            <a href="{{ route('user.posts.index') }}" class="hover:underline">📖 My Posts</a>
         @endif
 
         <!-- 🔔 Notification Badge -->

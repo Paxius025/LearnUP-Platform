@@ -1,6 +1,7 @@
 @extends('layouts.app')
-
+@include('components.navbar')
 @section('content')
+
 <div class="max-w-3xl mx-auto mt-10 bg-white p-6 shadow-md rounded-lg">
     <h2 class="text-2xl font-bold mb-4">🔔 การแจ้งเตือน</h2>
 

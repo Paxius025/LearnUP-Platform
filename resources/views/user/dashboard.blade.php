@@ -9,7 +9,6 @@
 <body class="bg-gray-100 min-h-screen">
 
     @include('components.navbar')
-
     <!-- Content -->
     <div class="max-w-4xl mx-auto mt-10">
                <!-- แสดงโพสต์ที่ถูกอนุมัติแล้ว -->

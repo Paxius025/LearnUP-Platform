@@ -151,6 +151,8 @@ class PostController extends Controller
         
         logAction('create_post', "Created post: {$post->title}");
 
+        
+        
         return view('user.posts.detail', compact('post'));
     }
 

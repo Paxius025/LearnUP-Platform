@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\DashboardManagementController;
 
 // Comment Controller
+use App\Http\Controllers\CommentController;
 
 // Notification Controller
 use App\Http\Controllers\NotificationController;
@@ -67,6 +68,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/posts/{post}/approve', [PostApprovalController::class, 'approve'])->name('posts.approve');
     Route::post('/posts/{post}/reject', [PostApprovalController::class, 'reject'])->name('posts.reject');
     Route::get('/posts/{post}/detail', [PostApprovalController::class, 'detail'])->name('admin.posts.detail');
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
 // notification
@@ -74,4 +76,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+});
+
+// Comment
+Route::middleware(['auth'])->group(function () {
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store'); // เพิ่มคอมเมนต์
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); // ลบคอมเมนต์
 });

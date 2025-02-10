@@ -22,6 +22,12 @@ class Post extends Model
     /**
      * ผู้ใช้ที่เป็นเจ้าของโพสต์
      */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+    
+     
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

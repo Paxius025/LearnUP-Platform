@@ -9,29 +9,34 @@
 <body class="bg-gray-100 min-h-screen">
 
     @include('components.navbar')
+
     <!-- Content -->
-    <div class="max-w-4xl mx-auto mt-10">
-               <!-- แสดงโพสต์ที่ถูกอนุมัติแล้ว -->
-        <div class="mt-6 space-y-4">
-            @foreach ($posts as $post)
-                <div class="p-4 bg-white shadow rounded-lg">
-                    <h3 class="text-xl font-bold">{{ $post->title }}</h3>
-                    <p class="text-gray-600">{!! Str::limit($post->content, 150) !!}</p>
+    <div class="max-w-4xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-6">
+        @foreach ($posts as $post)
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-72">
+                <!-- 🔹 รูปภาพ (แสดงแค่ 1 ภาพ และทำให้มีอัตราส่วน 4:3) -->
+                @if ($post->images && count($post->images) > 0)
+                    <div class="w-full h-[55%]">
+                        <img src="{{ Storage::url($post->images[0]) }}" class="w-full h-full object-cover">
 
-                    <div class="mt-2 flex justify-between">
-                        <a href="{{ route('user.posts.detail', $post->id) }}" class="text-blue-600 hover:underline">Read more</a>
-                        <span class="text-gray-500 text-sm">Published on {{ $post->created_at->format('M d, Y') }}</span>
                     </div>
-                    
+                @endif
+    
+                <!-- 🔹 เนื้อหาโพสต์ -->
+                <div class="p-4 flex-grow flex flex-col">
+                    <h3 class="text-lg font-bold line-clamp-2">{{ $post->title }}</h3>
+                    <div class="mt-auto flex justify-between items-center">
+                        <a href="{{ route('user.posts.detail', $post->id) }}" class="text-blue-600 hover:underline">Read more</a>
+                    </div>
                 </div>
-            @endforeach
-
-            @if ($posts->isEmpty())
-                <p class="text-gray-500 text-center mt-4">No approved posts available.</p>
-            @endif
-        </div>
-
+            </div>
+        @endforeach
+    
+        @if ($posts->isEmpty())
+            <p class="text-gray-500 text-center mt-4">No approved posts available.</p>
+        @endif
     </div>
+    
 
 </body>
 </html>

@@ -9,6 +9,11 @@ export default {
         './resources/**/*.js',
         './resources/**/*.vue',
     ],
+    safelist: [
+        'bg-blue-600', 'hover:bg-blue-700',
+        'bg-green-600', 'hover:bg-green-700',
+        'bg-orange-600', 'hover:bg-orange-700'
+    ],
     theme: {
         extend: {
             fontFamily: {

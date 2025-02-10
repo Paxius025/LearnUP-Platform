@@ -26,6 +26,9 @@
             </div>
         @endif
 
+        <!-- 🔹 คอมเมนต์ -->
+        @include('components.comment', ['post' => $post])
+
         <div class="mt-6">
             <a href="{{ route('user.dashboard') }}" class="text-gray-600 hover:underline">← Back to Dashboard</a>
         </div>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use App\Models\Log;
+use App\Models\Notification;
 
 class PostController extends Controller
 {
@@ -57,6 +58,19 @@ class PostController extends Controller
         ]);
 
         logAction('create_post', "Created post: {$post->title}");
+        
+        if ($status === 'pending') {
+            $admins = \App\Models\User::where('role', 'admin')->get(); // ดึง Admin ทุกคน
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'type' => 'new_post',
+                    'message' => "โพสต์ใหม่ \"{$post->title}\" รออนุมัติ",
+                    'is_read' => false,
+                ]);
+            }
+            logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ใหม่: {$post->title}");
+        }
 
         return redirect()->route('user.posts.index')->with('success', 'Post created successfully.');
     }

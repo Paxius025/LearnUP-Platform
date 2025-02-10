@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Log;
 
 class NotificationController extends Controller
 {
@@ -31,6 +32,9 @@ class NotificationController extends Controller
 
         $notification->markAsRead();
 
+        // ✅ เก็บ Log การอ่านแจ้งเตือน
+        logAction('read_notification', "User " . Auth::user()->username . " อ่านแจ้งเตือน: " . $notification->message);
+
         return redirect()->back()->with('success', 'แจ้งเตือนถูกอ่านแล้ว');
     }
 
@@ -43,7 +47,11 @@ class NotificationController extends Controller
                                     ->where('user_id', Auth::id())
                                     ->firstOrFail();
 
+        $message = $notification->message;
         $notification->delete();
+
+        // ✅ เก็บ Log การลบแจ้งเตือน
+        logAction('delete_notification', "User " . Auth::user()->username . " ลบแจ้งเตือน: " . $message);
 
         return redirect()->back()->with('success', 'ลบแจ้งเตือนสำเร็จ');
     }

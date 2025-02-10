@@ -84,4 +84,5 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store'); // เพิ่มคอมเมนต์
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); // ลบคอมเมนต์
+    Route::patch('/comments/{comment}/update', [CommentController::class, 'update'])->middleware('auth');
 });

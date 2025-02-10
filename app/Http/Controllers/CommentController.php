@@ -32,6 +32,25 @@ class CommentController extends Controller
         return redirect()->back()->with('success', 'คอมเมนต์ถูกเพิ่มเรียบร้อยแล้ว');
     }
 
+    public function update(Request $request, Comment $comment)
+    {
+        if (Auth::id() !== $comment->user_id) {
+            abort(403, 'คุณไม่มีสิทธิ์แก้ไขคอมเมนต์นี้');
+        }
+
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        $comment->update([
+            'content' => $request->content,
+        ]);
+
+        logAction('update_comment', "User ID " . Auth::id() . " updated Comment ID {$comment->id}");
+
+        return response()->json(['success' => true, 'message' => 'คอมเมนต์ถูกแก้ไขแล้ว', 'content' => $comment->content]);
+    }
+
     /**
      * ลบคอมเมนต์ (เฉพาะเจ้าของคอมเมนต์หรือ Admin เท่านั้น)
      */

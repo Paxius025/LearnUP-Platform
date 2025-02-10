@@ -69,7 +69,7 @@ class PostController extends Controller
                     'is_read' => false,
                 ]);
             }
-            logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ใหม่: {$post->title}");
+            logAction('notify_admin', "Notified admins about new post: {$post->title}");
         }
 
         return redirect()->route('user.posts.index')->with('success', 'Post created successfully.');
@@ -100,6 +100,7 @@ class PostController extends Controller
             'content' => $request->content,
             'pdf_file' => $pdfPath,
         ]);
+        logAction('update_post', "Updated post: {$post->title}");
 
         return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }
@@ -116,7 +117,7 @@ class PostController extends Controller
         }
 
         $post->delete();
-
+        
         return redirect()->route('user.posts.index')->with('success', 'Post deleted successfully.');
     }
 
@@ -128,7 +129,7 @@ class PostController extends Controller
 
         $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
         $path = $request->file('image')->storeAs('posts', $filename, 'public');
-
+        logAction('upload_Image', "Uploaded image: {$filename}");
         return response()->json(['url' => asset("storage/{$path}")]);
     }
 

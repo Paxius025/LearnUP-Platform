@@ -29,12 +29,12 @@ class PostApprovalController extends Controller
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_approved',
-            'message' => "โพสต์ \"{$post->title}\" ของคุณได้รับการอนุมัติ",
+            'message' => "Your post has been approved \"{$post->title}\"",
             'is_read' => false,
         ]);
     
         // ✅ เก็บ Log การอนุมัติ
-        logAction('approve_post', "Admin อนุมัติโพสต์: {$post->title}");
+        logAction('approve_post', "Admin approve post: {$post->title}");
     
         return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
     }

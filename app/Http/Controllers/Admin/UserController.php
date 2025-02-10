@@ -40,12 +40,14 @@ class UserController extends Controller
             Auth::login($user);
             session()->regenerate();
         }
+        logAction('update_user', "Updated user: {$user->name}");
         return redirect()->route('admin.users')->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
+        logAction('delete_user', "Deleted user: {$user->name}");
         return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
     }
 }

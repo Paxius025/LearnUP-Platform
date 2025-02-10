@@ -95,15 +95,34 @@ class PostController extends Controller
             $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
         }
 
+        $newStatus = ($post->status === 'approved') ? 'pending' : $post->status;
+
         $post->update([
             'title' => $request->title,
             'content' => $request->content,
             'pdf_file' => $pdfPath,
+            'status' => $newStatus, 
         ]);
+
         logAction('update_post', "Updated post: {$post->title}");
+
+        // แจ้งเตือน Admin ว่ามีโพสต์ต้องตรวจสอบใหม่
+        if ($newStatus === 'pending') {
+            $admins = \App\Models\User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Notification::create([
+                    'user_id' => $admin->id,
+                    'type' => 'updated_post',
+                    'message' => "โพสต์ \"{$post->title}\" ถูกแก้ไขและรอการอนุมัติใหม่",
+                    'is_read' => false,
+                ]);
+            }
+            logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ถูกแก้ไข: {$post->title}");
+        }
 
         return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }
+
     public function destroy(Post $post)
     {
         if ($post->user_id !== Auth::id()) {

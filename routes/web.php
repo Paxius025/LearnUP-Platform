@@ -48,11 +48,12 @@ Route::middleware(['auth'])->prefix('posts')->name('user.posts.')->group(functio
     Route::get('/create', [PostController::class, 'create'])->name('create');
     Route::post('/store', [PostController::class, 'store'])->name('store');
     Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
-    Route::post('/update/{post}', [PostController::class, 'update'])->name('update');
+    Route::put('/update/{post}', [PostController::class, 'update'])->name('update'); // ✅ เปลี่ยนเป็น PUT
     Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('delete');
-    Route::get('/{post}', [PostController::class, 'show'])->name('show'); // Route สำหรับแสดงโพสต์เดี่ยว
-    Route::get('/detail/{post}', [PostController::class, 'detail'])->name('detail'); // Route สำหรับแสดงรายละเอียดของโพสต์
+    Route::get('/{post}', [PostController::class, 'show'])->name('show'); // แสดงโพสต์เดี่ยว
+    Route::get('/detail/{post}', [PostController::class, 'detail'])->name('detail'); // รายละเอียดโพสต์
 });
+
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardManagementController::class, 'index'])->name('dashboard');

@@ -10,22 +10,36 @@
 </head>
 <body class="bg-gray-100 min-h-screen">
     @include('components.navbar')
+    
     <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold">Edit Post</h2>
 
+        <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
+        @if ($post->status === 'approved')
+            <div class="bg-yellow-200 text-yellow-800 p-3 rounded-lg mb-4">
+                ⚠️ การแก้ไขโพสต์จะทำให้โพสต์กลับไปอยู่ในสถานะ <strong>"รออนุมัติ (Pending)"</strong>
+            </div>
+        @endif
+
         <form action="{{ route('user.posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT') 
+
+            <!-- 🔹 Title -->
             <div class="mb-4">
                 <label for="title" class="block text-gray-700">Title</label>
-                <input type="text" id="title" name="title" value="{{ $post->title }}" class="w-full p-3 border rounded-lg" required>
+                <input type="text" id="title" name="title" value="{{ old('title', $post->title) }}" 
+                       class="w-full p-3 border rounded-lg" required>
             </div>
 
+            <!-- 🔹 Content -->
             <div class="mb-4">
                 <label class="block text-gray-700">Content</label>
-                <div id="editor">{!! $post->content !!}</div>
+                <div id="editor">{!! old('content', $post->content) !!}</div>
                 <input type="hidden" name="content" id="content">
             </div>
 
+            <!-- 🔹 PDF Upload -->
             <div class="mb-4">
                 <label for="pdf_file" class="block text-gray-700">Replace PDF (Optional)</label>
                 <input type="file" id="pdf_file" name="pdf_file" class="w-full p-3 border rounded-lg">
@@ -39,10 +53,14 @@
                 @endif
             </div>
 
-            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg">Update Post</button>
+            <!-- 🔹 Update Button -->
+            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                Update Post
+            </button>
         </form>
     </div>
 
+    <!-- ✅ Quill.js Script -->
     <script>
         var quill = new Quill('#editor', {
             theme: 'snow',
@@ -56,10 +74,16 @@
             }
         });
 
-        // กำหนดค่าจากโพสต์เดิม
+        // ✅ ตั้งค่าเริ่มต้นของ Quill.js
         quill.root.innerHTML = {!! json_encode($post->content) !!};
 
+        // ✅ บันทึกค่าลง input hidden ก่อนส่ง form
         quill.on('text-change', function() {
+            document.getElementById('content').value = quill.root.innerHTML;
+        });
+
+        // ✅ ป้องกันกรณีที่ Quill ไม่ได้แก้ไขอะไร แต่ต้องส่งค่าไปด้วย
+        document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('content').value = quill.root.innerHTML;
         });
     </script>

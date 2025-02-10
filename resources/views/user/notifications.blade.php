@@ -3,7 +3,16 @@
 @section('content')
 
     <div class="max-w-3xl mx-auto mt-10 bg-white p-6 shadow-md rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">🔔 การแจ้งเตือน</h2>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">🔔 การแจ้งเตือน</h2>
+
+            @if (!$notifications->isEmpty())
+                <button onclick="deleteAllReadNotifications()"
+                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    🗑️ ลบทั้งหมดที่อ่านแล้ว
+                </button>
+            @endif
+        </div>
 
         @if ($notifications->isEmpty())
             <p class="text-gray-500">ไม่มีการแจ้งเตือน</p>
@@ -52,9 +61,9 @@
                 if (data.success) {
                     let notificationItem = document.querySelector(`[data-id='${id}']`);
                     if (notificationItem) {
-                        notificationItem.style.backgroundColor = '#f3f4f6'; // เปลี่ยนเป็นสีอ่านแล้ว
+                        notificationItem.style.backgroundColor = '#f3f4f6';
                         let markReadButton = document.getElementById(`mark-read-${id}`);
-                        if (markReadButton) markReadButton.remove(); // ลบปุ่ม "✔️ อ่านแล้ว"
+                        if (markReadButton) markReadButton.remove();
                     }
                     updateNotificationCount();
                 }
@@ -75,11 +84,37 @@
 
                 let data = await response.json();
                 if (data.success) {
-                    document.querySelector(`[data-id='${id}']`).remove(); // ลบแจ้งเตือนออกจากหน้าเว็บ
+                    document.querySelector(`[data-id='${id}']`).remove();
                     updateNotificationCount();
                 }
             } catch (error) {
                 console.error('Error deleting notification:', error);
+            }
+        }
+
+        async function deleteAllReadNotifications() {
+            if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแจ้งเตือนที่อ่านแล้วทั้งหมด?')) return;
+
+            try {
+                let response = await fetch('/notifications/delete-read', {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+                let data = await response.json();
+                if (data.success) {
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        if (item.style.backgroundColor === 'rgb(243, 244, 246)') { // เช็คสี background ของ "อ่านแล้ว"
+                            item.remove();
+                        }
+                    });
+                    updateNotificationCount();
+                }
+            } catch (error) {
+                console.error('Error deleting read notifications:', error);
             }
         }
 

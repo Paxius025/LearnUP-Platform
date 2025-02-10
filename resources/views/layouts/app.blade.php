@@ -6,3 +6,10 @@
     <title>User Dashboard - Learn Up</title>
     @vite('resources/css/app.css')
 </head>
+<body>
+    @include('components.navbar')
+
+    <div class="container mx-auto mt-6">
+        @yield('content')
+    </div>
+</body>

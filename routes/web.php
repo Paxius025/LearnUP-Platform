@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\DashboardManagementController;
 
 // Comment Controller
 
+// Notification Controller
+use App\Http\Controllers\NotificationController;
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -64,10 +66,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/posts/{post}', [PostApprovalController::class, 'detail'])->name('posts.detail');
     Route::post('/posts/{post}/approve', [PostApprovalController::class, 'approve'])->name('posts.approve');
     Route::post('/posts/{post}/reject', [PostApprovalController::class, 'reject'])->name('posts.reject');
+    Route::get('/posts/{post}/detail', [PostApprovalController::class, 'detail'])->name('admin.posts.detail');
 });
 
-
+// notification
 Route::middleware(['auth'])->group(function () {
-    Route::post('/posts/{post}/comment', [CommentController::class, 'store'])->name('comment.store');
-    Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });

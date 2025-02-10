@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'role',
@@ -46,4 +47,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function getUsernameAttribute()
+    {
+        return $this->attributes['username'] ?? $this->attributes['name']; 
+    }
+
 }

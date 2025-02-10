@@ -20,7 +20,7 @@
         @foreach ($post->comments as $comment)
             <div class="p-4 bg-gray-100 rounded-lg">
                 <p class="text-gray-800">
-                    <strong>{{ $comment->user->username }} ({{ ucfirst($comment->user->role) }})</strong>: {{ $comment->content }}
+                    <strong>{{ $comment->user->name }} ({{ ucfirst($comment->user->role) }})</strong>: {{ $comment->content }}
                 </p>
                 <p class="text-gray-500 text-sm">{{ $comment->created_at->diffForHumans() }}</p>
 

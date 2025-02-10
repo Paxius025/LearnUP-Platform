@@ -1,7 +1,7 @@
-<nav class="bg-blue-600 p-4 text-white flex justify-between items-center">
+<nav class="bg-green-600 p-4 text-white flex justify-between items-center">
     <h1 class="text-xl font-bold">Learn Up</h1>
     
-    <div class="space-x-4 flex items-center">
+    <div class="space-x-6 flex items-center">
         @if (auth()->user()->role === 'admin')
             <a href="{{ route('admin.dashboard') }}" class="hover:underline">🏠 Admin Dashboard</a>
             <a href="{{ route('admin.logs') }}" class="hover:underline">📜 Logs</a>
@@ -17,7 +17,6 @@
             $unreadCount = \App\Models\Notification::where('user_id', auth()->id())
                                        ->where('is_read', false)
                                        ->count();
-
         @endphp
         <a href="{{ route('notifications.index') }}" class="relative hover:underline">
             🔔 Notifications

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Log;
 use Carbon\Carbon;
+use App\Models\Post;
+use App\Models\User;
 class LogController extends Controller
 {
     public function index()
@@ -15,7 +17,13 @@ class LogController extends Controller
     }
 
     public function stat()
-    {
+    {   
+        $totalPosts = Post::count();
+        $totalUsers = User::count();
+        $totalWriters = User::where('role', 'writer')->count();
+        $totalAdmins = User::where('role', 'admin')->count();
+        $totalLogs = Log::count();
+        
         // ดึงข้อมูล Log ตามประเภท (action) และนับจำนวนครั้งที่เกิดขึ้น
         $logStats = Log::selectRaw('action, COUNT(*) as count')
             ->groupBy('action')
@@ -29,6 +37,14 @@ class LogController extends Controller
             ->orderByRaw('DATE(created_at) ASC')
             ->get();
 
-        return view('admin.stat', compact('logStats', 'logTrends'));
+            return view('admin.stat', compact(
+                'logStats',
+                'logTrends',
+                'totalPosts',
+                'totalUsers',
+                'totalWriters',
+                'totalAdmins',
+                'totalLogs'
+            ));
     }
 }

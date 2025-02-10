@@ -32,15 +32,11 @@ class NotificationController extends Controller
 
         $notification->markAsRead();
 
-        // ✅ เก็บ Log การอ่านแจ้งเตือน
         logAction('read_notification', "User " . Auth::user()->username . " อ่านแจ้งเตือน: " . $notification->message);
 
-        return redirect()->back()->with('success', 'แจ้งเตือนถูกอ่านแล้ว');
+        return response()->json(['success' => true, 'message' => 'แจ้งเตือนถูกอ่านแล้ว']);
     }
 
-    /**
-     * ลบแจ้งเตือน
-     */
     public function destroy($id)
     {
         $notification = Notification::where('id', $id)
@@ -50,9 +46,8 @@ class NotificationController extends Controller
         $message = $notification->message;
         $notification->delete();
 
-        // ✅ เก็บ Log การลบแจ้งเตือน
         logAction('delete_notification', "User " . Auth::user()->username . " ลบแจ้งเตือน: " . $message);
 
-        return redirect()->back()->with('success', 'ลบแจ้งเตือนสำเร็จ');
+        return response()->json(['success' => true, 'message' => 'ลบแจ้งเตือนสำเร็จ']);
     }
 }

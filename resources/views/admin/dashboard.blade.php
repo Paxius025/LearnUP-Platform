@@ -14,7 +14,7 @@
         <h2 class="text-3xl font-bold text-green-700">Admin Dashboard</h2>
 
         <!-- Section: Summary -->
-        <div class="grid grid-cols-3 gap-6 mt-6">
+        <div class="grid grid-cols-4 gap-6 mt-6">
             <div class="p-6 bg-white shadow-lg rounded-lg">
                 <h3 class="text-lg font-bold text-green-700">Total Posts</h3>
                 <p class="text-gray-600 text-xl">{{ $totalPosts }}</p>
@@ -26,6 +26,11 @@
             <div class="p-6 bg-white shadow-lg rounded-lg">
                 <h3 class="text-lg font-bold text-green-700">Pending Approval</h3>
                 <p class="text-gray-600 text-xl">{{ $pendingCount }}</p>
+            </div>
+
+            <div class="p-6 bg-white shadow-lg rounded-lg">
+                <h3 class="text-lg font-bold text-green-700">Reject Posts</h3>
+                <p class="text-gray-600 text-xl">{{ $rejectedPosts }}</p>
             </div>
         </div>
 

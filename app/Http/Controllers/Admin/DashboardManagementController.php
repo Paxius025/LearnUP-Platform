@@ -15,7 +15,7 @@ class DashboardManagementController extends Controller
         $totalPosts = Post::count();
         $approvedPosts = Post::where('status', 'approved')->count();
         $pendingCount = Post::where('status', 'pending')->count();
-
-        return view('admin.dashboard', compact('pendingPosts', 'totalPosts', 'approvedPosts', 'pendingCount'));
+        $rejectedPosts = Post::where('status', 'rejected')->count();
+        return view('admin.dashboard', compact('pendingPosts', 'totalPosts', 'approvedPosts', 'pendingCount', 'rejectedPosts'));
     }
 }

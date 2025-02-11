@@ -57,17 +57,27 @@
                         <p class="text-black font-bold text-xl">No Image Available</p>
                     </div>
                 @endif
+                @php
+                    $isLiked = \App\Models\Like::where('user_id', Auth::id())->where('post_id', $post->id)->exists();
+                @endphp
 
                 <!-- 🔹 Like Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
+                    <!-- ปุ่ม Like -->
                     <button id="like-button-{{ $post->id }}"
                         class="like-button text-gray-600 hover:text-blue-600 font-semibold py-2 px-4 rounded-lg border-2 border-gray-600 hover:bg-blue-100 transition duration-300 ease-in-out"
                         onclick="toggleLike({{ $post->id }})">
-                        Like
+                        <!-- เปลี่ยนข้อความปุ่มถ้าไลค์แล้ว -->
+                        @if ($isLiked)
+                            Liked
+                        @else
+                            Like
+                        @endif
                     </button>
 
-                    <span id="like-count-{{ $post->id }}" class="text-sm text-gray-500 ml-2">
-                        {{ $post->likes()->count() }} Likes <!-- แสดงจำนวนไลค์ที่มีอยู่ -->
+                    <!-- จำนวนไลค์ -->
+                    <span id="like-count-{{ $post->id }}" class="text-sm text-gray-500 ml-2 mr-4">
+                        {{ $post->likes()->count() }} Likes
                     </span>
 
                     <a href="{{ route('user.posts.detail', $post->id) }}"
@@ -75,6 +85,8 @@
                         Read More
                     </a>
                 </div>
+
+
 
             </div>
         @endforeach

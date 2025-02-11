@@ -37,22 +37,6 @@
             /* มุมโค้งล่าง */
         }
 
-        /* ปรับปุ่ม Publish ให้ใหญ่และเด่น */
-        button[type="submit"] {
-            background-color: #4CAF50;
-            /* สีเขียว */
-            border-color: #4CAF50;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #45a049;
-            /* สีเขียวเข้มเมื่อ hover */
-            border-color: #45a049;
-        }
     </style>
 </head>
 

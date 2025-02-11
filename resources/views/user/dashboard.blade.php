@@ -17,8 +17,9 @@
         <!-- ปรับความกว้างที่นี่ -->
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
-            <div class="flex items-center border border-gray-300 rounded-full p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
-                
+            <div
+                class="flex items-center border border-gray-300 rounded-full p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+
                 <!-- Input with icon inside -->
                 <div class="relative w-full">
                     <input type="text" name="query" placeholder="Search posts..."
@@ -50,9 +51,18 @@
                     @if ($firstImage)
                         <img src="{{ asset('storage/' . ltrim($firstImage, '/')) }}" alt="Post Image"
                             class="max-w-[800px] h-50 object-cover">
+                    @else
+                        <div class="flex justify-center items-center h-[450px] bg-gray-100">
+                            <p class="text-black font-bold text-xl">No Image Available</p>
+                            <!-- ข้อความอยู่ตรงกลาง, ตัวหนา, ขนาดใหญ่, สีดำ -->
+                        </div>
                     @endif
+                @else
+                    <div class="flex justify-center items-center h-[450px] bg-gray-100">
+                        <p class="text-black font-bold text-xl">No Image Available</p>
+                        <!-- ข้อความอยู่ตรงกลาง, ตัวหนา, ขนาดใหญ่, สีดำ -->
+                    </div>
                 @endif
-
                 <!-- 🔹 Read More Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
                     <a href="{{ route('user.posts.detail', $post->id) }}"

@@ -11,6 +11,12 @@ use App\Models\User;
 
 class LogController extends Controller
 {
+    public function index(Request $request)
+    {
+        $logs = Log::latest()->paginate(10);
+
+        return view('admin.logs', compact('logs'));
+    }
     public function stat(Request $request)
     {
         // ค่า default ของ range คือ 7

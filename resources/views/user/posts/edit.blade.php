@@ -7,6 +7,41 @@
     @vite('resources/css/app.css')
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        /* ปรับขนาดของ editor ให้เหมาะสม */
+        #editor {
+            min-height: 300px; /* เพิ่มความสูงของ editor */
+            border: 1px solid #ddd; /* กรอบที่มีสีอ่อน */
+            border-radius: 8px; /* มุมโค้ง */
+            padding: 16px; /* เพิ่ม padding สำหรับเนื้อหาภายใน */
+            background-color: #fafafa; /* สีพื้นหลัง */
+        }
+
+        .ql-toolbar {
+            border-radius: 8px 8px 0 0; /* มุมโค้งบน */
+            border: 1px solid #ddd; /* กรอบของ toolbar */
+            background-color: #f5f5f5; /* พื้นหลัง toolbar */
+        }
+
+        .ql-container {
+            border-radius: 0 0 8px 8px; /* มุมโค้งล่าง */
+        }
+
+        /* ปรับปุ่ม Publish ให้ใหญ่และเด่น */
+        button[type="submit"] {
+            background-color: #4CAF50; /* สีเขียว */
+            border-color: #4CAF50;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+            border-color: #45a049;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     @include('components.navbar')

@@ -107,7 +107,10 @@ Storage::delete("public/{$pdfPath}");
 $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
 }
 
-$newStatus = ($post->status === 'approved') ? 'pending' : $post->status;
+$newStatus = $post->status; // ตั้งค่าเริ่มต้นเป็นสถานะเดิม
+if (Auth::user()->role === 'user' && $post->status === 'approved') {
+$newStatus = 'pending'; // ถ้าเป็น user และสถานะเป็น approved ให้เปลี่ยนเป็น pending
+}
 
 // 🔹 ดึง path ของรูปภาพจาก content ใหม่
 preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request->content, $matches);
@@ -118,15 +121,13 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     // 🔹 แปลงให้เป็น String ไม่ใช่ JSON array
     $imagePath = count($imagePaths) > 0 ? $imagePaths[0] : null;
 
-    $status = $newStatus;
-
     $post = Post::create([
     'user_id' => Auth::id(),
     'title' => $request->title,
     'content' => $request->content, // เก็บ HTML เต็มรูปแบบ
     'image' => $imagePath, // ✅ บันทึกเฉพาะ path เดียว ไม่ใช่ JSON array
     'pdf_file' => $pdfPath,
-    'status' => $status,
+    'status' => $newStatus,
     ]);
 
     logAction('update_post', "Updated post: {$post->title}");

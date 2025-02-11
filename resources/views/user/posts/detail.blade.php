@@ -12,7 +12,9 @@
 
     <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
         <h2 class="text-3xl font-bold">{{ $post->title }}</h2>
-        <p class="text-gray-500 text-sm">Published on {{ $post->created_at->format('M d, Y') }}</p>
+        <p class="text-gray-500 text-sm">Published on {{ $post->created_at->format('M d, Y') }} by
+            <span class="font-semibold text-gray-700">{{ $post->user->name }}</span> <!-- แสดงชื่อผู้โพสต์ -->
+        </p>
 
         <div class="mt-4">
             <p class="text-gray-700">{!! $post->content !!}</p>

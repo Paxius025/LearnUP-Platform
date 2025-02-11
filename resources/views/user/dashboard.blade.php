@@ -60,17 +60,15 @@
 
                 <!-- 🔹 Like Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
-                    @php
-                        // เช็คว่าโพสต์นี้ได้รับไลค์จากผู้ใช้หรือยัง
-                        $isLiked = \App\Models\Like::where('user_id', Auth::id())
-                            ->where('post_id', $post->id)
-                            ->exists();
-                    @endphp
                     <button id="like-button-{{ $post->id }}"
                         class="like-button text-gray-600 hover:text-blue-600 font-semibold py-2 px-4 rounded-lg border-2 border-gray-600 hover:bg-blue-100 transition duration-300 ease-in-out"
                         onclick="toggleLike({{ $post->id }})">
-                        {{ $isLiked ? 'Liked' : 'Like' }}
+                        Like
                     </button>
+
+                    <span id="like-count-{{ $post->id }}" class="text-sm text-gray-500 ml-2">
+                        {{ $post->likes()->count() }} Likes <!-- แสดงจำนวนไลค์ที่มีอยู่ -->
+                    </span>
 
                     <a href="{{ route('user.posts.detail', $post->id) }}"
                         class="text-blue-600 hover:text-blue-800 hover:underline font-semibold py-2 px-4 rounded-lg border-2 border-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out">
@@ -92,19 +90,28 @@
             axios.post(`/like/${postId}`)
                 .then(response => {
                     const button = document.getElementById(`like-button-${postId}`);
+                    const likeCount = document.getElementById(`like-count-${postId}`);
+
+                    // เปลี่ยนข้อความในปุ่ม
+                    button.textContent = response.data.liked ? 'Liked' : 'Like';
+
+                    // แสดงจำนวนไลค์
+                    likeCount.textContent = `${response.data.likeCount} Likes`;
+
+                    // อัพเดทปุ่มให้เป็นสีที่เหมาะสม
                     if (response.data.liked) {
-                        button.textContent = 'Liked';
                         button.classList.add('bg-blue-100');
                         button.classList.remove('border-gray-600', 'hover:bg-blue-100');
                     } else {
-                        button.textContent = 'Like';
                         button.classList.remove('bg-blue-100');
                         button.classList.add('border-gray-600', 'hover:bg-blue-100');
                     }
+
+                    //alert(response.data.message);
                 })
                 .catch(error => {
                     console.error('There was an error!', error);
-                    //alert('Something went wrong. Please try again later.');
+                    alert('Something went wrong. Please try again later.');
                 });
         }
     </script>

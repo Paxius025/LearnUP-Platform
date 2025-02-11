@@ -38,20 +38,7 @@
             <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
 
                 <!-- 🔹 ปุ่ม Bookmark (มุมขวาบน) -->
-                @php
-                    $isBookmarked = \App\Models\FavoritePost::where('user_id', Auth::id())
-                        ->where('post_id', $post->id)
-                        ->exists();
-                @endphp
-                <button id="bookmark-button-{{ $post->id }}"
-                    class="absolute top-3 right-3 p-2 transition-transform duration-300 ease-in-out transform"
-                    onclick="toggleBookmark({{ $post->id }})">
-                    <svg id="bookmark-icon-{{ $post->id }}" xmlns="http://www.w3.org/2000/svg"
-                        fill="{{ $isBookmarked ? 'red' : 'white' }}" viewBox="0 0 24 24" stroke="currentColor"
-                        class="w-8 h-8 stroke-gray-800 hover:scale-110 transition">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v18l7-5 7 5V3z" />
-                    </svg>
-                </button>
+                <x-bookmark-button :post="$post" />
 
                 <div class="p-4">
                     <h3 class="text-lg font-bold line-clamp-2">{{ $post->title }}</h3>
@@ -106,28 +93,9 @@
             <p class="text-gray-500 text-center mt-4">No approved posts available.</p>
         @endif
     </div>
+    @vite(['resources/js/app.js'])
 
     <script>
-        function toggleBookmark(postId) {
-            axios.post(`/favorite/${postId}`)
-                .then(response => {
-                    const icon = document.getElementById(`bookmark-icon-${postId}`);
-
-                    // เปลี่ยนสีของ Bookmark
-                    icon.setAttribute("fill", response.data.bookmarked ? "red" : "white");
-
-                    // เพิ่ม Animation
-                    icon.classList.add("scale-110");
-                    setTimeout(() => {
-                        icon.classList.remove("scale-110");
-                    }, 200);
-                })
-                .catch(error => {
-                    console.error('There was an error!', error);
-                    alert('Something went wrong. Please try again later.');
-                });
-        }
-
         function toggleLike(postId) {
             axios.post(`/like/${postId}`)
                 .then(response => {

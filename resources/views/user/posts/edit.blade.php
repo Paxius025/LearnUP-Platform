@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,26 +11,36 @@
     <style>
         /* ปรับขนาดของ editor ให้เหมาะสม */
         #editor {
-            min-height: 300px; /* เพิ่มความสูงของ editor */
-            border: 1px solid #ddd; /* กรอบที่มีสีอ่อน */
-            border-radius: 8px; /* มุมโค้ง */
-            padding: 16px; /* เพิ่ม padding สำหรับเนื้อหาภายใน */
-            background-color: #fafafa; /* สีพื้นหลัง */
+            min-height: 300px;
+            /* เพิ่มความสูงของ editor */
+            border: 1px solid #ddd;
+            /* กรอบที่มีสีอ่อน */
+            border-radius: 8px;
+            /* มุมโค้ง */
+            padding: 16px;
+            /* เพิ่ม padding สำหรับเนื้อหาภายใน */
+            background-color: #fafafa;
+            /* สีพื้นหลัง */
         }
 
         .ql-toolbar {
-            border-radius: 8px 8px 0 0; /* มุมโค้งบน */
-            border: 1px solid #ddd; /* กรอบของ toolbar */
-            background-color: #f5f5f5; /* พื้นหลัง toolbar */
+            border-radius: 8px 8px 0 0;
+            /* มุมโค้งบน */
+            border: 1px solid #ddd;
+            /* กรอบของ toolbar */
+            background-color: #f5f5f5;
+            /* พื้นหลัง toolbar */
         }
 
         .ql-container {
-            border-radius: 0 0 8px 8px; /* มุมโค้งล่าง */
+            border-radius: 0 0 8px 8px;
+            /* มุมโค้งล่าง */
         }
 
         /* ปรับปุ่ม Publish ให้ใหญ่และเด่น */
         button[type="submit"] {
-            background-color: #4CAF50; /* สีเขียว */
+            background-color: #4CAF50;
+            /* สีเขียว */
             border-color: #4CAF50;
             padding: 12px 24px;
             font-size: 16px;
@@ -38,33 +49,36 @@
         }
 
         button[type="submit"]:hover {
-            background-color: #45a049; /* สีเขียวเข้มเมื่อ hover */
+            background-color: #45a049;
+            /* สีเขียวเข้มเมื่อ hover */
             border-color: #45a049;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 min-h-screen">
     @include('components.navbar')
-    
+
     <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold">Edit Post</h2>
 
         <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
-        @if ($post->status === 'approved')
+        @if ($post->status === 'approved' && auth()->user()->role !== 'writer')
             <div class="bg-yellow-200 text-yellow-800 p-3 rounded-lg mb-4">
                 ⚠️ การแก้ไขโพสต์จะทำให้โพสต์กลับไปอยู่ในสถานะ <strong>"รออนุมัติ (Pending)"</strong>
             </div>
         @endif
 
+
         <form action="{{ route('user.posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT') 
+            @method('PUT')
 
             <!-- 🔹 Title -->
             <div class="mb-4">
                 <label for="title" class="block text-gray-700">Title</label>
-                <input type="text" id="title" name="title" value="{{ old('title', $post->title) }}" 
-                       class="w-full p-3 border rounded-lg" required>
+                <input type="text" id="title" name="title" value="{{ old('title', $post->title) }}"
+                    class="w-full p-3 border rounded-lg" required>
             </div>
 
             <!-- 🔹 Content -->
@@ -80,8 +94,9 @@
                 <input type="file" id="pdf_file" name="pdf_file" class="w-full p-3 border rounded-lg">
                 @if ($post->pdf_file)
                     <p class="mt-2">
-                        Current PDF: 
-                        <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank" class="text-blue-600 hover:underline">
+                        Current PDF:
+                        <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank"
+                            class="text-blue-600 hover:underline">
                             📄 View PDF
                         </a>
                     </p>
@@ -101,10 +116,16 @@
             theme: 'snow',
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, false] }],
+                    [{
+                        'header': [1, 2, false]
+                    }],
                     ['bold', 'italic', 'underline'],
                     ['image', 'link'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }]
                 ]
             }
         });
@@ -124,4 +145,5 @@
     </script>
 
 </body>
+
 </html>

@@ -38,7 +38,7 @@
 
                     <!-- เมนูแก้ไขและลบ -->
                     <div id="comment-menu-{{ $comment->id }}"
-                        class="hidden absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-32">
+                        class="hidden absolute right-0 mt-2 bg-white shadow-lg rounded-lg w-32 z-10">
                         <div class="px-4 py-2">
                             <button onclick="showEditForm({{ $comment->id }})"
                                 class="w-full text-left text-blue-500 hover:underline text-sm">

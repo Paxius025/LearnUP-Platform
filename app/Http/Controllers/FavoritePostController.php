@@ -40,7 +40,7 @@ class FavoritePostController extends Controller
             if ($postOwner->id !== $user->id) {
                 Notification::create([
                     'user_id' => $postOwner->id,
-                    'type' => 'bookmark',
+                    'type' => 'toggle_bookmark',
                     'message' => 'Someone bookmarked your post.',
                     'is_user_read' => false,
                     'is_admin_read' => false

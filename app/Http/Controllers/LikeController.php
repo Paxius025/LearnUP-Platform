@@ -29,7 +29,7 @@ class LikeController extends Controller
             // สร้างการแจ้งเตือน
             Notification::create([
                 'user_id' => $postOwner->id,
-                'type' => 'like',
+                'type' => 'toggle_like',
                 'message' => 'Your post has received a new like.',
                 'is_user_read' => false,
                 'is_admin_read' => false

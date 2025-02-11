@@ -16,11 +16,22 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl font-bold">🔔 การแจ้งเตือน</h2>
 
-            @if (!$notifications->isEmpty() && Auth::user()->role === 'admin')
-                <button onclick="markAllAsRead()" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+            <!-- ถ้าเป็น Admin ให้แสดงปุ่ม "อ่านทั้งหมด" ของ Admin -->
+            @if (!$notifications->isEmpty() &&  Auth::user()->role === 'admin')
+                <button onclick="markAllAsReadAdmin()"
+                    class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+                    ✔️ อ่านทั้งหมด 
+                </button>
+            @endif
+
+            <!-- ถ้าเป็น User ให้แสดงปุ่ม "อ่านทั้งหมด" ของ User -->
+            @if (!$notifications->isEmpty() &&  Auth::user()->role === 'user')
+                <button onclick="markAllAsReadUser()"
+                    class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
                     ✔️ อ่านทั้งหมด
                 </button>
             @endif
+
         </div>
 
         @if ($notifications->isEmpty())
@@ -95,7 +106,8 @@
                 document.querySelectorAll('.notification-item').forEach(item => {
                     item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
                     item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
-                    item.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
+                    item.querySelector('.bg-red-500').classList.replace('bg-red-500',
+                    'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
                     item.querySelector('.bg-red-500').textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
                 });
 

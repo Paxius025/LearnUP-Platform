@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-semibold mb-6 text-green-700 flex items-center justify-between">
             <span>📊 Log Statistics</span>
             <a href="{{ route('admin.logs') }}"
-                class="inline-block px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 transform hover:scale-105 text-m">
+                class="inline-block px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 transform hover:scale-105 text-">
                 📜 View Logs
             </a>
         </h1>

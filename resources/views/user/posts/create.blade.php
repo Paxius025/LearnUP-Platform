@@ -20,7 +20,7 @@
     <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-xl">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Create New Post</h2>
 
-        <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             @csrf
             <div class="mb-6">
                 <label for="title" class="block text-gray-700 text-lg font-semibold">Title</label>
@@ -30,7 +30,8 @@
             <div class="mb-6">
                 <label class="block text-gray-700 text-lg font-semibold">Content</label>
                 <div id="editor" class="bg-white border border-gray-300 rounded-lg p-4 min-h-[500px] shadow-md"></div>
-                <input type="hidden" name="content" id="content">
+                <input type="hidden" name="content" id="content" required>
+                <div id="content-error" class="text-red-500 text-sm mt-2 hidden">Please fill out this field</div>
             </div>
 
             <div class="mb-6">
@@ -141,6 +142,15 @@
                     document.body.removeChild(modal);
                 };
             };
+        }
+
+        function validateForm() {
+            var content = document.getElementById('content').value;
+            if (!content.trim()) {
+                document.getElementById('content-error').classList.remove('hidden');
+                return false;
+            }
+            return true;
         }
     </script>
 </body>

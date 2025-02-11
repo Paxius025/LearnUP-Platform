@@ -89,31 +89,37 @@ return redirect()->route('user.posts.index')->with('success', 'Post created succ
 
 public function update(Request $request, Post $post)
 {
+// ตรวจสอบว่าโพสต์นี้เป็นของผู้ใช้งานที่ล็อกอินอยู่หรือไม่
 if ($post->user_id !== Auth::id()) {
-abort(403);
+abort(403); // ถ้าไม่ใช่เจ้าของโพสต์ให้หยุดการทำงาน
 }
 
+// ทำการ validate ข้อมูลที่ได้รับจากฟอร์ม
 $request->validate([
 'title' => 'required|string|max:255',
 'content' => 'required',
 'pdf_file' => 'nullable|mimes:pdf|max:5120',
 ]);
 
-$pdfPath = $post->pdf_file;
+$pdfPath = $post->pdf_file; // เก็บ path ของไฟล์ PDF เก่า
+// ถ้ามีการอัปโหลดไฟล์ PDF ใหม่
 if ($request->hasFile('pdf_file')) {
+// ลบไฟล์ PDF เก่าหากมี
 if ($pdfPath) {
 Storage::delete("public/{$pdfPath}");
 }
+// อัปโหลดไฟล์ PDF ใหม่
 $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
 }
 
+// ตรวจสอบสถานะใหม่สำหรับโพสต์
 $newStatus = $post->status; // ตั้งค่าเริ่มต้นเป็นสถานะเดิม
 if (Auth::user()->role === 'user' && $post->status === 'approved') {
 $newStatus = 'pending'; // ถ้าเป็น user และสถานะเป็น approved ให้เปลี่ยนเป็น pending
 }
 
 // 🔹 ดึง path ของรูปภาพจาก content ใหม่
-preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request->content, $matches);
+preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->content, $matches);
     $imagePaths = array_map(function ($path) {
     return ltrim(str_replace(asset('storage/'), '', $path), '/');
     }, $matches[1] ?? []);
@@ -121,18 +127,19 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     // 🔹 แปลงให้เป็น String ไม่ใช่ JSON array
     $imagePath = count($imagePaths) > 0 ? $imagePaths[0] : null;
 
-    $post = Post::create([
-    'user_id' => Auth::id(),
+    // อัปเดตโพสต์
+    $post->update([
     'title' => $request->title,
     'content' => $request->content, // เก็บ HTML เต็มรูปแบบ
     'image' => $imagePath, // ✅ บันทึกเฉพาะ path เดียว ไม่ใช่ JSON array
     'pdf_file' => $pdfPath,
-    'status' => $newStatus,
+    'status' => $newStatus, // อัปเดตสถานะ
     ]);
 
     logAction('update_post', "Updated post: {$post->title}");
 
     if ($newStatus === 'pending') {
+    // แจ้งเตือน Admin ว่าโพสต์นี้ต้องรอการอนุมัติใหม่
     $admins = \App\Models\User::where('role', 'admin')->get();
     foreach ($admins as $admin) {
     Notification::create([
@@ -148,23 +155,6 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }
 
-
-    public function destroy(Post $post)
-    {
-    if ($post->user_id !== Auth::id()) {
-    abort(403);
-    }
-
-    logAction('delete_post', "Deleted post: {$post->title}");
-
-    if ($post->pdf_file) {
-    Storage::delete("public/{$post->pdf_file}");
-    }
-
-    $post->delete();
-
-    return redirect()->route('user.posts.index')->with('success', 'Post deleted successfully.');
-    }
 
     public function uploadImage(Request $request)
     {

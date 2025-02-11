@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FavoritePost;
 use App\Models\Post;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class FavoritePostController extends Controller
@@ -12,6 +13,10 @@ class FavoritePostController extends Controller
     // บันทึกหรือยกเลิก Bookmark
     public function toggle($postId)
     {
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Please login before bookmarking'], 401);
+        }
+
         $user = Auth::user();
         $post = Post::findOrFail($postId);
 
@@ -27,6 +32,21 @@ class FavoritePostController extends Controller
                 'user_id' => $user->id,
                 'post_id' => $post->id,
             ]);
+
+            // ค้นหาเจ้าของโพสต์
+            $postOwner = $post->user; // Assuming the Post model has a 'user' relationship
+
+            // ถ้าเจ้าของโพสต์ไม่ใช่ผู้ที่กด Bookmark
+            if ($postOwner->id !== $user->id) {
+                Notification::create([
+                    'user_id' => $postOwner->id,
+                    'type' => 'bookmark',
+                    'message' => 'Someone bookmarked your post.',
+                    'is_user_read' => false,
+                    'is_admin_read' => false
+                ]);
+            }
+
             return response()->json(['bookmarked' => true]);
         }
     }
@@ -44,5 +64,4 @@ class FavoritePostController extends Controller
 
         return view('user.bookmarks', compact('bookmarkedPosts'));
     }
-
 }

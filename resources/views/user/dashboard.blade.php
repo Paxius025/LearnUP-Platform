@@ -18,7 +18,7 @@
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
             <div
-                class="flex items-center border border-gray-300 rounded-full p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                class="flex items-center border border-gray-300 rounded-xl p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
 
                 <!-- Input with icon inside -->
                 <div class="relative w-full">

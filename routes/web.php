@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::post('/posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload.image');
+Route::get('/search', [PostController::class, 'search'])->name('user.posts.search');
 
 Route::middleware(['auth'])->prefix('posts')->name('user.posts.')->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('index');

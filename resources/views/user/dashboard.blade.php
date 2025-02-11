@@ -15,6 +15,16 @@
     <!-- Content -->
     <div class="max-w-[800px] mx-auto mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
         <!-- ปรับความกว้างที่นี่ -->
+
+        <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
+            <div class="flex items-center border border-gray-300 rounded-lg p-2">
+                <input type="text" name="query" placeholder="Search posts..." class="w-full px-4 py-2 text-lg border-none focus:outline-none rounded-l-lg">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 focus:outline-none">
+                    Search
+                </button>
+            </div>
+        </form>
+
         @foreach ($posts as $post)
             <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col min-h-[500px]">
                 <!-- ความสูงยังคงเท่าเดิม -->

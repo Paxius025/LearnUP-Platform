@@ -88,7 +88,7 @@
 
 <script>
     // ฟังก์ชัน markAllAsRead สำหรับ Admin
-    async function markAllAsRead() {
+    async function markAllAsReadAdmin() {
         try {
             let response = await fetch("{{ route('notifications.markAllNotificationsAsReadForAdmin') }}", {
                 method: 'PATCH',
@@ -109,19 +109,23 @@
                 document.querySelectorAll('.notification-item').forEach(item => {
                     item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
                     item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
-                    item.querySelector('.bg-red-500').classList.replace('bg-red-500',
-                        'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
-                    item.querySelector('.bg-red-500').textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
-                });
 
+                    // เลือกปุ่มภายใน notification-item
+                    let markReadButton = item.querySelector('button.bg-red-500');
+                    if (markReadButton) {
+                        markReadButton.classList.replace('bg-red-500', 'bg-green-500'); // เปลี่ยนสีของปุ่ม
+                        markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความในปุ่ม
+                    }
+                });
                 updateNotificationCount();
             } else {
                 console.error('ไม่สามารถทำการอ่านแจ้งเตือนทั้งหมด');
             }
         } catch (error) {
-            console.error('Error marking all notifications as read:', error);
+            console.error('Error marking all notifications as read for Admin:', error);
         }
     }
+
 
     // ฟังก์ชัน markAsRead สำหรับ User
     async function markAsRead(id) {

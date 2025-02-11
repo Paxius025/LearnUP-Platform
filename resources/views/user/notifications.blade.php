@@ -26,53 +26,55 @@
         @if ($notifications->isEmpty())
             <p class="text-gray-500">ยังไม่มีการแจ้งเตือน</p>
         @else
-            <!-- ใน Blade template -->
             <ul class="space-y-4" id="notification-list">
                 @foreach ($notifications as $notification)
-                    <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
-                        data-id="{{ $notification->id }}"
-                        data-read="{{ $notification->is_user_read || $notification->is_admin_read ? 'true' : 'false' }}"
-                        style="background-color: {{ $notification->is_user_read || $notification->is_admin_read ? '#e0e7ff' : '#c3daf8' }};">
+                    @if (!$notification->is_user_read && !$notification->is_admin_read)
+                        <!-- เพิ่มเงื่อนไขนี้ -->
+                        <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
+                            data-id="{{ $notification->id }}"
+                            data-read="{{ $notification->is_user_read || $notification->is_admin_read ? 'true' : 'false' }}"
+                            style="background-color: {{ $notification->is_user_read || $notification->is_admin_read ? '#e0e7ff' : '#c3daf8' }};">
 
-                        <!-- แสดงชื่อผู้โพสต์ -->
-                        <span class="text-gray-800 font-semibold">
-                            {{ $notification->user->name }} ({{ ucfirst($notification->type) }})
-                        </span>
+                            <!-- แสดงชื่อผู้โพสต์ -->
+                            <span class="text-gray-800 font-semibold">
+                                {{ $notification->user->name }} ({{ ucfirst($notification->type) }})
+                            </span>
 
-                        <div class="space-x-2">
-                            @if (Auth::user()->role === 'admin')
-                                <!-- Admin จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" และ "ลบ" -->
-                                @if (!$notification->is_admin_read)
-                                    <button onclick="markAsReadAdmin({{ $notification->id }})"
-                                        class="bg-red-500 text-white px-3 py-1 rounded">
-                                        ❌ ยังไม่ถูกอ่าน
-                                    </button>
+                            <div class="space-x-2">
+                                @if (Auth::user()->role === 'admin')
+                                    <!-- Admin จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" และ "ลบ" -->
+                                    @if (!$notification->is_admin_read)
+                                        <button onclick="markAsReadAdmin({{ $notification->id }})"
+                                            class="bg-red-500 text-white px-3 py-1 rounded">
+                                            ❌ ยังไม่ถูกอ่าน
+                                        </button>
+                                    @else
+                                        <button onclick="deleteNotification({{ $notification->id }})"
+                                            class="bg-green-500 text-white px-3 py-1 rounded ">
+                                            ✔️ อ่านแล้ว
+                                        </button>
+                                    @endif
                                 @else
-                                    <button onclick="deleteNotification({{ $notification->id }})"
-                                        class="bg-green-500 text-white px-3 py-1 rounded ">
-                                        ✔️ อ่านแล้ว
-                                    </button>
+                                    <!-- User จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" -->
+                                    @if (!$notification->is_user_read)
+                                        <button onclick="markAsRead({{ $notification->id }})"
+                                            class="bg-red-500 text-white px-3 py-1 rounded ">
+                                            ❌ ยังไม่ถูกอ่าน
+                                        </button>
+                                    @else
+                                        <button onclick="deleteNotification({{ $notification->id }})"
+                                            class="bg-green-500 text-white px-3 py-1 rounded ">
+                                            ✔️ อ่านแล้ว
+                                        </button>
+                                    @endif
                                 @endif
-                            @else
-                                <!-- User จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" -->
-                                @if (!$notification->is_user_read)
-                                    <button onclick="markAsRead({{ $notification->id }})"
-                                        class="bg-red-500 text-white px-3 py-1 rounded ">
-                                        ❌ ยังไม่ถูกอ่าน
-                                    </button>
-                                @else
-                                    <button onclick="deleteNotification({{ $notification->id }})"
-                                        class="bg-green-500 text-white px-3 py-1 rounded ">
-                                        ✔️ อ่านแล้ว
-                                    </button>
-                                @endif
-                            @endif
-
-                        </div>
-                    </li>
+                            </div>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         @endif
+
     </div>
 </body>
 
@@ -99,7 +101,7 @@
                     item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
                     item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
                     item.querySelector('.bg-red-500').classList.replace('bg-red-500',
-                    'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
+                        'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
                 });
                 updateNotificationCount();
             } else {

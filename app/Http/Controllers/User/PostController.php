@@ -47,7 +47,7 @@ class PostController extends Controller
         $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
     }
 
-    $status = in_array(Auth::user()->role, ['admin', 'writer']) ? 'approved' : 'pending';
+    $status = Auth::user()->role === 'user' ? 'pending' : 'approved';
 
     // 🔹 ดึง path ของรูปภาพจาก content
     preg_match_all('/<img.*?src=["\'](.*?storage\/posts\/.*?)["\'].*?>/i', $request->content, $matches);
@@ -71,14 +71,12 @@ $post = Post::create([
 logAction('create_post', "Created post: {$post->title}");
 
 if ($status === 'pending') {
-// ตรวจสอบว่าเจ้าของโพสต์ไม่ใช่ผู้ที่สร้างโพสต์
-if (Auth::id() !== $post->user_id) {
-// ดึง Admin ทุกคน
+/// ให้ทุกโพสต์ที่สร้างใหม่จะส่งแจ้งเตือนให้ Admin
 $admins = \App\Models\User::where('role', 'admin')->get();
 foreach ($admins as $admin) {
 Notification::create([
 'user_id' => $post->user->id,
-'type' => 'new_post',
+'type' => 'send for approval',
 'message' => "\"{$post->title}\" จาก " . $post->user->name,
 'created_at' => now(),
 'is_user_read' => false,
@@ -86,7 +84,7 @@ Notification::create([
 ]);
 }
 logAction('notify_admin', "Notified admins about new post: {$post->title}");
-}
+
 }
 
 
@@ -120,19 +118,16 @@ Storage::delete("public/{$pdfPath}");
 $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
 }
 
-// ตรวจสอบสถานะใหม่สำหรับโพสต์
-$newStatus = $post->status; // ตั้งค่าเริ่มต้นเป็นสถานะเดิม
-if (Auth::user()->role === 'user' && $post->status === 'approved') {
-$newStatus = 'pending'; // ถ้าเป็น user และสถานะเป็น approved ให้เปลี่ยนเป็น pending
-}
+// ตั้งค่า status เป็น 'pending' หาก role เป็น 'user' และ 'approved' สำหรับ role อื่น
+$newStatus = Auth::user()->role === 'user' ? 'pending' : 'approved';
 
-// 🔹 ดึง path ของรูปภาพจาก content ใหม่
+// ดึง path ของรูปภาพจาก content ใหม่
 preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->content, $matches);
     $imagePaths = array_map(function ($path) {
     return ltrim(str_replace(asset('storage/'), '', $path), '/');
     }, $matches[1] ?? []);
 
-    // 🔹 แปลงให้เป็น String ไม่ใช่ JSON array
+    // แปลงให้เป็น String ไม่ใช่ JSON array
     $imagePath = count($imagePaths) > 0 ? $imagePaths[0] : null;
 
     // อัปเดตโพสต์
@@ -141,31 +136,26 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
     'content' => $request->content, // เก็บ HTML เต็มรูปแบบ
     'image' => $imagePath, // ✅ บันทึกเฉพาะ path เดียว ไม่ใช่ JSON array
     'pdf_file' => $pdfPath,
-    'status' => $newStatus, // อัปเดตสถานะ
+    'status' => $newStatus, // อัปเดตสถานะตาม role
     ]);
 
     logAction('update_post', "Updated post: {$post->title}");
 
     // แจ้งเตือน Admin เมื่อโพสต์ถูกแก้ไขและรอการอนุมัติ
-    // แจ้งเตือน Admin เมื่อโพสต์ถูกแก้ไขและรอการอนุมัติ
     if ($newStatus === 'pending') {
     // ส่งแจ้งเตือนเฉพาะ Admin เท่านั้น
-    if (Auth::id() !== $post->user_id) {
     $admins = \App\Models\User::where('role', 'admin')->get();
     foreach ($admins as $admin) {
     Notification::create([
     'user_id' => $post->user->id,
-    'type' => 'updated_post',
+    'type' => 'send for approval',
     'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " และรอการอนุมัติ",
     'is_user_read' => false, // ผู้ใช้ยังไม่ได้อ่าน
     'is_admin_read' => false, // Admin ยังไม่ได้อ่าน
     ]);
-    }
     logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ถูกแก้ไข: {$post->title}");
     }
     }
-
-
 
     return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }

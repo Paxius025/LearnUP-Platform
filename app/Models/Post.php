@@ -19,6 +19,9 @@ class Post extends Model
         'status',
     ];
 
+    protected $casts = [
+        'image' => 'array',
+    ];
     /**
      * ผู้ใช้ที่เป็นเจ้าของโพสต์
      */

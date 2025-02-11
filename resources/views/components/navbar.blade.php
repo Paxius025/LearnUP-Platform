@@ -28,9 +28,6 @@
                 <a href="{{ route('admin.stat') }}" class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
                     📊 Statistics
                 </a>
-                <a href="{{ route('admin.logs') }}" class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
-                    📜 Logs
-                </a>
             @else
                 <a href="{{ route('user.dashboard') }}" class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
                     🏠 Dashboard

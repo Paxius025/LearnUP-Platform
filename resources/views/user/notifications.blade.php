@@ -63,7 +63,6 @@
 </body>
 <script>
     // ฟังก์ชัน markAsRead ที่อยู่ด้านบนสุด
-    // ฟังก์ชัน markAsRead ที่อยู่ด้านบนสุด
     async function markAsRead(id) {
         try {
             let response = await fetch(`/notifications/${id}/read`, {

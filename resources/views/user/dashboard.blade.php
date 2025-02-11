@@ -7,6 +7,8 @@
     <title>User Dashboard - Learn Up</title>
     @vite('resources/css/app.css')
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -80,14 +82,9 @@
                 <!-- 🔹 Like & Read More Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
                     <!-- ปุ่ม Like -->
-                    <button id="like-button-{{ $post->id }}"
-                        class="like-button text-gray-600 hover:text-blue-600 font-semibold py-2 px-4 rounded-lg border-2 border-gray-600 hover:bg-blue-100 transition duration-300 ease-in-out"
-                        onclick="toggleLike({{ $post->id }})">
-                        @if ($isLiked)
-                            Liked
-                        @else
-                            Like
-                        @endif
+                    <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})"
+                        class="text-gray-600 hover:text-blue-600 transition-transform duration-300 ease-in-out transform">
+                        <i id="like-icon-{{ $post->id }}" class="fas fa-thumbs-up text-2xl"></i>
                     </button>
 
                     <!-- จำนวนไลค์ -->
@@ -104,42 +101,13 @@
         @endforeach
 
 
+
         @if ($posts->isEmpty())
             <p class="text-gray-500 text-center mt-4">No approved posts available.</p>
         @endif
     </div>
 
     <script>
-        function toggleLike(postId) {
-            axios.post(`/like/${postId}`)
-                .then(response => {
-                    const button = document.getElementById(`like-button-${postId}`);
-                    const likeCount = document.getElementById(`like-count-${postId}`);
-
-                    // เปลี่ยนข้อความในปุ่ม
-                    button.textContent = response.data.liked ? 'Liked' : 'Like';
-
-                    // แสดงจำนวนไลค์
-                    likeCount.textContent = `${response.data.likeCount} Likes`;
-
-                    // อัพเดทปุ่มให้เป็นสีที่เหมาะสม
-                    if (response.data.liked) {
-                        button.classList.add('bg-blue-100');
-                        button.classList.remove('border-gray-600', 'hover:bg-blue-100');
-                    } else {
-                        button.classList.remove('bg-blue-100');
-                        button.classList.add('border-gray-600', 'hover:bg-blue-100');
-                    }
-
-                    //alert(response.data.message);
-                })
-                .catch(error => {
-                    console.error('There was an error!', error);
-                    alert('Something went wrong. Please try again later.');
-                });
-        }
-
-        // function toggleBookmark
         function toggleBookmark(postId) {
             axios.post(`/favorite/${postId}`)
                 .then(response => {
@@ -147,6 +115,42 @@
 
                     // เปลี่ยนสีของ Bookmark
                     icon.setAttribute("fill", response.data.bookmarked ? "red" : "white");
+
+                    // เพิ่ม Animation
+                    icon.classList.add("scale-110");
+                    setTimeout(() => {
+                        icon.classList.remove("scale-110");
+                    }, 200);
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                    alert('Something went wrong. Please try again later.');
+                });
+        }
+
+        function toggleLike(postId) {
+            axios.post(`/like/${postId}`)
+                .then(response => {
+                    const icon = document.getElementById(`like-icon-${postId}`);
+                    const likeCount = document.getElementById(`like-count-${postId}`);
+
+                    // เปลี่ยนสีของ Like โดยใช้ CSS Class
+                    if (response.data.liked) {
+                        icon.classList.remove("text-gray-600");
+                        icon.classList.add("text-blue-600"); // สีเมื่อไลค์แล้ว
+                    } else {
+                        icon.classList.remove("text-blue-600");
+                        icon.classList.add("text-gray-600"); // สีปกติ
+                    }
+
+                    // อัพเดทจำนวนไลค์
+                    likeCount.textContent = `${response.data.likeCount} Likes`;
+
+                    // เพิ่ม Animation
+                    icon.classList.add("scale-110");
+                    setTimeout(() => {
+                        icon.classList.remove("scale-110");
+                    }, 200);
                 })
                 .catch(error => {
                     console.error('There was an error!', error);

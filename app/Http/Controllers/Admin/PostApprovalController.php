@@ -8,7 +8,6 @@ use App\Models\Post;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
-
 class PostApprovalController extends Controller
 {
     public function detail(Post $post)
@@ -30,7 +29,8 @@ class PostApprovalController extends Controller
             'user_id' => $post->user_id,
             'type' => 'post_approved',
             'message' => "Your post has been approved \"{$post->title}\"",
-            'is_read' => false,
+            'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
+            'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
         ]);
     
         // ✅ เก็บ Log การอนุมัติ
@@ -38,7 +38,6 @@ class PostApprovalController extends Controller
     
         return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
     }
-    
 
     public function reject(Post $post)
     {
@@ -49,7 +48,8 @@ class PostApprovalController extends Controller
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
             'message' => "โพสต์ \"{$post->title}\" ของคุณถูกปฏิเสธ",
-            'is_read' => false,
+            'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
+            'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
         ]);
 
         // ✅ เก็บ Log การปฏิเสธโพสต์
@@ -57,5 +57,4 @@ class PostApprovalController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'Post rejected successfully.');
     }
-
 }

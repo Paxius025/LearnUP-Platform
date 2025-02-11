@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+namespace App\Http\Controllers;
+
 use App\Models\Notification;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Log;
 
@@ -29,61 +31,92 @@ class NotificationController extends Controller
     }
 
     /**
-     * อัปเดตสถานะแจ้งเตือนเป็น "อ่านแล้ว"
+     * ดึงรายการแจ้งเตือนที่ยังไม่ได้อ่านของ User
      */
-    public function markAsRead($id)
+    public function getUnreadNotificationsForUser()
     {
-        $notification = Notification::where('id', $id)
-                                    ->where('user_id', Auth::id())  // ตรวจสอบว่าผู้ใช้ที่ล็อกอินต้องเป็นเจ้าของการแจ้งเตือน
-                                    ->firstOrFail();
+        $unreadNotifications = Notification::where('user_id', Auth::id())
+                                           ->where('is_user_read', false)
+                                           ->latest()
+                                           ->get();
 
-        // อัปเดตสถานะเป็น "อ่านแล้ว"
-        $notification->is_read = true;
-        $notification->save();
+        logAction('user_get_unread', "User " . Auth::user()->username . " fetched unread notifications.");
 
-        // บันทึก Log
-        logAction('read_notification', "User " . Auth::user()->username . " อ่านแจ้งเตือน: " . $notification->message);
-        
-        return response()->json(['success' => true, 'message' => 'แจ้งเตือนถูกอ่านแล้ว']);
+        return response()->json($unreadNotifications);
     }
 
+    /**
+     * ดึงรายการแจ้งเตือนที่ยังไม่ได้อ่านของ Admin
+     */
+    public function getUnreadNotificationsForAdmin()
+    {
+        $unreadNotifications = Notification::where('is_admin_read', false)
+                                           ->latest()
+                                           ->get();
 
-    public function destroy($id)
+        logAction('admin_get_unread', "Admin " . Auth::user()->username . " fetched unread notifications.");
+
+        return response()->json($unreadNotifications);
+    }
+
+    /**
+     * อัปเดตสถานะแจ้งเตือนของ User เป็น "อ่านแล้ว"
+     */
+    public function markNotificationAsReadForUser($id)
     {
         $notification = Notification::where('id', $id)
                                     ->where('user_id', Auth::id())
                                     ->firstOrFail();
 
-        $message = $notification->message;
-        $notification->delete();
+        $notification->is_user_read = true;
+        $notification->save();
 
-        logAction('delete_notification', "User " . Auth::user()->username . " ลบแจ้งเตือน: " . $message);
+        logAction('user_mark_read', "User " . Auth::user()->username . " marked notification as read: " . $notification->message);
 
-        return response()->json(['success' => true, 'message' => 'ลบแจ้งเตือนสำเร็จ']);
+        return response()->json(['success' => true, 'message' => 'แจ้งเตือนถูกอ่านแล้ว']);
     }
 
-    public function deleteReadNotifications()
+    /**
+     * อัปเดตสถานะแจ้งเตือนของ Admin เป็น "อ่านแล้ว"
+     */
+    public function markNotificationAsReadForAdmin($id)
     {
-        $deletedCount = Notification::where('user_id', Auth::id())
-                                    ->where('is_read', true)
-                                    ->delete();
+        $notification = Notification::where('id', $id)
+                                    ->where('is_admin_read', false)
+                                    ->firstOrFail();
 
-        logAction('delete_all_read_notifications', "User " . Auth::user()->username . " ลบแจ้งเตือนที่อ่านแล้วทั้งหมด");
+        $notification->is_admin_read = true;
+        $notification->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => "ลบแจ้งเตือนที่อ่านแล้วสำเร็จ ({$deletedCount} รายการ)"
-        ]);
+        logAction('admin_mark_read', "Admin " . Auth::user()->username . " marked notification as read: " . $notification->message);
+
+        return response()->json(['success' => true, 'message' => 'แจ้งเตือนถูกอ่านแล้ว']);
     }
 
-    public function getNotificationCount()
+    /**
+     * อัปเดตสถานะแจ้งเตือนทั้งหมดของ User เป็น "อ่านแล้ว"
+     */
+    public function markAllNotificationsAsReadForUser()
     {
-        // นับจำนวนการแจ้งเตือนที่ยังไม่ได้อ่าน
-        $unreadCount = Notification::where('user_id', Auth::id())
-                                ->where('is_read', false)
-                                ->count();
+        $notifications = Notification::where('user_id', Auth::id())
+                                     ->where('is_user_read', false)
+                                     ->update(['is_user_read' => true]);
 
-        return response()->json(['unreadCount' => $unreadCount]);
+        logAction('user_mark_all_read', "User " . Auth::user()->username . " marked all notifications as read.");
+
+        return response()->json(['success' => true, 'message' => "แจ้งเตือนทั้งหมดถูกอ่านแล้ว"]);
     }
 
+    /**
+     * อัปเดตสถานะแจ้งเตือนทั้งหมดของ Admin เป็น "อ่านแล้ว"
+     */
+    public function markAllNotificationsAsReadForAdmin()
+    {
+        $notifications = Notification::where('is_admin_read', false)
+                                     ->update(['is_admin_read' => true]);
+
+        logAction('admin_mark_all_read', "Admin " . Auth::user()->username . " marked all notifications as read.");
+
+        return response()->json(['success' => true, 'message' => "แจ้งเตือนทั้งหมดถูกอ่านแล้ว"]);
+    }
 }

@@ -77,10 +77,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/count', [NotificationController::class, 'getNotificationCount']);
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
-    Route::delete('/notifications/delete-read', [NotificationController::class, 'deleteReadNotifications'])->name('notifications.deleteRead');
+    Route::get('/notifications/unread/user', [NotificationController::class, 'getUnreadNotificationsForUser'])->name('notifications.getUnreadNotificationsForUser');
+    Route::get('/notifications/unread/admin', [NotificationController::class, 'getUnreadNotificationsForAdmin'])->name('notifications.getUnreadNotificationsForAdmin');
+    Route::patch('/notifications/{id}/read/user', [NotificationController::class, 'markNotificationAsReadForUser'])->name('notifications.markNotificationAsReadForUser');
+    Route::patch('/notifications/{id}/read/admin', [NotificationController::class, 'markNotificationAsReadForAdmin'])->name('notifications.markNotificationAsReadForAdmin');
+    Route::patch('/notifications/mark-all-read/user', [NotificationController::class, 'markAllNotificationsAsReadForUser'])->name('notifications.markAllNotificationsAsReadForUser');
+    Route::patch('/notifications/mark-all-read/admin', [NotificationController::class, 'markAllNotificationsAsReadForAdmin'])->name('notifications.markAllNotificationsAsReadForAdmin');
 });
+
 
 // Comment
 Route::middleware(['auth'])->group(function () {

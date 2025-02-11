@@ -7,7 +7,6 @@
     <title>การแจ้งเตือน</title>
     <!-- ใส่ CSS ที่จำเป็น (เช่น Tailwind CSS, custom styles) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- สามารถใส่ CSS อื่น ๆ ได้ที่นี่ -->
 </head>
 
 <body class="bg-gray-100">
@@ -17,22 +16,23 @@
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl font-bold">🔔 การแจ้งเตือน</h2>
 
-            @if (!$notifications->isEmpty())
-                <button onclick="deleteAllReadNotifications()"
-                    class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
-                    🗑️ ลบทั้งหมดที่อ่านแล้ว
+            @if (!$notifications->isEmpty() && Auth::user()->role === 'admin')
+                <button onclick="markAllAsRead()" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+                    ✔️ อ่านทั้งหมด
                 </button>
             @endif
         </div>
 
         @if ($notifications->isEmpty())
-            <p class="text-gray-500">ไม่มีการแจ้งเตือน</p>
+            <p class="text-gray-500">ยังไม่มีการแจ้งเตือน</p>
         @else
+            <!-- ใน Blade template -->
             <ul class="space-y-4" id="notification-list">
                 @foreach ($notifications as $notification)
                     <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
-                        data-id="{{ $notification->id }}" data-read="{{ $notification->is_read ? 'true' : 'false' }}"
-                        style="background-color: {{ $notification->is_read ? '#f3f4f6' : '#c3daf8' }};">
+                        data-id="{{ $notification->id }}"
+                        data-read="{{ $notification->is_user_read || $notification->is_admin_read ? 'true' : 'false' }}"
+                        style="background-color: {{ $notification->is_user_read || $notification->is_admin_read ? '#e0e7ff' : '#c3daf8' }};">
 
                         <!-- แสดงชื่อผู้โพสต์ -->
                         <span class="text-gray-800 font-semibold">
@@ -40,20 +40,34 @@
                         </span>
 
                         <div class="space-x-2">
-                            @if (!$notification->is_read)
-                                <!-- ปุ่ม อ่านแล้ว -->
-                                <button id="mark-read-{{ $notification->id }}"
-                                    onclick="markAsRead({{ $notification->id }})"
-                                    class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                                    ✔️ อ่านแล้ว
-                                </button>
+                            @if (Auth::user()->role === 'admin')
+                                <!-- Admin จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" และ "ลบ" -->
+                                @if (!$notification->is_admin_read)
+                                    <button onclick="markAsReadAdmin({{ $notification->id }})"
+                                        class="bg-red-500 text-white px-3 py-1 rounded">
+                                        ❌ ยังไม่ถูกอ่าน
+                                    </button>
+                                @else
+                                    <button onclick="deleteNotification({{ $notification->id }})"
+                                        class="bg-green-500 text-white px-3 py-1 rounded ">
+                                        ✔️ อ่านแล้ว
+                                    </button>
+                                @endif
+                            @else
+                                <!-- User จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" -->
+                                @if (!$notification->is_user_read)
+                                    <button onclick="markAsRead({{ $notification->id }})"
+                                        class="bg-red-500 text-white px-3 py-1 rounded ">
+                                        ❌ ยังไม่ถูกอ่าน
+                                    </button>
+                                @else
+                                    <button onclick="deleteNotification({{ $notification->id }})"
+                                        class="bg-green-500 text-white px-3 py-1 rounded ">
+                                        ✔️ อ่านแล้ว
+                                    </button>
+                                @endif
                             @endif
 
-                            <!-- ปุ่ม ลบ -->
-                            <button onclick="deleteNotification({{ $notification->id }})"
-                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                ❌ ลบ
-                            </button>
                         </div>
                     </li>
                 @endforeach
@@ -61,11 +75,12 @@
         @endif
     </div>
 </body>
+
 <script>
-    // ฟังก์ชัน markAsRead ที่อยู่ด้านบนสุด
-    async function markAsRead(id) {
+    // ฟังก์ชัน markAllAsRead สำหรับ Admin
+    async function markAllAsRead() {
         try {
-            let response = await fetch(`/notifications/${id}/read`, {
+            let response = await fetch("{{ route('notifications.markAllNotificationsAsReadForAdmin') }}", {
                 method: 'PATCH',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -73,20 +88,52 @@
                 }
             });
 
-            // ตรวจสอบว่า response สำเร็จหรือไม่
             if (!response.ok) {
                 throw new Error('Error: ' + response.statusText);
             }
 
-            // ตรวจสอบว่าข้อมูลที่ได้รับเป็น JSON หรือไม่
+            let data = await response.json();
+
+            if (data.success) {
+                document.querySelectorAll('.notification-item').forEach(item => {
+                    item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
+                    item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
+                    item.querySelector('.bg-red-500').classList.replace('bg-red-500',
+                    'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
+                });
+                updateNotificationCount();
+            } else {
+                console.error('ไม่สามารถทำการอ่านแจ้งเตือนทั้งหมด');
+            }
+        } catch (error) {
+            console.error('Error marking all notifications as read:', error);
+        }
+    }
+
+    // ฟังก์ชัน markAsRead สำหรับ User
+    async function markAsRead(id) {
+        try {
+            let response = await fetch(`/notifications/${id}/read/user`, {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error: ' + response.statusText);
+            }
+
             let data = await response.json();
 
             if (data.success) {
                 let notificationItem = document.querySelector(`[data-id='${id}']`);
                 if (notificationItem) {
-                    notificationItem.style.backgroundColor = '#f3f4f6';
-                    let markReadButton = document.getElementById(`mark-read-${id}`);
-                    if (markReadButton) markReadButton.remove();
+                    notificationItem.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
+                    notificationItem.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
+                    let markReadButton = notificationItem.querySelector('.bg-red-500');
+                    if (markReadButton) markReadButton.classList.replace('bg-red-500', 'bg-green-500');
                 }
                 updateNotificationCount();
             } else {
@@ -97,51 +144,36 @@
         }
     }
 
-
-    async function deleteNotification(id) {
+    // ฟังก์ชัน markAsRead สำหรับ Admin
+    async function markAsReadAdmin(id) {
         try {
-            let response = await fetch(`/notifications/${id}`, {
-                method: 'DELETE',
+            let response = await fetch(`/notifications/${id}/read/admin`, {
+                method: 'PATCH',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     'Content-Type': 'application/json',
                 }
             });
 
-            let data = await response.json();
-            if (data.success) {
-                document.querySelector(`[data-id='${id}']`).remove();
-                updateNotificationCount();
+            if (!response.ok) {
+                throw new Error('Error: ' + response.statusText);
             }
-        } catch (error) {
-            console.error('Error deleting notification:', error);
-        }
-    }
 
-    async function deleteAllReadNotifications() {
-        if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบแจ้งเตือนที่อ่านแล้วทั้งหมด?')) return;
+            let data = await response.json();
 
-        try {
-            let response = await fetch("{{ route('notifications.deleteRead') }}", {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
+            if (data.success) {
+                let notificationItem = document.querySelector(`[data-id='${id}']`);
+                if (notificationItem) {
+                    notificationItem.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
+                    notificationItem.setAttribute('data-read', 'true');
+                    notificationItem.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500');
                 }
-            });
-
-            let data = await response.json();
-            if (data.success) {
-                document.querySelectorAll('.notification-item').forEach(item => {
-                    if (item.dataset.read === "true") {
-                        item.remove();
-                    }
-                });
-                alert(data.message);
                 updateNotificationCount();
+            } else {
+                console.error('ไม่สามารถทำการอ่านแจ้งเตือนนี้ได้');
             }
         } catch (error) {
-            console.error('Error deleting read notifications:', error);
+            console.error('Error marking notification as read:', error);
         }
     }
 

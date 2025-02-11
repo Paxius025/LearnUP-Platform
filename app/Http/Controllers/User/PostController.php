@@ -81,7 +81,8 @@ Notification::create([
 'type' => 'new_post',
 'message' => "\"{$post->title}\" จาก " . $post->user->name,
 'created_at' => now(),
-'is_read' => false,
+'is_user_read' => false,
+'is_admin_read' => false,
 ]);
 }
 logAction('notify_admin', "Notified admins about new post: {$post->title}");
@@ -156,7 +157,8 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
     'user_id' => $post->user->id,
     'type' => 'updated_post',
     'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " และรอการอนุมัติ",
-    'is_read' => false,
+    'is_user_read' => false, // ผู้ใช้ยังไม่ได้อ่าน
+    'is_admin_read' => false, // Admin ยังไม่ได้อ่าน
     ]);
     }
     logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ถูกแก้ไข: {$post->title}");

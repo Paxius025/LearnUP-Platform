@@ -60,10 +60,16 @@
 
                 <!-- 🔹 Like Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
+                    @php
+                        // เช็คว่าโพสต์นี้ได้รับไลค์จากผู้ใช้หรือยัง
+                        $isLiked = \App\Models\Like::where('user_id', Auth::id())
+                            ->where('post_id', $post->id)
+                            ->exists();
+                    @endphp
                     <button id="like-button-{{ $post->id }}"
                         class="like-button text-gray-600 hover:text-blue-600 font-semibold py-2 px-4 rounded-lg border-2 border-gray-600 hover:bg-blue-100 transition duration-300 ease-in-out"
                         onclick="toggleLike({{ $post->id }})">
-                        Like
+                        {{ $isLiked ? 'Liked' : 'Like' }}
                     </button>
 
                     <a href="{{ route('user.posts.detail', $post->id) }}"
@@ -74,6 +80,7 @@
 
             </div>
         @endforeach
+
 
         @if ($posts->isEmpty())
             <p class="text-gray-500 text-center mt-4">No approved posts available.</p>

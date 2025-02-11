@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Log;
+use App\Models\Notification;
 
 class UserController extends Controller
 {
@@ -28,19 +30,27 @@ class UserController extends Controller
             'role' => 'required|in:user,writer,admin',
         ]);
 
+        $oldRole = $user->role;
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
         ]);
 
-        if (Auth::id() === $user->id) {
-            Auth::logout();
-            $user = User::find($user->id); 
-            Auth::login($user);
-            session()->regenerate();
+        // ส่งการแจ้งเตือนให้ผู้ใช้เมื่อมีการเปลี่ยนยศ
+        if ($oldRole !== $user->role) {
+            Notification::create([
+                'user_id' => $user->id,
+                'type' => 'role_updated',
+                'message' => "Your role has changed {$oldRole} to {$user->role}",
+                'is_user_read' => false,  
+                'is_admin_read' => false, 
+            ]);
         }
+
         logAction('update_user', "Updated user: {$user->name}");
+
         return redirect()->route('admin.users')->with('success', 'User updated successfully.');
     }
 

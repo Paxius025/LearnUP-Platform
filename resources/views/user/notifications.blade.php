@@ -47,7 +47,13 @@
                         <span class="text-gray-800 font-semibold">
                             {{ $notification->user->name }} ({{ ucfirst($notification->type) }})
                             @if ($notification->type === 'new_post')
-                                - Send for approval
+                                <p>{{ $notification->message }}</p>
+                            @elseif ($notification->type === 'approved_post')
+                                <p>{{ $notification->message }}</p>
+                            @elseif ($notification->type === 'rejected_post')
+                                <p>{{ $notification->message }}</p>
+                            @elseif ($notification->type === 'role_updated')
+                                <p>{{ $notification->message }}</p>
                             @endif
                         </span>
 

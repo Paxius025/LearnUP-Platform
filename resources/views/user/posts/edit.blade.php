@@ -36,7 +36,6 @@
             border-radius: 0 0 8px 8px;
             /* มุมโค้งล่าง */
         }
-
     </style>
 </head>
 
@@ -47,12 +46,11 @@
         <h2 class="text-2xl font-bold">Edit Post</h2>
 
         <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
-        @if ($post->status === 'approved' && auth()->user()->role !== 'writer')
+        @if (auth()->check() && auth()->user()->role === 'user')
             <div class="bg-yellow-200 text-yellow-800 p-3 rounded-lg mb-4">
                 ⚠️ การแก้ไขโพสต์จะทำให้โพสต์กลับไปอยู่ในสถานะ <strong>"รออนุมัติ (Pending)"</strong>
             </div>
         @endif
-
 
         <form action="{{ route('user.posts.update', $post->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -78,7 +76,7 @@
                 <input type="file" id="pdf_file" name="pdf_file" class="w-full p-3 border rounded-lg">
                 @if ($post->pdf_file)
                     <p class="mt-2">
-                        Current PDF:
+                        Current PDF :
                         <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank"
                             class="text-blue-600 hover:underline">
                             📄 View PDF

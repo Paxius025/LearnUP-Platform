@@ -5,23 +5,25 @@
     <table class="table-auto w-full bg-white border border-gray-300 rounded-lg shadow-md">
         <thead class="bg-gray-100">
             <tr>
-                <th class="px-6 py-3 text-center text-sm font-bold text-black">Title</th>
-                <th class="px-6 py-3 text-center text-sm font-bold text-black">Content</th>
-                <th class="px-6 py-3 text-center text-sm font-bold text-black">Date</th>
-                <th class="px-6 py-3 text-center text-sm font-bold text-black">Status</th>
-                <th class="px-6 py-3 text-center text-sm font-bold text-black">Actions</th>
+                <th class="px-6 py-3 text-center text-sm font-bold text-black min-w-[200px]">Title</th>
+                <th class="px-6 py-3 text-center text-sm font-bold text-black min-w-[200px]">Content</th>
+                <th class="px-6 py-3 text-center text-sm font-bold text-black min-w-[100px]">Date</th>
+                <th class="px-6 py-3 text-center text-sm font-bold text-black min-w-[120px]">Status</th>
+                <th class="px-6 py-3 text-center text-sm font-bold text-black min-w-[150px]">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($posts as $post)
                 <tr class="border-t border-gray-200">
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 text-center">
                         <a href="{{ route('user.posts.show', $post->id) }}" class="text-blue-600 hover:underline">
-                            {{ $post->title }}
+                            {{ Str::limit($post->title, 15) }}
                         </a>
                     </td>
-                    <td class="px-6 py-4 text-gray-700">{!! Str::limit(strip_tags($post->content), 100) !!}</td>
-                    <td class="px-6 py-4 text-gray-500 text-sm">
+                    <td class="px-6 py-4 text-center text-gray-700">
+                        {!! Str::limit(strip_tags($post->content), 15) !!}
+                    </td>
+                    <td class="px-6 py-4 text-center text-gray-500 text-sm">
                         📅 {{ $post->created_at->format('M d, Y') }}
                     </td>
                     <td class="px-6 py-4">

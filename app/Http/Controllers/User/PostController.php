@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use App\Models\Log;
 use App\Models\Notification;
-
+use App\Models\User;
 class PostController extends Controller
 {
     public function index()
@@ -35,22 +35,22 @@ class PostController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'pdf_file' => 'nullable|mimes:pdf|max:5120', // รองรับไฟล์ PDF ไม่เกิน 5MB
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'content' => 'required',
+        'pdf_file' => 'nullable|mimes:pdf|max:5120', // รองรับไฟล์ PDF ไม่เกิน 5MB
+    ]);
 
-        $pdfPath = null;
-        if ($request->hasFile('pdf_file')) {
-            $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
-        }
+    $pdfPath = null;
+    if ($request->hasFile('pdf_file')) {
+        $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
+    }
 
-        $status = in_array(Auth::user()->role, ['admin', 'writer']) ? 'approved' : 'pending';
+    $status = in_array(Auth::user()->role, ['admin', 'writer']) ? 'approved' : 'pending';
 
-        // 🔹 ดึง path ของรูปภาพจาก content
-        preg_match_all('/<img.*?src=["\'](.*?storage\/posts\/.*?)["\'].*?>/i', $request->content, $matches);
+    // 🔹 ดึง path ของรูปภาพจาก content
+    preg_match_all('/<img.*?src=["\'](.*?storage\/posts\/.*?)["\'].*?>/i', $request->content, $matches);
 
 $imagePaths = array_map(function ($path) {
 return ltrim(str_replace(asset('storage/'), '', $path), '/');
@@ -68,24 +68,31 @@ $post = Post::create([
 'status' => $status,
 ]);
 
-
 logAction('create_post', "Created post: {$post->title}");
 
 if ($status === 'pending') {
-$admins = \App\Models\User::where('role', 'admin')->get(); // ดึง Admin ทุกคน
+// ตรวจสอบว่าเจ้าของโพสต์ไม่ใช่ผู้ที่สร้างโพสต์
+if (Auth::id() !== $post->user_id) {
+// ดึง Admin ทุกคน
+$admins = \App\Models\User::where('role', 'admin')->get();
 foreach ($admins as $admin) {
 Notification::create([
-'user_id' => $admin->id,
+'user_id' => $post->user->id,
 'type' => 'new_post',
-'message' => "โพสต์ใหม่ \"{$post->title}\" รออนุมัติ",
+'message' => "\"{$post->title}\" จาก " . $post->user->name,
+'created_at' => now(),
 'is_read' => false,
 ]);
 }
 logAction('notify_admin', "Notified admins about new post: {$post->title}");
 }
+}
+
+
 
 return redirect()->route('user.posts.index')->with('success', 'Post created successfully.');
 }
+
 
 public function update(Request $request, Post $post)
 {
@@ -138,19 +145,25 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
 
     logAction('update_post', "Updated post: {$post->title}");
 
+    // แจ้งเตือน Admin เมื่อโพสต์ถูกแก้ไขและรอการอนุมัติ
+    // แจ้งเตือน Admin เมื่อโพสต์ถูกแก้ไขและรอการอนุมัติ
     if ($newStatus === 'pending') {
-    // แจ้งเตือน Admin ว่าโพสต์นี้ต้องรอการอนุมัติใหม่
+    // ส่งแจ้งเตือนเฉพาะ Admin เท่านั้น
+    if (Auth::id() !== $post->user_id) {
     $admins = \App\Models\User::where('role', 'admin')->get();
     foreach ($admins as $admin) {
     Notification::create([
-    'user_id' => $admin->id,
+    'user_id' => $post->user->id,
     'type' => 'updated_post',
-    'message' => "โพสต์ \"{$post->title}\" ถูกแก้ไขและรอการอนุมัติใหม่",
+    'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " และรอการอนุมัติ",
     'is_read' => false,
     ]);
     }
     logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ถูกแก้ไข: {$post->title}");
     }
+    }
+
+
 
     return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }

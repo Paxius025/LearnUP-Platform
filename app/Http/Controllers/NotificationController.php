@@ -14,9 +14,16 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::where('user_id', Auth::id())
-                                     ->latest()
-                                     ->get();
+        // ตรวจสอบว่าเป็น Admin หรือเจ้าของโพสต์
+        if (Auth::user()->role === 'admin') {
+            // ถ้าเป็น Admin, ให้ดูการแจ้งเตือนทั้งหมด
+            $notifications = Notification::latest()->get();
+        } else {
+            // ถ้าเป็น User (เจ้าของโพสต์), ให้ดึงเฉพาะการแจ้งเตือนของโพสต์ที่ตัวเองสร้าง
+            $notifications = Notification::where('user_id', Auth::id())
+                                        ->latest()
+                                        ->get();
+        }
 
         return view('user.notifications', compact('notifications'));
     }
@@ -27,15 +34,19 @@ class NotificationController extends Controller
     public function markAsRead($id)
     {
         $notification = Notification::where('id', $id)
-                                    ->where('user_id', Auth::id())
+                                    ->where('user_id', Auth::id())  // ตรวจสอบว่าผู้ใช้ที่ล็อกอินต้องเป็นเจ้าของการแจ้งเตือน
                                     ->firstOrFail();
 
-        $notification->markAsRead();
+        // อัปเดตสถานะเป็น "อ่านแล้ว"
+        $notification->is_read = true;
+        $notification->save();
 
+        // บันทึก Log
         logAction('read_notification', "User " . Auth::user()->username . " อ่านแจ้งเตือน: " . $notification->message);
-
+        
         return response()->json(['success' => true, 'message' => 'แจ้งเตือนถูกอ่านแล้ว']);
     }
+
 
     public function destroy($id)
     {
@@ -65,5 +76,14 @@ class NotificationController extends Controller
         ]);
     }
 
+    public function getNotificationCount()
+    {
+        // นับจำนวนการแจ้งเตือนที่ยังไม่ได้อ่าน
+        $unreadCount = Notification::where('user_id', Auth::id())
+                                ->where('is_read', false)
+                                ->count();
+
+        return response()->json(['unreadCount' => $unreadCount]);
+    }
 
 }

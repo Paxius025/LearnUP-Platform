@@ -53,4 +53,9 @@ class User extends Authenticatable
         return $this->attributes['username'] ?? $this->attributes['name']; 
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

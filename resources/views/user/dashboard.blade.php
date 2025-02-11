@@ -104,7 +104,7 @@
                 })
                 .catch(error => {
                     console.error('There was an error!', error);
-                    alert('Something went wrong. Please try again later.');
+                    //alert('Something went wrong. Please try again later.');
                 });
         }
     </script>

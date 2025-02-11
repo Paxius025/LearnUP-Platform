@@ -61,8 +61,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/approvals', [PostApprovalController::class, 'index'])->name('approval');
     Route::get('/logs', [LogController::class, 'index'])->name('logs');
     Route::get('/stat', [LogController::class, 'stat'])->name('stat');
-    Route::get('/admin/log-statistics', [LogController::class, 'stat'])->name('admin.log_stats');
-    
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::post('/users/{user}/update', [UserController::class, 'update'])->name('users.update');

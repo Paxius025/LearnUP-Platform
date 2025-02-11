@@ -76,7 +76,7 @@ $admins = \App\Models\User::where('role', 'admin')->get();
 foreach ($admins as $admin) {
 Notification::create([
 'user_id' => $post->user->id,
-'type' => 'send for approval',
+'type' => 'new_post',
 'message' => "\"{$post->title}\" จาก " . $post->user->name,
 'created_at' => now(),
 'is_user_read' => false,
@@ -148,7 +148,7 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
     foreach ($admins as $admin) {
     Notification::create([
     'user_id' => $post->user->id,
-    'type' => 'send for approval',
+    'type' => 'updated_post',
     'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " และรอการอนุมัติ",
     'is_user_read' => false, // ผู้ใช้ยังไม่ได้อ่าน
     'is_admin_read' => false, // Admin ยังไม่ได้อ่าน

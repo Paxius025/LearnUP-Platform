@@ -28,49 +28,40 @@
         @else
             <ul class="space-y-4" id="notification-list">
                 @foreach ($notifications as $notification)
-                    @if (!$notification->is_user_read && !$notification->is_admin_read)
-                        <!-- เพิ่มเงื่อนไขนี้ -->
-                        <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
-                            data-id="{{ $notification->id }}"
-                            data-read="{{ $notification->is_user_read || $notification->is_admin_read ? 'true' : 'false' }}"
-                            style="background-color: {{ $notification->is_user_read || $notification->is_admin_read ? '#e0e7ff' : '#c3daf8' }};">
+                    <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
+                        data-id="{{ $notification->id }}"
+                        data-read="{{ $notification->is_user_read || $notification->is_admin_read ? 'true' : 'false' }}"
+                        style="background-color: {{ $notification->is_user_read || $notification->is_admin_read ? '#e0e7ff' : '#c3daf8' }};">
+                        <!-- แสดงชื่อผู้โพสต์ -->
+                        <span class="text-gray-800 font-semibold">
+                            {{ $notification->user->name }} ({{ ucfirst($notification->type) }})
+                            @if ($notification->type === 'new_post')
+                                - Send for approval
+                            @endif
+                        </span>
 
-                            <!-- แสดงชื่อผู้โพสต์ -->
-                            <span class="text-gray-800 font-semibold">
-                                {{ $notification->user->name }} ({{ ucfirst($notification->type) }})
-                            </span>
-
-                            <div class="space-x-2">
-                                @if (Auth::user()->role === 'admin')
-                                    <!-- Admin จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" และ "ลบ" -->
-                                    @if (!$notification->is_admin_read)
-                                        <button onclick="markAsReadAdmin({{ $notification->id }})"
-                                            class="bg-red-500 text-white px-3 py-1 rounded">
-                                            ❌ ยังไม่ถูกอ่าน
-                                        </button>
-                                    @else
-                                        <button onclick="deleteNotification({{ $notification->id }})"
-                                            class="bg-green-500 text-white px-3 py-1 rounded ">
-                                            ✔️ อ่านแล้ว
-                                        </button>
-                                    @endif
+                        <div class="space-x-2">
+                            @if (Auth::user()->role === 'admin')
+                                <!-- Admin จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" และ "ลบ" -->
+                                @if (!$notification->is_admin_read)
+                                    <button onclick="markAsReadAdmin({{ $notification->id }})"
+                                        class="bg-red-500 text-white px-3 py-1 rounded">❌ ยังไม่ถูกอ่าน</button>
                                 @else
-                                    <!-- User จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" -->
-                                    @if (!$notification->is_user_read)
-                                        <button onclick="markAsRead({{ $notification->id }})"
-                                            class="bg-red-500 text-white px-3 py-1 rounded ">
-                                            ❌ ยังไม่ถูกอ่าน
-                                        </button>
-                                    @else
-                                        <button onclick="deleteNotification({{ $notification->id }})"
-                                            class="bg-green-500 text-white px-3 py-1 rounded ">
-                                            ✔️ อ่านแล้ว
-                                        </button>
-                                    @endif
+                                    <button onclick="deleteNotification({{ $notification->id }})"
+                                        class="bg-green-500 text-white px-3 py-1 rounded">✔️ อ่านแล้ว</button>
                                 @endif
-                            </div>
-                        </li>
-                    @endif
+                            @else
+                                <!-- User จะเห็นปุ่ม "ทำเครื่องหมายว่าอ่านแล้ว" -->
+                                @if (!$notification->is_user_read)
+                                    <button onclick="markAsRead({{ $notification->id }})"
+                                        class="bg-red-500 text-white px-3 py-1 rounded">❌ ยังไม่ถูกอ่าน</button>
+                                @else
+                                    <button onclick="deleteNotification({{ $notification->id }})"
+                                        class="bg-green-500 text-white px-3 py-1 rounded">✔️ อ่านแล้ว</button>
+                                @endif
+                            @endif
+                        </div>
+                    </li>
                 @endforeach
             </ul>
         @endif
@@ -80,9 +71,10 @@
 
 <script>
     // ฟังก์ชัน markAllAsRead สำหรับ Admin
-    async function markAllAsRead() {
+    // ฟังก์ชัน markAsRead สำหรับ Admin
+    async function markAsReadAdmin(id) {
         try {
-            let response = await fetch("{{ route('notifications.markAllNotificationsAsReadForAdmin') }}", {
+            let response = await fetch(`/notifications/${id}/read/admin`, {
                 method: 'PATCH',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -97,20 +89,28 @@
             let data = await response.json();
 
             if (data.success) {
-                document.querySelectorAll('.notification-item').forEach(item => {
-                    item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
-                    item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
-                    item.querySelector('.bg-red-500').classList.replace('bg-red-500',
-                        'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
-                });
+                let notificationItem = document.querySelector(`[data-id='${id}']`);
+                if (notificationItem) {
+                    notificationItem.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
+                    notificationItem.setAttribute('data-read', 'true');
+
+                    // เปลี่ยนสถานะปุ่ม
+                    let markReadButton = notificationItem.querySelector('button');
+                    if (markReadButton) {
+                        markReadButton.classList.replace('bg-red-500', 'bg-green-500'); // เปลี่ยนสีปุ่ม
+                        markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความในปุ่ม
+                    }
+                }
                 updateNotificationCount();
             } else {
-                console.error('ไม่สามารถทำการอ่านแจ้งเตือนทั้งหมด');
+                console.error('ไม่สามารถทำการอ่านแจ้งเตือนนี้ได้');
             }
         } catch (error) {
-            console.error('Error marking all notifications as read:', error);
+            console.error('Error marking notification as read:', error);
         }
     }
+
+
 
     // ฟังก์ชัน markAsRead สำหรับ User
     async function markAsRead(id) {
@@ -136,6 +136,7 @@
                     notificationItem.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
                     let markReadButton = notificationItem.querySelector('.bg-red-500');
                     if (markReadButton) markReadButton.classList.replace('bg-red-500', 'bg-green-500');
+                    markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
                 }
                 updateNotificationCount();
             } else {
@@ -169,6 +170,7 @@
                     notificationItem.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
                     notificationItem.setAttribute('data-read', 'true');
                     notificationItem.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500');
+                    notificationItem.querySelector('.bg-red-500').textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
                 }
                 updateNotificationCount();
             } else {

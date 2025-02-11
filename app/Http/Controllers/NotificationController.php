@@ -18,17 +18,19 @@ class NotificationController extends Controller
     {
         // ตรวจสอบว่าเป็น Admin หรือเจ้าของโพสต์
         if (Auth::user()->role === 'admin') {
-            // ถ้าเป็น Admin, ให้ดูการแจ้งเตือนทั้งหมด
-            $notifications = Notification::latest()->get();
+            // ถ้าเป็น Admin, ให้ดูการแจ้งเตือนทั้งหมดที่ยังไม่ถูกอ่าน
+            $notifications = Notification::where('is_admin_read', false)->latest()->get();
         } else {
-            // ถ้าเป็น User (เจ้าของโพสต์), ให้ดึงเฉพาะการแจ้งเตือนของโพสต์ที่ตัวเองสร้าง
+            // ถ้าเป็น User (เจ้าของโพสต์), ให้ดึงเฉพาะการแจ้งเตือนของโพสต์ที่ตัวเองสร้าง และยังไม่ถูกอ่าน
             $notifications = Notification::where('user_id', Auth::id())
+                                        ->where('is_user_read', false)
                                         ->latest()
                                         ->get();
         }
 
         return view('user.notifications', compact('notifications'));
     }
+
 
     /**
      * ดึงรายการแจ้งเตือนที่ยังไม่ได้อ่านของ User

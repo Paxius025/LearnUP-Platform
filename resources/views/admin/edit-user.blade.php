@@ -29,8 +29,8 @@
                 <label for="role" class="block text-gray-700">Role</label>
                 <select id="role" name="role" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600">
                     <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
-                    <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="writer" {{ $user->role === 'writer' ? 'selected' : '' }}>Writer</option>
+                    <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>
                 </select>                
             </div>
 

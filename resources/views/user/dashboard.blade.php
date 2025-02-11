@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - Learn Up</title>
     @vite('resources/css/app.css')
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -14,18 +15,16 @@
 
     <!-- Content -->
     <div class="max-w-[800px] mx-auto mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
-        <!-- ปรับความกว้างที่นี่ -->
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
             <div
                 class="flex items-center border border-gray-300 rounded-xl p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
 
-                <!-- Input with icon inside -->
                 <div class="relative w-full">
                     <input type="text" name="query" placeholder="Search posts..."
                         class="w-full px-4 py-2 text-lg text-gray-700 placeholder-gray-500 focus:outline-none rounded-full focus:ring-2 focus:ring-blue-500 pr-10 transition duration-300">
                 </div>
-                <!-- Submit button with round corners -->
+
                 <button type="submit"
                     class="text-white px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 flex items-center ml-2">
                     <span class="ml-2">🔎</span>
@@ -35,14 +34,11 @@
 
         @foreach ($posts as $post)
             <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col min-h-[500px]">
-                <!-- ความสูงยังคงเท่าเดิม -->
 
-                <!-- 🔹 Title -->
                 <div class="p-4">
                     <h3 class="text-lg font-bold line-clamp-2">{{ $post->title }}</h3>
                 </div>
 
-                <!-- 🔹 รูปภาพ (ดึง index[0] และกำหนดขนาด 4:3) -->
                 @if (!empty($post->image))
                     @php
                         $images = json_decode($post->image, true);
@@ -54,17 +50,22 @@
                     @else
                         <div class="flex justify-center items-center h-[450px] bg-gray-100">
                             <p class="text-black font-bold text-xl">No Image Available</p>
-                            <!-- ข้อความอยู่ตรงกลาง, ตัวหนา, ขนาดใหญ่, สีดำ -->
                         </div>
                     @endif
                 @else
                     <div class="flex justify-center items-center h-[450px] bg-gray-100">
                         <p class="text-black font-bold text-xl">No Image Available</p>
-                        <!-- ข้อความอยู่ตรงกลาง, ตัวหนา, ขนาดใหญ่, สีดำ -->
                     </div>
                 @endif
-                <!-- 🔹 Read More Button -->
+
+                <!-- 🔹 Like Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
+                    <button id="like-button-{{ $post->id }}"
+                        class="like-button text-gray-600 hover:text-blue-600 font-semibold py-2 px-4 rounded-lg border-2 border-gray-600 hover:bg-blue-100 transition duration-300 ease-in-out"
+                        onclick="toggleLike({{ $post->id }})">
+                        Like
+                    </button>
+
                     <a href="{{ route('user.posts.detail', $post->id) }}"
                         class="text-blue-600 hover:text-blue-800 hover:underline font-semibold py-2 px-4 rounded-lg border-2 border-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out">
                         Read More
@@ -79,7 +80,27 @@
         @endif
     </div>
 
-
+    <script>
+        function toggleLike(postId) {
+            axios.post(`/like/${postId}`)
+                .then(response => {
+                    const button = document.getElementById(`like-button-${postId}`);
+                    if (response.data.liked) {
+                        button.textContent = 'Liked';
+                        button.classList.add('bg-blue-100');
+                        button.classList.remove('border-gray-600', 'hover:bg-blue-100');
+                    } else {
+                        button.textContent = 'Like';
+                        button.classList.remove('bg-blue-100');
+                        button.classList.add('border-gray-600', 'hover:bg-blue-100');
+                    }
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                    alert('Something went wrong. Please try again later.');
+                });
+        }
+    </script>
 </body>
 
 </html>

@@ -24,6 +24,9 @@ use App\Http\Controllers\CommentController;
 // Notification Controller
 use App\Http\Controllers\NotificationController;
 
+// Like Controller
+use App\Http\Controllers\LikeController;
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
@@ -92,3 +95,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); // ลบคอมเมนต์
     Route::patch('/comments/{comment}/update', [CommentController::class, 'update'])->middleware('auth');
 });
+
+// Like
+Route::middleware('auth')->post('/like/{postId}', [LikeController::class, 'toggleLike']);

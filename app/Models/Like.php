@@ -31,7 +31,6 @@ class Like extends Model
                     ->first();
 
         if ($like) {
-             // ถ้าเจอแสดงว่าไ 
             $like->delete();
             return false;  
         } else {

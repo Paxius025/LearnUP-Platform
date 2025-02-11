@@ -11,7 +11,6 @@
             </a>
         </h1>
 
-
         <!-- สถิติรวม -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <div class="bg-green-500 text-white p-4 rounded-lg shadow-md text-center">
@@ -35,6 +34,7 @@
                 <p class="text-3xl font-bold">{{ $totalLogs }}</p>
             </div>
         </div>
+
         <!-- Layout ใช้ Flexbox -->
         <div class="flex flex-col lg:flex-row gap-6">
             <div class="lg:w-2/3 bg-gray-100 p-6 rounded-lg">
@@ -59,22 +59,22 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // ตรวจสอบว่าข้อมูลใน Blade ถูกแปลงเป็น JSON
+        // ✅ ดึงข้อมูลจาก grouped_action
         const logStats = @json($logStats);
-        const logLabels = logStats.map(log => log.action);
+        const logLabels = logStats.map(log => log.grouped_action);
         const logCounts = logStats.map(log => log.count);
 
         const logTrends = @json($logTrends);
         const trendLabels = [...new Set(logTrends.map(log => log.date))];
-        const actions = [...new Set(logTrends.map(log => log.action))];
+        const actions = [...new Set(logTrends.map(log => log.grouped_action))];
 
-        // สร้างสีแบบ Mapping เพื่อให้สีของประเภทเดียวกันเหมือนกัน
+        // ✅ ใช้ grouped_action ในการกำหนดสี
         const actionColors = {};
         actions.forEach((action, index) => {
             actionColors[action] = getColorByIndex(index);
         });
 
-        // Bar Chart
+        // ✅ Bar Chart
         new Chart(document.getElementById('logBarChart').getContext('2d'), {
             type: 'bar',
             data: {
@@ -103,7 +103,7 @@
             }
         });
 
-        // Line Chart
+        // ✅ Line Chart
         new Chart(document.getElementById('logLineChart').getContext('2d'), {
             type: 'line',
             data: {
@@ -111,8 +111,8 @@
                 datasets: actions.map(action => ({
                     label: action,
                     data: trendLabels.map(date => {
-                        const entry = logTrends.find(log => log.date === date && log.action ===
-                            action);
+                        const entry = logTrends.find(log => log.date === date && log
+                            .grouped_action === action);
                         return entry ? entry.count : 0;
                     }),
                     borderColor: actionColors[action],

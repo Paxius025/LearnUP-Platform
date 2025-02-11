@@ -17,12 +17,17 @@
         <!-- ปรับความกว้างที่นี่ -->
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
-            <div class="flex items-center border border-gray-300 rounded-lg p-2">
-                <input type="text" name="query" placeholder="Search posts..."
-                    class="w-full px-4 py-2 text-lg border-none focus:outline-none rounded-l-lg">
+            <div class="flex items-center border border-gray-300 rounded-full p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                
+                <!-- Input with icon inside -->
+                <div class="relative w-full">
+                    <input type="text" name="query" placeholder="Search posts..."
+                        class="w-full px-4 py-2 text-lg text-gray-700 placeholder-gray-500 focus:outline-none rounded-full focus:ring-2 focus:ring-blue-500 pr-10 transition duration-300">
+                </div>
+                <!-- Submit button with round corners -->
                 <button type="submit"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 focus:outline-none">
-                    Search
+                    class="text-white px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 flex items-center ml-2">
+                    <span class="ml-2">🔎</span>
                 </button>
             </div>
         </form>

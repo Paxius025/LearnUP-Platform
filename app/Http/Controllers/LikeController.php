@@ -45,4 +45,15 @@ class LikeController extends Controller
 
         logAction('toggle_like', "User " . Auth::user()->username . " liked post: $postId");
     }
+
+    public function mostLikedPosts()
+    {
+        // คำนวณโพสต์ที่ถูกไลค์มากที่สุด (เรียงลำดับตามจำนวนไลค์)
+        $mostLikedPosts = Post::withCount('likes')  // ใช้ withCount เพื่อดึงจำนวนไลค์
+            ->orderBy('likes_count', 'desc')  // เรียงจากมากไปหาน้อย
+            ->take(10)  // ดึงมาแค่ 10 โพสต์ที่มีจำนวนไลค์มากที่สุด
+            ->get();
+
+        return view('user.most_liked_posts', compact('mostLikedPosts'));
+    }
 }

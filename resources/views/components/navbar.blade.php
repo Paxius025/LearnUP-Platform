@@ -38,6 +38,10 @@
                     class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
                     🏠 Dashboard
                 </a>
+                <a href="{{ route('most.liked.posts') }}"
+                    class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
+                    ❤️ Most Liked Posts
+                </a>
                 <a href="{{ route('user.posts.create') }}"
                     class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
                     📝 Create Post

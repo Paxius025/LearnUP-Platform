@@ -98,3 +98,4 @@ Route::middleware(['auth'])->group(function () {
 
 // Like
 Route::middleware('auth')->post('/like/{postId}', [LikeController::class, 'toggleLike']);
+Route::get('/most-liked-posts', [LikeController::class, 'mostLikedPosts'])->name('most.liked.posts');

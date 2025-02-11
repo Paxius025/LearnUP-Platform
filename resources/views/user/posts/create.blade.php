@@ -15,31 +15,32 @@
 
 </head>
 
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen font-sans antialiased">
     @include('components.navbar')
-    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
-        <h2 class="text-2xl font-bold">Create New Post</h2>
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-xl">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6">Create New Post</h2>
 
         <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="mb-4">
-                <label for="title" class="block text-gray-700">Title</label>
-                <input type="text" id="title" name="title" class="w-full p-3 border rounded-lg" required>
+            <div class="mb-6">
+                <label for="title" class="block text-gray-700 text-lg font-semibold">Title</label>
+                <input type="text" id="title" name="title" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-gray-700">Content</label>
-                <div id="editor"></div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-lg font-semibold">Content</label>
+                <div id="editor" class="bg-white border border-gray-300 rounded-lg p-4 min-h-[500px] shadow-md"></div>
                 <input type="hidden" name="content" id="content">
             </div>
 
-            <div class="mb-4">
-                <label for="pdf_file" class="block text-gray-700">Upload PDF (Optional)</label>
-                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
-                    class="w-full p-3 border rounded-lg">
+            <div class="mb-6">
+                <label for="pdf_file" class="block text-gray-700 text-lg font-semibold">Upload PDF (Optional)</label>
+                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm">
             </div>
 
-            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg">Publish</button>
+            <div class="flex justify-center">
+                <button type="submit" class="bg-blue-600 text-white px-8 py-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">Publish</button>
+            </div>
         </form>
     </div>
 
@@ -48,16 +49,10 @@
             theme: 'snow',
             modules: {
                 toolbar: [
-                    [{
-                        'header': [1, 2, false]
-                    }],
+                    [{ 'header': [1, 2, false] }],
                     ['bold', 'italic', 'underline'],
                     ['image', 'link'],
-                    [{
-                        'list': 'ordered'
-                    }, {
-                        'list': 'bullet'
-                    }]
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
                 ]
             }
         });
@@ -106,15 +101,15 @@
                         <h2>Crop Image</h2>
                         <div id="crop-container" style="max-width: 500px; max-height: 400px; overflow: hidden;">
                         </div>
-                        <button id="crop-btn" style="margin-top: 10px; padding: 10px 20px; background: green; color: white; border: none; cursor: pointer;">Crop & Upload</button>
-                        <button id="cancel-btn" style="margin-top: 10px; padding: 10px 20px; background: red; color: white; border: none; cursor: pointer;">Cancel</button>
+                        <button id="crop-btn" class="bg-green-500 text-white px-6 py-2 rounded-md mt-4">Crop & Upload</button>
+                        <button id="cancel-btn" class="bg-red-500 text-white px-6 py-2 rounded-md mt-4">Cancel</button>
                     </div>
                 `;
                 document.body.appendChild(modal);
                 document.getElementById('crop-container').appendChild(image);
 
                 var cropper = new Cropper(image, {
-                    aspectRatio: 16 / 9, // ปรับเป็น 1:1, 4:3 หรืออื่น ๆ ตามต้องการ
+                    aspectRatio: 16 / 9, // Adjust as needed (1:1, 4:3, etc.)
                     viewMode: 2,
                 });
 
@@ -139,7 +134,7 @@
                         }
 
                         document.body.removeChild(modal);
-                    }, 'image/jpeg', 0.8); // คุณภาพ 80%
+                    }, 'image/jpeg', 0.8); // Quality 80%
                 };
 
                 document.getElementById('cancel-btn').onclick = function() {
@@ -148,9 +143,6 @@
             };
         }
     </script>
-
-
-
 </body>
 
 </html>

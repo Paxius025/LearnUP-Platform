@@ -33,7 +33,23 @@
         </form>
 
         @foreach ($posts as $post)
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col min-h-[500px]">
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
+
+                <!-- 🔹 ปุ่ม Bookmark (มุมขวาบน) -->
+                @php
+                    $isBookmarked = \App\Models\FavoritePost::where('user_id', Auth::id())
+                        ->where('post_id', $post->id)
+                        ->exists();
+                @endphp
+                <button id="bookmark-button-{{ $post->id }}"
+                    class="absolute top-3 right-3 p-2 transition-transform duration-300 ease-in-out transform"
+                    onclick="toggleBookmark({{ $post->id }})">
+                    <svg id="bookmark-icon-{{ $post->id }}" xmlns="http://www.w3.org/2000/svg"
+                        fill="{{ $isBookmarked ? 'red' : 'white' }}" viewBox="0 0 24 24" stroke="currentColor"
+                        class="w-8 h-8 stroke-gray-800 hover:scale-110 transition">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v18l7-5 7 5V3z" />
+                    </svg>
+                </button>
 
                 <div class="p-4">
                     <h3 class="text-lg font-bold line-clamp-2">{{ $post->title }}</h3>
@@ -61,13 +77,12 @@
                     $isLiked = \App\Models\Like::where('user_id', Auth::id())->where('post_id', $post->id)->exists();
                 @endphp
 
-                <!-- 🔹 Like Button -->
+                <!-- 🔹 Like & Read More Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
                     <!-- ปุ่ม Like -->
                     <button id="like-button-{{ $post->id }}"
                         class="like-button text-gray-600 hover:text-blue-600 font-semibold py-2 px-4 rounded-lg border-2 border-gray-600 hover:bg-blue-100 transition duration-300 ease-in-out"
                         onclick="toggleLike({{ $post->id }})">
-                        <!-- เปลี่ยนข้อความปุ่มถ้าไลค์แล้ว -->
                         @if ($isLiked)
                             Liked
                         @else
@@ -85,9 +100,6 @@
                         Read More
                     </a>
                 </div>
-
-
-
             </div>
         @endforeach
 
@@ -120,6 +132,21 @@
                     }
 
                     //alert(response.data.message);
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                    alert('Something went wrong. Please try again later.');
+                });
+        }
+
+        // function toggleBookmark
+        function toggleBookmark(postId) {
+            axios.post(`/favorite/${postId}`)
+                .then(response => {
+                    const icon = document.getElementById(`bookmark-icon-${postId}`);
+
+                    // เปลี่ยนสีของ Bookmark
+                    icon.setAttribute("fill", response.data.bookmarked ? "red" : "white");
                 })
                 .catch(error => {
                     console.error('There was an error!', error);

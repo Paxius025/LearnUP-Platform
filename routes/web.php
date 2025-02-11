@@ -27,6 +27,9 @@ use App\Http\Controllers\NotificationController;
 // Like Controller
 use App\Http\Controllers\LikeController;
 
+// Favorite Post Controller
+use App\Http\Controllers\FavoritePostController;
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
@@ -99,3 +102,9 @@ Route::middleware(['auth'])->group(function () {
 // Like
 Route::middleware('auth')->post('/like/{postId}', [LikeController::class, 'toggleLike']);
 Route::get('/most-liked-posts', [LikeController::class, 'mostLikedPosts'])->name('most.liked.posts');
+
+// Favorite Post
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorites', [FavoritePostController::class, 'index'])->name('favorites.index');
+    Route::post('/favorite/{postId}', [FavoritePostController::class, 'toggle'])->name('favorites.toggle');
+});

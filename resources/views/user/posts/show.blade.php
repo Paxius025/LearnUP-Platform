@@ -11,6 +11,11 @@
     @include('components.navbar')
 
     <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
+        <!-- 🔹 แสดงชื่อผู้เขียน -->
+        <div class="text-sm text-gray-500 mb-4">
+            <p>By <strong>{{ $post->user->name }}</strong></p> <!-- ชื่อผู้เขียน -->
+        </div>
+
         <h2 class="text-3xl font-bold">{{ $post->title }}</h2>
         <p class="text-gray-600 mt-2">{!! $post->content !!}</p>
 

@@ -29,7 +29,6 @@
                 <p class="text-3xl font-bold">{{ $totalLogs }}</p>
             </div>
         </div>
-
         <!-- Layout ใช้ Flexbox -->
         <div class="flex flex-col lg:flex-row gap-6">
             <div class="lg:w-2/3 bg-gray-100 p-6 rounded-lg">
@@ -54,6 +53,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // ตรวจสอบว่าข้อมูลใน Blade ถูกแปลงเป็น JSON
         const logStats = @json($logStats);
         const logLabels = logStats.map(log => log.action);
         const logCounts = logStats.map(log => log.count);
@@ -85,10 +85,14 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'top' }
+                    legend: {
+                        position: 'top'
+                    }
                 },
                 scales: {
-                    y: { beginAtZero: true }
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
         });
@@ -101,7 +105,8 @@
                 datasets: actions.map(action => ({
                     label: action,
                     data: trendLabels.map(date => {
-                        const entry = logTrends.find(log => log.date === date && log.action === action);
+                        const entry = logTrends.find(log => log.date === date && log.action ===
+                            action);
                         return entry ? entry.count : 0;
                     }),
                     borderColor: actionColors[action],
@@ -114,24 +119,35 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { position: 'top' }
+                    legend: {
+                        position: 'top'
+                    }
                 },
                 scales: {
-                    y: { beginAtZero: true }
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
         });
 
         function getColorByIndex(index) {
             const colors = [
-                'rgba(34, 139, 34, 0.6)', // เขียว KU
+                'rgba(34, 139, 34, 0.6)', // เขียวเข้ม
                 'rgba(60, 179, 113, 0.6)', // เขียวอ่อน
                 'rgba(46, 204, 113, 0.6)', // เขียวสด
                 'rgba(255, 99, 132, 0.6)', // แดง
                 'rgba(54, 162, 235, 0.6)', // ฟ้า
                 'rgba(255, 206, 86, 0.6)', // เหลือง
                 'rgba(128, 0, 128, 0.6)', // ม่วง
-                'rgba(255, 165, 0, 0.6)'  // ส้ม
+                'rgba(255, 165, 0, 0.6)', // ส้ม
+                'rgba(75, 0, 130, 0.6)', // ม่วงเข้ม
+                'rgba(0, 255, 255, 0.6)', // ฟ้าคราม
+                'rgba(255, 69, 0, 0.6)', // ส้มแดง
+                'rgba(128, 128, 0, 0.6)', // เหลืองอมเขียว
+                'rgba(255, 20, 147, 0.6)', // DeepPink
+                'rgba(30, 144, 255, 0.6)', // DodgerBlue
+                'rgba(250, 128, 114, 0.6)' // Salmon
             ];
             return colors[index % colors.length];
         }

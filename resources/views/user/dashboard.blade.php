@@ -18,8 +18,10 @@
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
             <div class="flex items-center border border-gray-300 rounded-lg p-2">
-                <input type="text" name="query" placeholder="Search posts..." class="w-full px-4 py-2 text-lg border-none focus:outline-none rounded-l-lg">
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 focus:outline-none">
+                <input type="text" name="query" placeholder="Search posts..."
+                    class="w-full px-4 py-2 text-lg border-none focus:outline-none rounded-l-lg">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 focus:outline-none">
                     Search
                 </button>
             </div>
@@ -47,9 +49,11 @@
                 @endif
 
                 <!-- 🔹 Read More Button -->
-                <div class="p-4 mt-auto">
-                    <a href="{{ route('user.posts.detail', $post->id) }}" class="text-blue-600 hover:underline">Read
-                        more</a>
+                <div class="p-4 mt-auto flex justify-between items-center">
+                    <a href="{{ route('user.posts.detail', $post->id) }}"
+                        class="text-blue-600 hover:text-blue-800 hover:underline font-semibold py-2 px-4 rounded-lg border-2 border-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out">
+                        Read More
+                    </a>
                 </div>
 
             </div>

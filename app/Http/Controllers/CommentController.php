@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
-
 class CommentController extends Controller
 {
     /**
@@ -22,7 +21,7 @@ class CommentController extends Controller
         $comment = Comment::create([
             'user_id' => Auth::id(),
             'post_id' => $post->id,
-            'parent_id' => $request->parent_id, // ถ้าเป็น Reply จะมีค่า parent_id
+            'parent_id' => $request->parent_id, 
             'content' => $request->content,
         ]);
 

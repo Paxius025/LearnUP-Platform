@@ -118,6 +118,8 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     // 🔹 แปลงให้เป็น String ไม่ใช่ JSON array
     $imagePath = count($imagePaths) > 0 ? $imagePaths[0] : null;
 
+    $status = $newStatus;
+
     $post = Post::create([
     'user_id' => Auth::id(),
     'title' => $request->title,
@@ -188,7 +190,7 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     public function detail(Post $post)
     {
     // ตรวจสอบว่าโพสต์ถูกอนุมัติหรือเป็นเจ้าของโพสต์
-    if ($post->status !== 'approved' && $post->user_id !== auth()->id()) {
+    if ($post->status !== 'approved' && $post->user_id !== Auth::user()->id) {
     abort(403, 'You are not authorized to view this post.');
     }
 

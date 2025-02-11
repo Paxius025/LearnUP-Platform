@@ -11,7 +11,6 @@
                 <th class="px-6 py-3 text-center text-sm font-bold text-black">Status</th>
                 <th class="px-6 py-3 text-center text-sm font-bold text-black">Actions</th>
             </tr>
-            
         </thead>
         <tbody>
             @foreach ($posts as $post)
@@ -35,7 +34,7 @@
                         @endif
                     </td>
                     <td class="px-6 py-4">
-                        <div class="flex justify-center items-center space-x-4"> <!-- ใช้ justify-center และ items-center เพื่อจัดให้อยู่กึ่งกลาง -->
+                        <div class="flex justify-center items-center space-x-4">
                             <!-- Edit Button -->
                             <a href="{{ route('user.posts.edit', $post->id) }}"
                                 class="inline-flex items-center px-6 py-3 bg-yellow-500 text-white rounded-md shadow-md hover:bg-yellow-600 transition duration-300 transform hover:scale-105">
@@ -58,6 +57,11 @@
             @endforeach
         </tbody>
     </table>
+
+    <!-- แสดงปุ่มสำหรับการเปลี่ยนหน้า -->
+    <div class="mt-4">
+        {{ $posts->links() }} <!-- Laravel Pagination -->
+    </div>
 
     @if ($posts->isEmpty())
         <p class="text-gray-500 text-center mt-4">No approved posts available.</p>

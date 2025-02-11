@@ -56,8 +56,11 @@
                                     <button onclick="markAsRead({{ $notification->id }})"
                                         class="bg-red-500 text-white px-3 py-1 rounded">❌ ยังไม่ถูกอ่าน</button>
                                 @else
-                                    <button onclick="deleteNotification({{ $notification->id }})"
-                                        class="bg-green-500 text-white px-3 py-1 rounded">✔️ อ่านแล้ว</button>
+                                    <!-- ปุ่มสำหรับ User ที่จะอ่านทั้งหมด -->
+                                    <button onclick="markAllAsReadUser()"
+                                        class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+                                        ✔️ อ่านทั้งหมด
+                                    </button>
                                 @endif
                             @endif
                         </div>
@@ -92,8 +95,7 @@
                 document.querySelectorAll('.notification-item').forEach(item => {
                     item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
                     item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
-                    item.querySelector('.bg-red-500').classList.replace('bg-red-500',
-                        'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
+                    item.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500'); // เปลี่ยนปุ่มเป็น "อ่านแล้ว"
                     item.querySelector('.bg-red-500').textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
                 });
 
@@ -105,7 +107,6 @@
             console.error('Error marking all notifications as read:', error);
         }
     }
-
 
     // ฟังก์ชัน markAsRead สำหรับ User
     async function markAsRead(id) {
@@ -143,7 +144,6 @@
     }
 
     // ฟังก์ชัน markAsRead สำหรับ Admin
-    // ฟังก์ชัน markAsRead สำหรับ Admin
     async function markAsReadAdmin(id) {
         try {
             let response = await fetch(`/notifications/${id}/read/admin`, {
@@ -165,13 +165,8 @@
                 if (notificationItem) {
                     notificationItem.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
                     notificationItem.setAttribute('data-read', 'true');
-
-                    // เลือกปุ่มภายใน notificationItem และเปลี่ยนสี + ข้อความ
-                    let markReadButton = notificationItem.querySelector('button');
-                    if (markReadButton) {
-                        markReadButton.classList.replace('bg-red-500', 'bg-green-500'); // เปลี่ยนสีปุ่ม
-                        markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความในปุ่ม
-                    }
+                    notificationItem.querySelector('.bg-red-500').classList.replace('bg-red-500', 'bg-green-500');
+                    notificationItem.querySelector('.bg-red-500').textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
                 }
                 updateNotificationCount();
             } else {
@@ -182,6 +177,42 @@
         }
     }
 
+    // ฟังก์ชัน markAllAsRead สำหรับ User
+    async function markAllAsReadUser() {
+        try {
+            let response = await fetch("{{ route('notifications.markAllNotificationsAsReadForUser') }}", {
+                method: 'PATCH',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error: ' + response.statusText);
+            }
+
+            let data = await response.json();
+
+            if (data.success) {
+                // เปลี่ยนสถานะของการแจ้งเตือนทั้งหมดให้เป็น "อ่านแล้ว"
+                document.querySelectorAll('.notification-item').forEach(item => {
+                    item.style.backgroundColor = '#f3f4f6'; // เปลี่ยนสีพื้นหลังเป็นสีที่อ่านแล้ว
+                    item.setAttribute('data-read', 'true'); // ตั้งค่าให้เป็นการอ่านแล้ว
+                    let markReadButton = item.querySelector('button');
+                    if (markReadButton) {
+                        markReadButton.classList.replace('bg-red-500', 'bg-green-500'); // เปลี่ยนสีปุ่ม
+                        markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
+                    }
+                });
+                updateNotificationCount();
+            } else {
+                console.error('ไม่สามารถทำการอ่านแจ้งเตือนทั้งหมด');
+            }
+        } catch (error) {
+            console.error('Error marking all notifications as read:', error);
+        }
+    }
 
     async function updateNotificationCount() {
         try {

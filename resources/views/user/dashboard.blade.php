@@ -31,6 +31,15 @@
                     class="text-white px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 flex items-center ml-2">
                     <span class="ml-2">🔎</span>
                 </button>
+
+                <a href="{{ route('user.bookmarks') }}"
+                    class="ml-2 text-gray-700 px-6 py-2 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-300 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v18l7-5 7 5V3z" />
+                    </svg>
+                    <span class="ml-2">Bookmarked</span>
+                </a>
+
             </div>
         </form>
 

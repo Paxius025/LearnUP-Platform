@@ -30,4 +30,19 @@ class FavoritePostController extends Controller
             return response()->json(['bookmarked' => true]);
         }
     }
+
+    public function bookmarkedPosts()
+    {
+        $user = Auth::user();
+
+        // ดึงโพสต์ที่ถูกบันทึกไว้
+        $bookmarkedPosts = Post::whereIn('id', function ($query) use ($user) {
+            $query->select('post_id')
+                ->from('favorite_posts')
+                ->where('user_id', $user->id);
+        })->latest()->paginate(10);
+
+        return view('user.bookmarks', compact('bookmarkedPosts'));
+    }
+
 }

@@ -107,4 +107,5 @@ Route::get('/most-liked-posts', [LikeController::class, 'mostLikedPosts'])->name
 Route::middleware(['auth'])->group(function () {
     Route::get('/favorites', [FavoritePostController::class, 'index'])->name('favorites.index');
     Route::post('/favorite/{postId}', [FavoritePostController::class, 'toggle'])->name('favorites.toggle');
+    Route::get('/bookmarks', [FavoritePostController::class, 'bookmarkedPosts'])->name('user.bookmarks');
 });

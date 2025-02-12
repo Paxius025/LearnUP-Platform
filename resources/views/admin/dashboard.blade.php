@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Learn Up</title>
     @vite('resources/css/app.css')
 </head>
+
 <body class="bg-green-50 min-h-screen">
 
     @include('components.navbar')
@@ -15,24 +17,36 @@
 
         <!-- Section: Summary -->
         <div class="grid grid-cols-4 gap-6 mt-6">
-            <div class="p-6 bg-white shadow-lg rounded-lg">
-                <h3 class="text-lg font-bold text-green-700">Total Posts</h3>
-                <p class="text-gray-600 text-xl">{{ $totalPosts }}</p>
-            </div>
-            <div class="p-6 bg-white shadow-lg rounded-lg">
-                <h3 class="text-lg font-bold text-green-700">Approved Posts</h3>
-                <p class="text-gray-600 text-xl">{{ $approvedPosts }}</p>
-            </div>
-            <div class="p-6 bg-white shadow-lg rounded-lg">
-                <h3 class="text-lg font-bold text-green-700">Pending Approval</h3>
-                <p class="text-gray-600 text-xl">{{ $pendingCount }}</p>
+            <div class="p-6 bg-green-100 shadow-xl rounded-lg border border-green-300 text-center">
+                <h3 class="text-lg font-bold text-green-800 flex justify-center items-center">
+                    📌 Total Posts
+                </h3>
+                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $totalPosts }}</p>
             </div>
 
-            <div class="p-6 bg-white shadow-lg rounded-lg">
-                <h3 class="text-lg font-bold text-green-700">Reject Posts</h3>
-                <p class="text-gray-600 text-xl">{{ $rejectedPosts }}</p>
+            <div class="p-6 bg-blue-100 shadow-xl rounded-lg border border-blue-300 text-center">
+                <h3 class="text-lg font-bold text-blue-800 flex justify-center items-center">
+                    ✅ Approved Posts
+                </h3>
+                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $approvedPosts }}</p>
+            </div>
+
+            <div class="p-6 bg-yellow-100 shadow-xl rounded-lg border border-yellow-300 text-center">
+                <h3 class="text-lg font-bold text-yellow-800 flex justify-center items-center">
+                    ⏳ Pending Approval
+                </h3>
+                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $pendingCount }}</p>
+            </div>
+
+            <div class="p-6 bg-red-100 shadow-xl rounded-lg border border-red-300 text-center">
+                <h3 class="text-lg font-bold text-red-800 flex justify-center items-center">
+                    ❌ Rejected Posts
+                </h3>
+                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $rejectedPosts }}</p>
             </div>
         </div>
+
+
 
         <!-- Section: Pending Posts -->
         <h3 class="text-2xl font-bold text-green-700 mt-10">Pending Posts</h3>
@@ -56,7 +70,8 @@
                             <td class="p-4">{{ $post->user->name }}</td>
                             <td class="p-4">{{ $post->created_at->format('M d, Y') }}</td>
                             <td class="p-4 text-center">
-                                <a href="{{ route('admin.posts.detail', $post->id) }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all duration-300">
+                                <a href="{{ route('admin.posts.detail', $post->id) }}"
+                                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-all duration-300">
                                     Review
                                 </a>
                             </td>
@@ -74,4 +89,5 @@
     </div>
 
 </body>
+
 </html>

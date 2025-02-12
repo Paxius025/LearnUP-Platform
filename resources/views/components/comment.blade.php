@@ -23,7 +23,10 @@
                     <div class="flex justify-between items-center w-full">
                         <div class="flex items-center space-x-2">
                             <p class="text-gray-800">
-                                <strong>{{ $comment->user->name }} ({{ ucfirst($comment->user->role) }})</strong>:
+                                <a href="{{ route('profile.show', $post->user->id) }}"
+                                    class="font-semibold text-gray-700 hover:underline">
+                                    {{ $post->user->name }}
+                                </a>
                                 <span class="comment-content">{{ $comment->content }}</span>
                             </p>
                         </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnUP</title>
     @vite('resources/css/app.css')
+    <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
 </head>
 <body class="bg-green-50 flex items-center justify-center min-h-screen">
 

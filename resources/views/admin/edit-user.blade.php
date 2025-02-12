@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User Role - Learn Up</title>
     @vite('resources/css/app.css')
+    <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
 </head>
 
 <body class="bg-green-50 min-h-screen font-poppins flex flex-col items-center pt-20">

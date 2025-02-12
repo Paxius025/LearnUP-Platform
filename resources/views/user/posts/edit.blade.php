@@ -8,6 +8,7 @@
     @vite('resources/css/app.css')
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <style>
         #editor {
             min-height: 150px;

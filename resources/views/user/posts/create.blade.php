@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnUP</title>
     @vite('resources/css/app.css')
+    <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <!-- Cropper.js CSS -->

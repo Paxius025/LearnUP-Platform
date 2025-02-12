@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnUP</title>
-    
+    <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <!-- เพิ่มการใช้ฟอนต์ Sarabun หรือ Kanit จาก Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')

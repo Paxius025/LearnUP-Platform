@@ -7,7 +7,7 @@
     <title>@yield('title', 'Learn Up')</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     @vite('resources/css/app.css')
-
+    <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <style>
         /* ป้องกัน Scrollbar เกินจำเป็น */
         html,

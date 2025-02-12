@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LearnUP - Knowledge Sharing Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 🌟 Overview
+LearnUP is a platform where users can **share knowledge** through **PDF files** and **blog posts**. It is designed to **facilitate learning** in an intuitive and collaborative environment.
 
-## About Laravel
+## 🚀 Features
+### **User Features**
+- ✅ Create and edit blog posts with **Quill.js Editor**
+- ✅ Upload **PDF files** and attach them to posts
+- ✅ Preview PDF files with **PDF.js**
+- ✅ Like posts (**toggle system: like/unlike**)
+- ✅ Comment and reply to posts with notifications
+- ✅ Persistent login (**Remember Me Token + Cookies**)
+- ✅ Beautiful UI with **TailwindCSS**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### **Admin Features**
+- ✅ Approve or reject user posts
+- ✅ View statistics on:
+  - Number of users, posts, likes, and comments
+  - Active users (writers, admins, regular users)
+  - Log history
+- ✅ Manage user roles (User, Writer, Admin)
+- ✅ Delete inappropriate posts and comments
+- ✅ Dashboard notification system
+- ✅ Activity logs tracking **(Login, Post Creation, Comments, Likes)**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### **Notification System**
+- ✅ Notify **Admin** when a new post is awaiting approval
+- ✅ Notify **Users** when their post is **approved/rejected**
+- ✅ Notify **Users** when someone **likes or comments** on their post
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🛠️ Technology Stack
+| Component      | Technology |
+|---------------|------------|
+| **Backend**   | Laravel (Latest) |
+| **Frontend**  | Blade + TailwindCSS |
+| **Database**  | MySQL |
+| **Editor**    | Quill.js |
+| **File Storage** | Laravel Storage (Local) |
+| **PDF Preview** | PDF.js / iframe |
+| **Authentication** | Laravel Custom Auth |
+| **Graph & Analytics** | Chart.js |
 
-## Learning Laravel
+## 🏗️ User Roles
+| Role     | Capabilities |
+|----------|--------------------------------------------------|
+| **User** | Create posts (requires approval), Upload PDFs, Comment |
+| **Writer** | Directly post without approval, Upload PDFs, Comment |
+| **Admin** | Approve/reject posts, View statistics, Manage users, Monitor logs |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📊 Dashboard Statistics
+- **Total posts, users, writers, admins, and logs**
+- **Line charts for post creation, comments, and registrations (Last 7 Days)**
+- **Bar charts for logs categorized by actions (login, create, comment, etc.)**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🔄 Flow of Operations
+📌 **User**
+1. **Login → Dashboard**
+2. **Create a post + Upload PDFs**
+3. **Wait for approval** (Admin Notification triggered)
+4. **If approved, post is published**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+📌 **Writer**
+1. **Login → Dashboard**
+2. **Create a post + Upload PDFs**
+3. **Post goes live instantly**
 
-## Laravel Sponsors
+📌 **Admin**
+1. **Login → Dashboard**
+2. **Approve/reject posts**
+3. **Monitor statistics and logs**
+4. **Manage user roles and content**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📂 File Structure (Frontend)
+```
+resources/
+|- Auth/
+|    
+|- User (user & writer)/
+|    |- dashboard.blade.php
+|- Admin/
+|    |- dashboard.blade.php
+```
 
-### Premium Partners
+## 🎨 UI Design
+- **Uses TailwindCSS for styling**
+- **Green theme inspired by Kasetsart University**
+- **Encouraging learning quotes on the homepage**
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 📌 Additional Notes
+- **All interactions log events** (Login, Logout, Post, Comment, Like)
+- **Persistent login enabled** (Users don’t need to log in frequently)
+- **System records likes in `user_id, post_id` (toggle like/unlike)**
 
-## Contributing
+---
+🚀 **LearnUP is built to make knowledge sharing easier and more efficient!**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

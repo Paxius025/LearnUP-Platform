@@ -47,7 +47,7 @@
         <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
         @if (auth()->check() && auth()->user()->role === 'user')
             <div class="bg-yellow-200 text-yellow-800 p-3 rounded-lg mb-4">
-                ⚠️ การแก้ไขโพสต์จะทำให้โพสต์กลับไปอยู่ในสถานะ <strong>"รออนุมัติ (Pending)"</strong>
+                ⚠️ Editing the post will revert its status to <strong>"Pending Approval"</strong>
             </div>
         @endif
 

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div class="mt-10 container mx-auto p-6 bg-white shadow-md rounded-lg">
 
         <h1 class="text-2xl font-semibold mb-6 text-green-700 flex items-center justify-between">
             <span>📊 Log Statistics</span>
@@ -42,7 +42,7 @@
                     📌 Log Count by Action
                 </h2>
                 <div class="relative w-full">
-                    <canvas id="logBarChart" style="width:100%; height:700px;"></canvas>
+                    <canvas id="logBarChart" style="width:100%; height:500px;"></canvas>
                 </div>
             </div>
             <div class="lg:w-1/3 bg-gray-100 p-6 rounded-lg">
@@ -50,7 +50,7 @@
                     📈 Log Trends (Last 7 Days)
                 </h2>
                 <div class="relative w-full">
-                    <canvas id="logLineChart" style="width:100%; height:700px;"></canvas>
+                    <canvas id="logLineChart" style="width:100%; height:500px;"></canvas>
                 </div>
             </div>
         </div>

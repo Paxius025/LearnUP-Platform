@@ -1,15 +1,14 @@
 @extends('layouts.app')
-
-@extends('layouts.app')
-
+@section('title', 'LearnUP')
 @section('content')
     <!-- Navbar -->
     <div class="fixed top-0 left-0 w-full bg-white shadow-md z-50">
         @include('components.navbar')
     </div>
 
-    <div class="max-w-4xl mx-auto pt-24 overflow-hidden min-h-screen">
-        <div class="bg-white shadow-lg rounded-lg p-6">
+    <!-- ใช้ container ป้องกันเนื้อหาเกิน -->
+    <div class="container mx-auto px-4 pt-24 min-h-screen">
+        <div class="w-full max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
             <!-- ส่วนหัวโปรไฟล์ -->
             <div class="flex flex-col items-center space-y-4">
                 @if ($user->avatar)
@@ -45,8 +44,7 @@
 
             <div class="mt-4 space-y-4">
                 @forelse ($posts as $post)
-                    <div
-                        class="p-4 bg-gray-100 rounded-lg shadow hover:shadow-md transition flex justify-between items-center">
+                    <div class="p-4 bg-gray-100 rounded-lg shadow hover:shadow-md transition flex justify-between items-center">
                         <div>
                             <h4 class="text-lg font-semibold text-gray-800">{{ $post->title }}</h4>
                             <p class="text-gray-600 text-sm">{{ $post->created_at->diffForHumans() }}</p>

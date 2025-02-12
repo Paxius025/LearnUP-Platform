@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $post->title }} - Learn Up</title>
+    <title>Learn Up</title>
     @vite('resources/css/app.css')
 </head>
 

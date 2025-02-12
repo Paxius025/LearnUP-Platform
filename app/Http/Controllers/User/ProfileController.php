@@ -64,17 +64,18 @@ class ProfileController extends Controller
     public function show($id)
     {
         $user = User::findOrFail($id);
+        $allPosts = Post::where('user_id', $id)->pluck('id');
+
         $posts = Post::where('user_id', $id)->latest()->paginate(4);
 
-        // คำนวณยอดไลค์ทั้งหมดของโพสต์ของผู้ใช้คนนี้
-        $totalLikes = Like::whereIn('post_id', $posts->pluck('id'))->count();
+        $totalLikes = Like::whereIn('post_id', $allPosts)->count();
 
-        // คำนวณจำนวนครั้งที่โพสต์ของผู้ใช้นี้ถูก Bookmark
-        $totalBookmarks = FavoritePost::whereIn('post_id', $posts->pluck('id'))->count();
+        $totalBookmarks = FavoritePost::whereIn('post_id', $allPosts)->count();
         
         logAction('view_profile', "Viewed profile of user: {$user->username}");
 
         return view('user.profile.show', compact('user', 'posts', 'totalLikes', 'totalBookmarks'));
     }
+
     
 }

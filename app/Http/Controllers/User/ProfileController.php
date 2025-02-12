@@ -52,6 +52,7 @@ class ProfileController extends Controller
         }
 
         $user->save();
+        logAction('update_profile', "User {$user->username} updated profile");
 
         return redirect()->route('profile.edit')->with('success', 'โปรไฟล์ของคุณได้รับการอัปเดตแล้ว');
     }

@@ -36,7 +36,7 @@ class PostApprovalController extends Controller
         // ✅ เก็บ Log การอนุมัติ
         logAction('approve_post', "Admin approve post: {$post->title}");
     
-        return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
+        return redirect()->route('admin.manage.posts')->with('success', 'Post approved successfully.');
     }
 
     public function reject(Post $post)
@@ -47,13 +47,13 @@ class PostApprovalController extends Controller
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
-            'message' => "โพสต์ \"{$post->title}\" ของคุณถูกปฏิเสธ",
+            'message' => "Post \"{$post->title}\" rejeted",
             'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
             'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
         ]);
 
         // ✅ เก็บ Log การปฏิเสธโพสต์
-        logAction('reject_post', "Admin ปฏิเสธโพสต์: {$post->title}");
+        logAction('reject_post', "Admin reject: {$post->title}");
 
         return redirect()->route('admin.dashboard')->with('success', 'Post rejected successfully.');
     }

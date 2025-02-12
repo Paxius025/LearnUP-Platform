@@ -19,7 +19,7 @@
             Learn Up
         </h1>
 
-        <div class="space-x-8 flex items-center">
+        <div class="space-x-8 flex items-center text-xl">
             @if (auth()->user()->role === 'admin')
                 <a href="{{ route('admin.dashboard') }}"
                     class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
@@ -93,7 +93,7 @@
             <!-- ปุ่ม Profile -->
             <a href="{{ route('profile.edit') }}"
                 class="bg-black text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-bold">
-                ⚙️ 
+                ⚙️
             </a>
         @endif
 

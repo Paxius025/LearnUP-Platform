@@ -17,36 +17,11 @@
 
         <!-- Section: Summary -->
         <div class="grid grid-cols-4 gap-6 mt-6">
-            <div class="p-6 bg-green-100 shadow-xl rounded-lg border border-green-300 text-center">
-                <h3 class="text-lg font-bold text-green-800 flex justify-center items-center">
-                    📌 Total Posts
-                </h3>
-                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $totalPosts }}</p>
-            </div>
-
-            <div class="p-6 bg-blue-100 shadow-xl rounded-lg border border-blue-300 text-center">
-                <h3 class="text-lg font-bold text-blue-800 flex justify-center items-center">
-                    ✅ Approved Posts
-                </h3>
-                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $approvedPosts }}</p>
-            </div>
-
-            <div class="p-6 bg-yellow-100 shadow-xl rounded-lg border border-yellow-300 text-center">
-                <h3 class="text-lg font-bold text-yellow-800 flex justify-center items-center">
-                    ⏳ Pending Approval
-                </h3>
-                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $pendingCount }}</p>
-            </div>
-
-            <div class="p-6 bg-red-100 shadow-xl rounded-lg border border-red-300 text-center">
-                <h3 class="text-lg font-bold text-red-800 flex justify-center items-center">
-                    ❌ Rejected Posts
-                </h3>
-                <p class="text-gray-700 text-2xl font-bold mt-2">{{ $rejectedPosts }}</p>
-            </div>
+            <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />
+            <x-dashboard-stat-card title="Approved Posts" count="{{ $approvedPosts }}" color="blue" icon="✅" />
+            <x-dashboard-stat-card title="Pending Approval" count="{{ $pendingCount }}" color="yellow" icon="⏳" />
+            <x-dashboard-stat-card title="Rejected Posts" count="{{ $rejectedPosts }}" color="red" icon="❌" />
         </div>
-
-
 
         <!-- Section: Pending Posts -->
         <h3 class="text-2xl font-bold text-green-700 mt-10">📝 Pending Posts</h3>
@@ -75,7 +50,7 @@
                                     🔍 Review
                                 </a>
                             </td>
-                            
+
                         </tr>
                     @endforeach
 

@@ -46,6 +46,8 @@ class FavoritePostController extends Controller
                     'is_admin_read' => false
                 ]);
             }
+            
+            logAction('toggle_bookmark', "User " . $user->username . " bookmarked post: $postId");
 
             return response()->json(['bookmarked' => true]);
         }
@@ -62,6 +64,7 @@ class FavoritePostController extends Controller
                 ->where('user_id', $user->id);
         })->latest()->paginate(10);
 
+        logAction('view_bookmarks', "User {$user->username} viewed their bookmarks");
         return view('user.bookmarks', compact('bookmarkedPosts'));
     }
 }

@@ -31,7 +31,10 @@
 
         <h2 class="text-3xl font-bold">{{ $post->title }}</h2>
         <p class="text-gray-500 text-sm">Published on {{ $post->created_at->format('M d, Y') }} by
-            <span class="font-semibold text-gray-700">{{ $post->user->name }}</span>
+            <a href="{{ route('profile.show', $post->user->id) }}" class="font-semibold text-gray-700 hover:underline">
+                {{ $post->user->name }}
+            </a>
+
         </p>
 
 

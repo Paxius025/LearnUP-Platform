@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
+use App\Models\User;
+use App\Models\Like;
+use App\Models\FavoritePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -56,4 +60,21 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.edit')->with('success', 'โปรไฟล์ของคุณได้รับการอัปเดตแล้ว');
     }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        $posts = Post::where('user_id', $id)->latest()->paginate(4);
+
+        // คำนวณยอดไลค์ทั้งหมดของโพสต์ของผู้ใช้คนนี้
+        $totalLikes = Like::whereIn('post_id', $posts->pluck('id'))->count();
+
+        // คำนวณจำนวนครั้งที่โพสต์ของผู้ใช้นี้ถูก Bookmark
+        $totalBookmarks = FavoritePost::whereIn('post_id', $posts->pluck('id'))->count();
+        
+        logAction('view_profile', "Viewed profile of user: {$user->username}");
+
+        return view('user.profile.show', compact('user', 'posts', 'totalLikes', 'totalBookmarks'));
+    }
+    
 }

@@ -62,7 +62,7 @@
 
     <!-- Pagination Links -->
     <div class="mt-4">
-        {{ $posts->links() }} <!-- Laravel Pagination -->
+        {{ $posts->links() }}
     </div>
 
     @if ($posts->isEmpty())

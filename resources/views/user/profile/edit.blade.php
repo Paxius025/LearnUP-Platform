@@ -62,10 +62,18 @@
 
                 <!-- Buttons -->
                 <div class="flex justify-between mt-6">
-                    <a href="{{ route('user.dashboard') }}"
-                        class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition font-semibold">
-                        Cancle
-                    </a>
+                    @if (auth()->user()->role === 'admin')
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition font-semibold">
+                            Cancel
+                        </a>
+                    @else
+                        <a href="{{ route('user.dashboard') }}"
+                            class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-600 transition font-semibold">
+                            Cancel
+                        </a>
+                    @endif
+
 
                     <button type="submit"
                         class="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition font-semibold">

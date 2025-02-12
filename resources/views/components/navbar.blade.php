@@ -19,7 +19,7 @@
             Learn Up
         </h1>
 
-        <div class="space-x-8 flex items-center text-xl">
+        <div class="space-x-8 flex items-center text-base">
             @if (auth()->user()->role === 'admin')
                 <a href="{{ route('admin.dashboard') }}"
                     class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">

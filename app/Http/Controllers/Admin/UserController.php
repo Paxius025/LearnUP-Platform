@@ -25,34 +25,31 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
             'role' => 'required|in:user,writer,admin',
         ]);
 
         $oldRole = $user->role;
 
         $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
+            'role' => $request->role,  
         ]);
 
-        // ส่งการแจ้งเตือนให้ผู้ใช้เมื่อมีการเปลี่ยนยศ
+        // ส่งการแจ้งเตือนเมื่อมีการเปลี่ยน Role
         if ($oldRole !== $user->role) {
             Notification::create([
                 'user_id' => $user->id,
                 'type' => 'role_updated',
-                'message' => "Your role has changed {$oldRole} to {$user->role}",
+                'message' => "Your role has changed from {$oldRole} to {$user->role}",
                 'is_user_read' => false,  
                 'is_admin_read' => false, 
             ]);
         }
 
-        logAction('update_user', "Updated user: {$user->name}");
+        logAction('update_user', "Updated user role: {$user->name} ({$oldRole} → {$user->role})");
 
-        return redirect()->route('admin.users')->with('success', 'User updated successfully.');
+        return redirect()->route('admin.users')->with('success', 'User role updated successfully.');
     }
+
 
     public function destroy(User $user)
     {

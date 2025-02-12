@@ -69,7 +69,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/stat', [LogController::class, 'stat'])->name('stat');
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::post('/users/{user}/update', [UserController::class, 'update'])->name('users.update');
+    Route::patch('/users/{user}/update', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}/delete', [UserController::class, 'destroy'])->name('users.delete');
     
     Route::get('/posts/{post}', [PostApprovalController::class, 'detail'])->name('posts.detail');

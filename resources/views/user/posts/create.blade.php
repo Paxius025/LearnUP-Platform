@@ -12,7 +12,34 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
     <!-- Cropper.js JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <style>
+        #editor {
+            min-height: 150px;
+            /* เพิ่มขนาดขั้นต่ำของ Editor */
+            height: 300px;
+            /* เพิ่มความสูงของ Editor */
+            max-height: 500px;
+            /* เพิ่มความสูงสูงสุด */
+        }
 
+        .ql-container {
+            min-height: 150px !important;
+            height: 300px !important;
+            max-height: 400px !important;
+            /* ปรับให้พอดีกับ Layout */
+            overflow: hidden !important;
+            /* ป้องกันล้น */
+        }
+
+        .ql-editor {
+            min-height: 150px !important;
+            height: 300px !important;
+            max-height: 400px !important;
+            padding: 10px !important;
+            overflow-y: auto !important;
+            /* ให้ Scroll ถ้ามีเนื้อหาเยอะ */
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen font-sans antialiased">
@@ -20,27 +47,33 @@
     <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-xl">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Create New Post</h2>
 
-        <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data"
+            onsubmit="return validateForm()">
             @csrf
             <div class="mb-6">
                 <label for="title" class="block text-gray-700 text-lg font-semibold">Title</label>
-                <input type="text" id="title" name="title" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" required>
+                <input type="text" id="title" name="title"
+                    class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    required>
             </div>
 
             <div class="mb-6">
                 <label class="block text-gray-700 text-lg font-semibold">Content</label>
-                <div id="editor" class="bg-white border border-gray-300 rounded-lg p-4 min-h-[500px] shadow-md"></div>
+                <div id="editor" class="bg-white border border-gray-300 rounded-lg p-4 min-h-[500px] shadow-md">
+                </div>
                 <input type="hidden" name="content" id="content" required>
                 <div id="content-error" class="text-red-500 text-sm mt-2 hidden">Please fill out this field</div>
             </div>
 
             <div class="mb-6">
                 <label for="pdf_file" class="block text-gray-700 text-lg font-semibold">Upload PDF (Optional)</label>
-                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf" class="w-full p-4 border border-gray-300 rounded-lg shadow-sm">
+                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
+                    class="w-full p-4 border border-gray-300 rounded-lg shadow-sm">
             </div>
 
             <div class="flex justify-center">
-                <button type="submit" class="bg-blue-600 text-white px-8 py-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">Publish</button>
+                <button type="submit"
+                    class="bg-blue-600 text-white px-8 py-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">Publish</button>
             </div>
         </form>
     </div>
@@ -50,10 +83,16 @@
             theme: 'snow',
             modules: {
                 toolbar: [
-                    [{ 'header': [1, 2, false] }],
+                    [{
+                        'header': [1, 2, false]
+                    }],
                     ['bold', 'italic', 'underline'],
                     ['image', 'link'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }]
                 ]
             }
         });

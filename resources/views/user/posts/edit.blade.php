@@ -9,32 +9,31 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        /* ปรับขนาดของ editor ให้เหมาะสม */
         #editor {
-            min-height: 300px;
-            /* เพิ่มความสูงของ editor */
-            border: 1px solid #ddd;
-            /* กรอบที่มีสีอ่อน */
-            border-radius: 8px;
-            /* มุมโค้ง */
-            padding: 16px;
-            /* เพิ่ม padding สำหรับเนื้อหาภายใน */
-            background-color: #fafafa;
-            /* สีพื้นหลัง */
-        }
-
-        .ql-toolbar {
-            border-radius: 8px 8px 0 0;
-            /* มุมโค้งบน */
-            border: 1px solid #ddd;
-            /* กรอบของ toolbar */
-            background-color: #f5f5f5;
-            /* พื้นหลัง toolbar */
+            min-height: 150px;
+            /* เพิ่มขนาดขั้นต่ำของ Editor */
+            height: 300px;
+            /* เพิ่มความสูงของ Editor */
+            max-height: 500px;
+            /* เพิ่มความสูงสูงสุด */
         }
 
         .ql-container {
-            border-radius: 0 0 8px 8px;
-            /* มุมโค้งล่าง */
+            min-height: 150px !important;
+            height: 300px !important;
+            max-height: 400px !important;
+            /* ปรับให้พอดีกับ Layout */
+            overflow: hidden !important;
+            /* ป้องกันล้น */
+        }
+
+        .ql-editor {
+            min-height: 150px !important;
+            height: 300px !important;
+            max-height: 400px !important;
+            padding: 10px !important;
+            overflow-y: auto !important;
+            /* ให้ Scroll ถ้ามีเนื้อหาเยอะ */
         }
     </style>
 </head>

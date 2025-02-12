@@ -29,6 +29,9 @@
                     class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
                     👥 Manage Users
                 </a>
+                <a href="{{ route('admin.manage.posts') }}"
+                    class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
+                    📝 Manage Posts
                 <a href="{{ route('admin.stat') }}"
                     class="hover:text-teal-200 transition duration-300 transform hover:scale-105 font-bold">
                     📊 Statistics

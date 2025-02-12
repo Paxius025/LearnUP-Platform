@@ -33,6 +33,9 @@ use App\Http\Controllers\FavoritePostController;
 // Profile Controller
 use App\Http\Controllers\User\ProfileController;
 
+// Posts Management Controller
+use App\Http\Controllers\Admin\PostManagementController;
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
@@ -118,4 +121,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+});
+
+// Posts Management
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/manage/posts', [\App\Http\Controllers\Admin\PostManagementController::class, 'index'])->name('manage.posts');
 });

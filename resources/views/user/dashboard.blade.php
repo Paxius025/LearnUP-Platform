@@ -83,10 +83,12 @@
 
                 <!-- 🔹 Like & Read More Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
-                    <!-- ปุ่ม Like -->
+                    <!-- 🔹 ปุ่ม Like -->
                     <button id="like-button-{{ $post->id }}" onclick="toggleLike({{ $post->id }})"
-                        class="text-gray-600 hover:text-blue-600 transition-transform duration-300 ease-in-out transform">
-                        <i id="like-icon-{{ $post->id }}" class="fas fa-thumbs-up text-2xl"></i>
+                        class="text-gray-600 hover:text-blue-600 transition-transform duration-300 ease-in-out transform"
+                        data-liked="{{ $isLiked ? 'true' : 'false' }}">
+                        <i id="like-icon-{{ $post->id }}"
+                            class="fas fa-thumbs-up text-2xl {{ $isLiked ? 'text-blue-600' : 'text-gray-600' }}"></i>
                     </button>
 
                     <!-- จำนวนไลค์ -->

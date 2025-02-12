@@ -20,21 +20,29 @@
         @if ($post->comments && $post->comments->isNotEmpty())
             @foreach ($post->comments as $comment)
                 <div class="p-4 bg-gray-100 rounded-lg relative" data-id="{{ $comment->id }}">
-                    <div class="flex justify-between items-center"> <!-- ใช้ flex เพื่อจัดปุ่มฟันเฟืองไปทางขวา -->
-                        <p class="text-gray-800">
-                            <strong>{{ $comment->user->name }} ({{ ucfirst($comment->user->role) }})</strong>:
-                            <span class="comment-content">{{ $comment->content }}</span>
-                        </p>
-                        <p class="text-gray-500 text-sm">{{ $comment->created_at->diffForHumans() }}</p>
+                    <div class="flex justify-between items-center w-full">
+                        <div class="flex items-center space-x-2">
+                            <p class="text-gray-800">
+                                <strong>{{ $comment->user->name }} ({{ ucfirst($comment->user->role) }})</strong>:
+                                <span class="comment-content">{{ $comment->content }}</span>
+                            </p>
+                        </div>
 
-                        <!-- ปุ่มฟันเฟืองเพื่อแสดงเมนู -->
-                        @if (auth()->id() === $comment->user_id || auth()->user()->role === 'admin')
-                            <button onclick="toggleMenu({{ $comment->id }})"
-                                class="text-gray-600 hover:text-gray-800 text-xl">
-                                ⚙️
-                            </button>
-                        @endif
+                        <div class="flex items-center gap-x-4">
+                            <p class="text-gray-500 text-sm whitespace-nowrap mr-4">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <!-- ปุ่มฟันเฟืองเพื่อแสดงเมนู -->
+                            @if (auth()->id() === $comment->user_id || auth()->user()->role === 'admin')
+                                <button onclick="toggleMenu({{ $comment->id }})"
+                                    class="text-gray-600 hover:text-gray-800 text-xl">
+                                    ⚙️
+                                </button>
+                            @endif
+                        </div>
                     </div>
+
 
                     <!-- เมนูแก้ไขและลบ -->
                     <div id="comment-menu-{{ $comment->id }}"

@@ -1,6 +1,7 @@
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-<nav class="bg-gradient-to-r from-green-600 to-teal-600 p-4 text-white flex items-center shadow-2xl relative">
+<nav class="bg-green-600 p-4 text-white flex items-center shadow-lg relative">
+
     <!-- Logo / Back Button -->
     <div class="flex-1 flex items-center space-x-4">
         @if (!request()->routeIs('user.dashboard') && !request()->routeIs('admin.dashboard'))
@@ -13,7 +14,6 @@
             </a>
         @endif
     </div>
-
 
     <!-- Navigation Links - ใช้ absolute + transform เพื่อให้ตรงกลาง -->
     <div class="absolute left-1/2 transform -translate-x-1/2 flex space-x-6 text-base">
@@ -67,7 +67,8 @@
             class="relative flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
             <i data-lucide="bell" class="mb-1"></i> <span>Notifications</span>
             @if ($unreadCount > 0)
-                <span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full -mr-2 -mt-2">
+                <span
+                    class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full -mr-2 -mt-2">
                     {{ $unreadCount }}
                 </span>
             @endif
@@ -76,13 +77,15 @@
 
     <!-- Profile and Logout Section -->
     <div class="flex-1 flex justify-end space-x-2">
-        <a href="{{ route('profile.edit') }}" class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
+        <a href="{{ route('profile.edit') }}"
+            class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
             <i data-lucide="settings"></i> <span class="ml-1">Profile</span>
         </a>
         <form action="{{ route('logout') }}" method="POST">
             @csrf
-            <button type="submit" class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="log-out"></i> 
+            <button type="submit"
+                class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
+                <i data-lucide="log-out"></i>
                 <span class="ml-1">Logout</span>
             </button>
         </form>

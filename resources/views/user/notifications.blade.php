@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LearnUP</title>
-    <!-- ใส่ CSS ที่จำเป็น (เช่น Tailwind CSS, custom styles) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-100 overflow-x-hidden">
+
     @include('components.navbar') <!-- นำ navbar มาใช้ที่นี่ -->
 
-    <div class="max-w-3xl mx-auto mt-10 bg-white p-6 shadow-md rounded-lg">
+    <div class="max-w-4xl w-full mx-auto mt-10 p-6 shadow-md rounded-lg">
+
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl font-bold">🔔 การแจ้งเตือน</h2>
 

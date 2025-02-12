@@ -2,34 +2,50 @@
 
 @section('content')
     <div class="container mx-auto p-6">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h1 class="text-2xl font-semibold mb-4">📌 Post Details</h1>
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+            <h1 class="text-3xl font-bold text-gray-700 mb-6 flex items-center">
+                📌 <span class="ml-2">Post Details</span>
+            </h1>
 
-            <p><strong>Title:</strong> {{ $post->title }}</p>
-            <p><strong>Content:</strong></p>
-            <div class="border p-4 rounded-lg bg-gray-100">
-                {!! $post->content !!}
+            <div class="space-y-4">
+                <p class="text-lg font-semibold text-gray-600"><strong>Title:</strong> {{ $post->title }}</p>
+
+                <div>
+                    <p class="text-lg font-semibold text-gray-600">Content:</p>
+                    <div class="border p-5 rounded-lg bg-gray-50 shadow-inner text-gray-800 leading-relaxed">
+                        {!! $post->content !!}
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <p class="text-lg font-semibold text-gray-600">Status:</p>
+                    @if ($post->status == 'pending')
+                        <span class="px-3 py-1 text-sm font-semibold bg-yellow-100 text-yellow-700 rounded-lg shadow">
+                            Pending Approval
+                        </span>
+                    @elseif ($post->status == 'approved')
+                        <span class="px-3 py-1 text-sm font-semibold bg-green-100 text-green-700 rounded-lg shadow">
+                            Approved
+                        </span>
+                    @else
+                        <span class="px-3 py-1 text-sm font-semibold bg-red-100 text-red-700 rounded-lg shadow">
+                            Rejected
+                        </span>
+                    @endif
+                </div>
+
+                <p class="text-lg font-semibold text-gray-600"><strong>Posted by:</strong> {{ $post->user->name }}</p>
+                <p class="text-lg font-semibold text-gray-600"><strong>Created at:</strong>
+                    {{ $post->created_at->format('d/m/Y H:i') }}</p>
             </div>
 
-            <p><strong>Status:</strong>
-                @if ($post->status == 'pending')
-                    <span class="text-yellow-500">Pending Approval</span>
-                @elseif ($post->status == 'approved')
-                    <span class="text-green-500">Approved</span>
-                @else
-                    <span class="text-red-500">Rejected</span>
-                @endif
-            </p>
-
-            <p><strong>Posted by:</strong> {{ $post->user->name }}</p>
-            <p><strong>Created at:</strong> {{ $post->created_at->format('d/m/Y H:i') }}</p>
-
-            <div class="mt-4 flex space-x-4">
+            <div class="mt-6 flex space-x-4 justify-center">
                 @if ($post->status == 'pending')
                     <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-all duration-300">
+                        <button type="submit"
+                            class="w-40 px-5 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ✅ Approve
                         </button>
                     </form>
@@ -37,34 +53,30 @@
                     <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-all duration-300">
+                        <button type="submit"
+                            class="w-40 px-5 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ❌ Reject
                         </button>
                     </form>
-
                 @elseif ($post->status == 'approved')
                     <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition-all duration-300">
+                        <button type="submit"
+                            class="w-40 px-5 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ❌ Reject
                         </button>
                     </form>
-
                 @elseif ($post->status == 'rejected')
                     <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition-all duration-300">
+                        <button type="submit"
+                            class=" w-40 px-5 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ✅ Approve
                         </button>
                     </form>
                 @endif
-
-                <a href="{{ route('admin.manage.posts') }}"
-                    class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600 transition-all duration-300">
-                    ⬅️ Back to Manage Posts
-                </a>
             </div>
         </div>
     </div>

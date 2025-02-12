@@ -11,10 +11,10 @@ class DashboardManagementController extends Controller
     public function index()
     {
         // ดึงโพสต์ที่ยังไม่อนุมัติ (pending)
-        $pendingPosts = Post::where('status', 'pending')->latest()->get(); 
+        $pendingCount = Post::where('status', 'pending')->latest()->paginate(6);
         $totalPosts = Post::count();
         $approvedPosts = Post::where('status', 'approved')->count();
-        $pendingCount = Post::where('status', 'pending')->count();
+        $pendingPosts = Post::where('status', 'pending')->count();
         $rejectedPosts = Post::where('status', 'rejected')->count();
         return view('admin.dashboard', compact('pendingPosts', 'totalPosts', 'approvedPosts', 'pendingCount', 'rejectedPosts'));
     }

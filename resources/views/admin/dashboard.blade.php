@@ -18,7 +18,7 @@
         <!-- Section: Summary -->
         <div class="grid grid-cols-4 gap-6 mt-6">
             <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />
-            <x-dashboard-stat-card title="Pending Approval" count="{{ $pendingCount }}" color="yellow" icon="⏳" />
+            <x-dashboard-stat-card title="Pending Approval" count="{{ $pendingPosts }}" color="yellow" icon="⏳" />
             <x-dashboard-stat-card title="Approved Posts" count="{{ $approvedPosts }}" color="blue" icon="✅" />
             <x-dashboard-stat-card title="Rejected Posts" count="{{ $rejectedPosts }}" color="red" icon="❌" />
         </div>
@@ -38,9 +38,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($pendingPosts as $index => $post)
+                    @foreach ($pendingCount as $index => $post)
                         <tr class="border-b border-gray-300 hover:bg-green-50 transition-all duration-300">
-                            <td class="p-4 text-center font-semibold text-gray-600">{{ $index + 1 }}</td>
+                            <td class="p-4 text-center font-semibold text-gray-600">
+                                {{ ($pendingCount->currentPage() - 1) *$pendingCount->perPage() + $loop->iteration }}
+                            </td>
                             <td class="p-4 font-bold text-green-700">{{ $post->title }}</td>
                             <td class="p-4 text-gray-600">{{ $post->user->name }}</td>
                             <td class="p-4 text-gray-500">{{ $post->created_at->format('M d, Y') }}</td>
@@ -50,11 +52,10 @@
                                     🔍 Review
                                 </a>
                             </td>
-
                         </tr>
                     @endforeach
 
-                    @if ($pendingPosts->isEmpty())
+                    @if ($pendingCount->isEmpty())
                         <tr>
                             <td colspan="5" class="text-center text-gray-500 p-6">
                                 😴 No posts pending approval.
@@ -63,6 +64,11 @@
                     @endif
                 </tbody>
             </table>
+
+            <!-- Pagination -->
+            <div class="mt-4">
+                {{ $pendingCount->links('pagination::tailwind') }}
+            </div>
         </div>
 
 

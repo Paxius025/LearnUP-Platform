@@ -45,7 +45,7 @@
                         @csrf
                         @method('PATCH')
                         <button type="submit"
-                            class="w-40 px-5 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            class="w-40px-5 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ✅ Approve
                         </button>
                     </form>

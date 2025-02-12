@@ -17,7 +17,7 @@
 </head>
 
 <body>
-
+    @include('components.navbar')
     <div class="container mx-auto mt-6">
         @yield('content')
     </div>

@@ -8,10 +8,10 @@
     @vite('resources/css/app.css')
 
     <style>
-        /* ป้องกัน Scroll Bar ที่ไม่จำเป็น */
+        
         html,
         body {
-            overflow-x: hidden;
+            overflow: hidden;
         }
     </style>
 </head>

@@ -66,7 +66,7 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
         $allPosts = Post::where('user_id', $id)->pluck('id');
 
-        $posts = Post::where('user_id', $id)->latest()->paginate(4);
+        $posts = Post::where('user_id', $id)->latest()->paginate(5);
 
         $totalLikes = Like::whereIn('post_id', $allPosts)->count();
 

@@ -14,8 +14,8 @@ class PostManagementController extends Controller
     {
         // ตรวจสอบว่ามีโพสต์อยู่จริง
         $pendingPosts = Post::where('status', 'pending')->latest()->get() ?? collect([]);
-        $approvedPosts = Post::where('status', 'approved')->latest()->paginate(10, ['*'], 'approved_page');
-        $rejectedPosts = Post::where('status', 'rejected')->latest()->paginate(10, ['*'], 'rejected_page');
+        $approvedPosts = Post::where('status', 'approved')->latest()->paginate(8, ['*'], 'approved_page');
+        $rejectedPosts = Post::where('status', 'rejected')->latest()->paginate(8, ['*'], 'rejected_page');
 
         // คำนวณจำนวนโพสต์แต่ละประเภท
         $totalPosts = Post::count();

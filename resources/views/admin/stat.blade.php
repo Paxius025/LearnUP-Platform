@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="mt-10 container mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div class="mt-5 container mx-auto p-6 bg-white shadow-md rounded-lg">
 
-        <h1 class="text-2xl font-semibold mb-6 text-green-700 flex items-center justify-between">
+        <h1 class="text-2xl font-semibold mb-4 text-green-700 flex items-center justify-between">
             <span>📊 Log Statistics</span>
             <a href="{{ route('admin.logs') }}"
                 class="inline-block px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 transition-all duration-300 transform hover:scale-105 text-">
@@ -12,26 +12,26 @@
         </h1>
 
         <!-- สถิติรวม -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
             <div class="bg-green-500 text-white p-4 rounded-lg shadow-md text-center">
                 <h3 class="text-xl font-semibold">📜 Total Posts</h3>
                 <p class="text-3xl font-bold">{{ $totalPosts }}</p>
             </div>
             <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md text-center">
                 <h3 class="text-xl font-semibold">👥 Total Users</h3>
-                <p class="text-3xl font-bold">{{ $totalUsers }}</p>
+                <p class="text-2xl font-bold">{{ $totalUsers }}</p>
             </div>
             <div class="bg-yellow-500 text-white p-4 rounded-lg shadow-md text-center">
                 <h3 class="text-xl font-semibold">✍️ Writers</h3>
-                <p class="text-3xl font-bold">{{ $totalWriters }}</p>
+                <p class="text-2xl font-bold">{{ $totalWriters }}</p>
             </div>
             <div class="bg-purple-500 text-white p-4 rounded-lg shadow-md text-center">
                 <h3 class="text-xl font-semibold">🔧 Admins</h3>
-                <p class="text-3xl font-bold">{{ $totalAdmins }}</p>
+                <p class="text-2xl font-bold">{{ $totalAdmins }}</p>
             </div>
             <div class="bg-red-500 text-white p-4 rounded-lg shadow-md text-center">
                 <h3 class="text-xl font-semibold">📊 Total Logs</h3>
-                <p class="text-3xl font-bold">{{ $totalLogs }}</p>
+                <p class="text-2xl font-bold">{{ $totalLogs }}</p>
             </div>
         </div>
 
@@ -42,7 +42,7 @@
                     📌 Log Count by Action
                 </h2>
                 <div class="relative w-full">
-                    <canvas id="logBarChart" style="width:100%; height:500px;"></canvas>
+                    <canvas id="logBarChart" style="width:100%; height:450px;"></canvas>
                 </div>
             </div>
             <div class="lg:w-1/3 bg-gray-100 p-6 rounded-lg">
@@ -50,7 +50,7 @@
                     📈 Log Trends (Last 7 Days)
                 </h2>
                 <div class="relative w-full">
-                    <canvas id="logLineChart" style="width:100%; height:500px;"></canvas>
+                    <canvas id="logLineChart" style="width:100%; height:450px;"></canvas>
                 </div>
             </div>
         </div>

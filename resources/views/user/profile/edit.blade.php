@@ -5,7 +5,7 @@
         @include('components.navbar')
     </div>
 
-    <div class="flex justify-center items-center min-h-screen py-10">
+    <div class="flex justify-center items-center mt-2  py-10">
         <div class="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Edit Profile</h2>
 
@@ -31,7 +31,7 @@
             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <!-- ชื่อ -->
+                <!-- Name -->
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-700">Username</label>
                     <input type="text" name="name" value="{{ old('name', $user->name) }}"
@@ -44,13 +44,13 @@
                 <!-- Bio -->
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-700">Bio</label>
-                    <textarea name="bio" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400">{{ old('bio', $user->bio) }}</textarea>
+                    <textarea name="bio" rows="4" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 h-25 resize-none">{{ old('bio', $user->bio) }}</textarea>
                     @error('bio')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- รูปโปรไฟล์ -->
+                <!-- Profile Picture -->
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-700">Upload picture</label>
                     <input type="file" name="avatar"

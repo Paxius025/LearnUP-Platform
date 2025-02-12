@@ -1,6 +1,5 @@
 @extends('layouts.app')
 
-@section('title', 'การแจ้งเตือน')
 @section('content')
     <div class="max-w-4xl w-full mx-auto bg-white shadow-md rounded-lg p-6">
         <div class="flex justify-between items-center mb-4">

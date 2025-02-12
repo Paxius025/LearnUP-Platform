@@ -5,7 +5,7 @@
         @include('components.navbar')
     </div>
 
-    <div class="flex justify-center items-center min-h-screen bg-green-50 py-10">
+    <div class="flex justify-center items-center min-h-screen py-10">
         <div class="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Edit Profile</h2>
 

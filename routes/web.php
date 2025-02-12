@@ -30,6 +30,9 @@ use App\Http\Controllers\LikeController;
 // Favorite Post Controller
 use App\Http\Controllers\FavoritePostController;
 
+// Profile Controller
+use App\Http\Controllers\User\ProfileController;
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 
@@ -108,4 +111,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/favorites', [FavoritePostController::class, 'index'])->name('favorites.index');
     Route::post('/favorite/{postId}', [FavoritePostController::class, 'toggle'])->name('favorites.toggle');
     Route::get('/bookmarks', [FavoritePostController::class, 'bookmarkedPosts'])->name('user.bookmarks');
+}); 
+
+// Profile
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });

@@ -79,13 +79,23 @@
 
         </div>
 
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit"
-                class="bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 font-bold">
-                Logout
-            </button>
-        </form>
+        <!-- ตรวจสอบว่าอยู่หน้า Edit Profile หรือไม่ -->
+        @if (request()->routeIs('profile.edit'))
+            <!-- ปุ่ม Logout -->
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 font-bold">
+                    👋🏻 Logout
+                </button>
+            </form>
+        @else
+            <!-- ปุ่ม Profile -->
+            <a href="{{ route('profile.edit') }}"
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-bold">
+                👤 Profile
+            </a>
+        @endif
 
     </nav>
 

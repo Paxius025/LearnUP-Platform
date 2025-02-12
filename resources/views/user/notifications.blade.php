@@ -3,23 +3,23 @@
 @section('content')
     <div class="max-w-4xl w-full mx-auto bg-white shadow-md rounded-lg p-6">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-bold">🔔 การแจ้งเตือน</h2>
+            <h2 class="text-2xl font-bold">🔔 Notification</h2>
 
             @if (!$notifications->isEmpty() && Auth::user()->role === 'admin')
                 <button onclick="markAllAsReadAdmin()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    ✔️ อ่านทั้งหมด
+                    ✔️  Mark All as Read
                 </button>
             @endif
 
             @if ((!$notifications->isEmpty() && Auth::user()->role === 'user') || Auth::user()->role === 'writer')
                 <button onclick="markAllAsReadUser()" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
-                    ✔️ อ่านทั้งหมด
+                    ✔️  Mark All as Read
                 </button>
             @endif
         </div>
 
         @if ($notifications->isEmpty())
-            <p class="text-gray-500">ยังไม่มีการแจ้งเตือน</p>
+            <p class="text-gray-500">No recent alerts</p>
         @else
             <ul class="space-y-4" id="notification-list">
                 @foreach ($notifications as $notification)
@@ -38,23 +38,23 @@
                                 @if (!$notification->is_admin_read)
                                     <button onclick="markAsReadAdmin({{ $notification->id }})"
                                         class="bg-red-500 text-white px-3 py-1 rounded">
-                                        ❌ ยังไม่ถูกอ่าน
+                                        ❌ Unread
                                     </button>
                                 @else
                                     <button class="bg-green-500 text-white px-3 py-1 rounded">
-                                        ✔️ อ่านแล้ว
+                                        ✔️ Read
                                     </button>
                                 @endif
                             @else
                                 @if (!$notification->is_user_read)
                                     <button onclick="markAsRead({{ $notification->id }})"
                                         class="bg-red-500 text-white px-3 py-1 rounded">
-                                        ❌ ยังไม่ถูกอ่าน
+                                        ❌ Unread
                                     </button>
                                 @else
                                     <button onclick="markAllAsReadUser()"
                                         class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
-                                        ✔️ อ่านทั้งหมด
+                                        ✔️ read
                                     </button>
                                 @endif
                             @endif
@@ -97,12 +97,12 @@
                                 "bg-red-500",
                                 "bg-green-500"
                             ); // เปลี่ยนสีของปุ่ม
-                            markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความในปุ่ม
+                            markReadButton.textContent = "✔️ Read"; // เปลี่ยนข้อความในปุ่ม
                         }
                     });
                     updateNotificationCount();
                 } else {
-                    console.error("ไม่สามารถทำการอ่านแจ้งเตือนทั้งหมด");
+                    console.error("Unable to mark all notifications as read");
                 }
             } catch (error) {
                 console.error(
@@ -141,11 +141,11 @@
                                 "bg-red-500",
                                 "bg-green-500"
                             );
-                        markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
+                        markReadButton.textContent = "✔️ Read";  
                     }
                     updateNotificationCount();
                 } else {
-                    console.error("ไม่สามารถทำการอ่านแจ้งเตือนนี้ได้");
+                    console.error("Unable to mark all notifications as read");
                 }
             } catch (error) {
                 console.error("Error marking notification as read:", error);
@@ -181,12 +181,12 @@
                                 "bg-red-500",
                                 "bg-green-500"
                             ); // เปลี่ยนสีของปุ่ม
-                            markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความในปุ่ม
+                            markReadButton.textContent = "✔️ Read"; // เปลี่ยนข้อความในปุ่ม
                         }
                     }
                     updateNotificationCount();
                 } else {
-                    console.error("ไม่สามารถทำการอ่านแจ้งเตือนนี้ได้");
+                    console.error("Unable to mark this notification as read");
                 }
             } catch (error) {
                 console.error("Error marking notification as read for Admin:", error);
@@ -223,12 +223,12 @@
                                 "bg-red-500",
                                 "bg-green-500"
                             ); // เปลี่ยนสีปุ่ม
-                            markReadButton.textContent = "✔️ อ่านแล้ว"; // เปลี่ยนข้อความ
+                            markReadButton.textContent = "✔️ Read"; // เปลี่ยนข้อความ
                         }
                     });
                     updateNotificationCount();
                 } else {
-                    console.error("ไม่สามารถทำการอ่านแจ้งเตือนทั้งหมด");
+                    console.error("Unable to mark all notifications as read");
                 }
             } catch (error) {
                 console.error("Error marking all notifications as read:", error);

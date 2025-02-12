@@ -92,7 +92,7 @@
         @else
             <!-- ปุ่ม Profile -->
             <a href="{{ route('profile.edit') }}"
-                class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-bold">
+                class="bg-sky-500/100 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 font-bold">
                 👤 Profile
             </a>
         @endif

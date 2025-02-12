@@ -126,4 +126,5 @@ Route::middleware(['auth'])->group(function () {
 // Posts Management
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/manage/posts', [\App\Http\Controllers\Admin\PostManagementController::class, 'index'])->name('manage.posts');
+    Route::get('/manage/posts/{id}', [\App\Http\Controllers\Admin\PostManagementController::class, 'show'])->name('manage.posts.show');
 });

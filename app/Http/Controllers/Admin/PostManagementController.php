@@ -27,8 +27,10 @@ class PostManagementController extends Controller
         ));
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $post = Post::findOrFail($id);
-        return view('admin.manage.post-detail', compact('post'));
+        return view('admin.manage.detail', compact('post'));
     }
+
 }

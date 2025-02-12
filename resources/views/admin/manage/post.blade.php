@@ -28,22 +28,24 @@
                             <th class="border p-2">ชื่อโพสต์</th>
                             <th class="border p-2">สถานะ</th>
                             <th class="border p-2">สร้างเมื่อ</th>
+                            <th class="border p-2">รายละเอียดโพสต์</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($posts as $post)
                             <tr class="border">
                                 <td class="border p-2">{{ $post->id }}</td>
-                                <td class="border p-2">
-                                    <a href="{{ route('admin.manage.posts.show', $post->id) }}"
-                                        class="text-blue-500 underline">
-                                        {{ $post->title }}
-                                    </a>
-                                </td>
+                                <td class="border p-2">{{ $post->title }}</td>
                                 <td class="border p-2 text-{{ $status == 'approved' ? 'green-600' : 'red-600' }}">
                                     {{ $status == 'approved' ? 'อนุมัติแล้ว' : 'ถูกปฏิเสธ' }}
                                 </td>
                                 <td class="border p-2">{{ $post->created_at->format('d/m/Y') }}</td>
+                                <td class="border p-2 text-center">
+                                    <a href="{{ route('admin.manage.posts.detail', $post->id) }}"
+                                        class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
+                                        🔍 ดูรายละเอียด
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

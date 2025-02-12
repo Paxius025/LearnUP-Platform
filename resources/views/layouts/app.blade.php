@@ -9,10 +9,10 @@
 
     <style>
         
-        html,
+        /* html,
         body {
             overflow: hidden;
-        }
+        } */
     </style>
 </head>
 

@@ -18,8 +18,8 @@
         <!-- Section: Summary -->
         <div class="grid grid-cols-4 gap-6 mt-6">
             <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />
-            <x-dashboard-stat-card title="Approved Posts" count="{{ $approvedPosts }}" color="blue" icon="✅" />
             <x-dashboard-stat-card title="Pending Approval" count="{{ $pendingCount }}" color="yellow" icon="⏳" />
+            <x-dashboard-stat-card title="Approved Posts" count="{{ $approvedPosts }}" color="blue" icon="✅" />
             <x-dashboard-stat-card title="Rejected Posts" count="{{ $rejectedPosts }}" color="red" icon="❌" />
         </div>
 

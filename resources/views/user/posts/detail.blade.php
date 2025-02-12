@@ -14,12 +14,26 @@
 
     <div class="relative max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
 
-        <!-- 🔹 ปุ่ม Bookmark (มุมขวาบน) -->
-        <x-bookmark-button :post="$post" />
+        <div class="flex items-center justify-end w-full">
+            <!-- แสดงจำนวนไลค์ -->
+            <div class="flex items-center mr-10">
+                <span id="like-count-{{ $post->id }}" class="text-sm text-gray-500 flex items-center">
+                    ❤️ {{ $post->likes()->count() }} Likes
+                </span>
+            </div>
+
+            <!-- ปุ่ม Bookmark -->
+            <div>
+                <x-bookmark-button :post="$post" />
+            </div>
+        </div>
+
+
         <h2 class="text-3xl font-bold">{{ $post->title }}</h2>
         <p class="text-gray-500 text-sm">Published on {{ $post->created_at->format('M d, Y') }} by
             <span class="font-semibold text-gray-700">{{ $post->user->name }}</span>
         </p>
+
 
         <div class="mt-4">
             <p class="text-gray-700">{!! $post->content !!}</p>
@@ -45,4 +59,5 @@
     <!-- ✅ JavaScript สำหรับ Bookmark -->
     @vite(['resources/js/app.js'])
 </body>
+
 </html>

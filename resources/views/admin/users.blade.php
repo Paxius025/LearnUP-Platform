@@ -7,13 +7,18 @@
     <title>Manage Users - Learn Up</title>
     @vite('resources/css/app.css')
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            padding-top: 40px;
+        }
+    </style>
 </head>
 
 <body class="bg-green-50 min-h-screen">
 
     @include('components.navbar')
 
-    <div class="max-w-6xl mx-auto mt-[100px] px-4">
+    <div class="max-w-6xl mx-auto mt-[80px] px-4">
 
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" action="{{ route('admin.users') }}" method="GET"

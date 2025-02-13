@@ -7,6 +7,11 @@
     <title>Admin Dashboard - Learn Up</title>
     @vite('resources/css/app.css')
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
 </head>
 
 <body class="bg-green-50 min-h-screen mt-[80px]">

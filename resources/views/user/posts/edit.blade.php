@@ -40,7 +40,6 @@
     @include('components.navbar')
 
     <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow">
-        <h2 class="text-2xl font-bold">Edit Post</h2>
 
         <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
         @if (auth()->check() && auth()->user()->role === 'user')

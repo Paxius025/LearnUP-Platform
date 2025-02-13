@@ -14,7 +14,7 @@
     <div class="max-w-[800px] mx-auto mt-[100px]">
 
         @foreach ($mostLikedPosts as $post)
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden mb-6">
+            <div class="bg-white border border-gray-300 rounded-lg overflow-hidden mb-6">
                 <div class="p-4">
                     <h3 class="text-lg font-bold">{{ $post->title }}</h3>
                     <p class="text-gray-600">Likes: {{ $post->likes_count }}</p>

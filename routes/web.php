@@ -48,26 +48,35 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
+// Profile
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
+});
+
 // User Dashboard
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('user.dashboard');
 });
 
-Route::post('/posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload.image');
-Route::get('/search', [PostController::class, 'search'])->name('user.posts.search');
 
+// User Posts
 Route::middleware(['auth'])->prefix('posts')->name('user.posts.')->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('index');
     Route::get('/create', [PostController::class, 'create'])->name('create');
     Route::post('/store', [PostController::class, 'store'])->name('store');
     Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
-    Route::put('/update/{post}', [PostController::class, 'update'])->name('update'); // ✅ เปลี่ยนเป็น PUT
+    Route::put('/update/{post}', [PostController::class, 'update'])->name('update');
     Route::delete('/delete/{post}', [PostController::class, 'destroy'])->name('delete');
-    Route::get('/{post}', [PostController::class, 'show'])->name('show'); // แสดงโพสต์เดี่ยว
-    Route::get('/detail/{post}', [PostController::class, 'detail'])->name('detail'); // รายละเอียดโพสต์
+    Route::get('/{post}', [PostController::class, 'show'])->name('show'); 
+    Route::get('/detail/{post}', [PostController::class, 'detail'])->name('detail');
 });
 
+Route::post('/posts/upload-image', [PostController::class, 'uploadImage'])->name('posts.upload.image');
+Route::get('/search', [PostController::class, 'search'])->name('user.posts.search');
 
+// Admin routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardManagementController::class, 'index'])->name('dashboard');
     Route::get('/approvals', [PostApprovalController::class, 'index'])->name('approval');
@@ -85,6 +94,33 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
+// Posts Management
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/manage/posts', [\App\Http\Controllers\Admin\PostManagementController::class, 'index'])->name('manage.posts');
+    Route::get('/manage/posts/{id}', [\App\Http\Controllers\Admin\PostManagementController::class, 'show'])->name('manage.posts.detail');
+    Route::get('/posts/{post}/approval', [\App\Http\Controllers\Admin\PostManagementController::class, 'detail'])->name('posts.detail');
+    Route::patch('/posts/{post}/approve', [\App\Http\Controllers\Admin\PostManagementController::class, 'approve'])->name('posts.approve');
+    Route::patch('/posts/{post}/reject', [\App\Http\Controllers\Admin\PostManagementController::class, 'reject'])->name('posts.reject');
+});
+
+// Favorite Post
+Route::middleware(['auth'])->group(function () {
+    Route::get('/favorites', [FavoritePostController::class, 'index'])->name('favorites.index');
+    Route::post('/favorite/{postId}', [FavoritePostController::class, 'toggle'])->name('favorites.toggle');
+    Route::get('/bookmarks', [FavoritePostController::class, 'bookmarkedPosts'])->name('user.bookmarks');
+}); 
+
+// Comment
+Route::middleware(['auth'])->group(function () {
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store'); 
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); 
+    Route::patch('/comments/{comment}/update', [CommentController::class, 'update'])->middleware('auth');
+});
+
+// Like
+Route::middleware('auth')->post('/like/{postId}', [LikeController::class, 'toggleLike']);
+Route::get('/most-liked-posts', [LikeController::class, 'mostLikedPosts'])->name('most.liked.posts');
+
 // notification
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications/count', [NotificationController::class, 'getNotificationCount']);
@@ -95,39 +131,4 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/notifications/{id}/read/admin', [NotificationController::class, 'markNotificationAsReadForAdmin'])->name('notifications.markNotificationAsReadForAdmin');
     Route::patch('/notifications/mark-all-read/user', [NotificationController::class, 'markAllNotificationsAsReadForUser'])->name('notifications.markAllNotificationsAsReadForUser');
     Route::patch('/notifications/mark-all-read/admin', [NotificationController::class, 'markAllNotificationsAsReadForAdmin'])->name('notifications.markAllNotificationsAsReadForAdmin');
-});
-
-
-// Comment
-Route::middleware(['auth'])->group(function () {
-    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store'); // เพิ่มคอมเมนต์
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy'); // ลบคอมเมนต์
-    Route::patch('/comments/{comment}/update', [CommentController::class, 'update'])->middleware('auth');
-});
-
-// Like
-Route::middleware('auth')->post('/like/{postId}', [LikeController::class, 'toggleLike']);
-Route::get('/most-liked-posts', [LikeController::class, 'mostLikedPosts'])->name('most.liked.posts');
-
-// Favorite Post
-Route::middleware(['auth'])->group(function () {
-    Route::get('/favorites', [FavoritePostController::class, 'index'])->name('favorites.index');
-    Route::post('/favorite/{postId}', [FavoritePostController::class, 'toggle'])->name('favorites.toggle');
-    Route::get('/bookmarks', [FavoritePostController::class, 'bookmarkedPosts'])->name('user.bookmarks');
-}); 
-
-// Profile
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-    Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
-});
-
-// Posts Management
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/manage/posts', [\App\Http\Controllers\Admin\PostManagementController::class, 'index'])->name('manage.posts');
-    Route::get('/manage/posts/{id}', [\App\Http\Controllers\Admin\PostManagementController::class, 'show'])->name('manage.posts.detail');
-    Route::get('/posts/{post}/approval', [\App\Http\Controllers\Admin\PostManagementController::class, 'detail'])->name('posts.detail');
-    Route::patch('/posts/{post}/approve', [\App\Http\Controllers\Admin\PostManagementController::class, 'approve'])->name('posts.approve');
-    Route::patch('/posts/{post}/reject', [\App\Http\Controllers\Admin\PostManagementController::class, 'reject'])->name('posts.reject');
 });

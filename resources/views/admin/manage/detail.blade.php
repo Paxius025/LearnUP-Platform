@@ -34,10 +34,17 @@
                     @endif
                 </div>
 
-                <p class="text-base md:text-lg font-semibold text-gray-600"><strong>Posted by:</strong>
-                    {{ $post->user->name }}</p>
+                <p class="text-base md:text-lg font-semibold text-gray-600"><strong>Posted by:</strong> {{ $post->user->name }}</p>
                 <p class="text-base md:text-lg font-semibold text-gray-600"><strong>Created at:</strong>
                     {{ $post->created_at->format('d/m/Y H:i') }}</p>
+                    @if ($post->pdf_file)
+                    <div class="mt-6">
+                        <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            📄 View PDF
+                        </a>
+                    </div>
+                @endif
             </div>
 
             <div class="mt-6 flex space-x-3 md:space-x-4 justify-center">

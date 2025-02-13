@@ -1,6 +1,6 @@
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-<nav class="bg-green-600 p-4 text-white flex items-center shadow-lg relative">
+<nav class="bg-green-600 p-4 text-white flex items-center relative">
 
     <!-- Logo -->
     <div class="flex-1 flex items-center space-x-4">
@@ -14,8 +14,8 @@
         @php
             $navLinks = [
                 'admin.dashboard' => ['icon' => 'home', 'label' => 'Admin Dashboard'],
-                'admin.users' => ['icon' => 'users', 'label' => 'Manage Users'],
                 'admin.manage.posts' => ['icon' => 'file-text', 'label' => 'Manage Posts'],
+                'admin.users' => ['icon' => 'users', 'label' => 'Manage Users'],
                 'admin.stat' => ['icon' => 'bar-chart', 'label' => 'Statistics'],
                 'user.dashboard' => ['icon' => 'home', 'label' => 'Dashboard'],
                 'most.liked.posts' => ['icon' => 'heart', 'label' => 'Most Liked Posts'],

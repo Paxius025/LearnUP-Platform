@@ -2,8 +2,6 @@
 
 @section('content')
     <div class="container mx-auto p-6">
-        <h2 class="text-2xl font-bold mb-4">Manage Posts</h2>
-
         {{-- Post Statistics --}}
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
             <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />

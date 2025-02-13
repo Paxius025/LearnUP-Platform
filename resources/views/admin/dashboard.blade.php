@@ -14,8 +14,6 @@
     @include('components.navbar')
 
     <div class="container mx-auto p-6">
-        <h2 class="text-3xl font-bold text-green-700">Admin Dashboard</h2>
-
         <!-- Section: Summary -->
         <div class="grid grid-cols-4 gap-6 mt-6">
             <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />

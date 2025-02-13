@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('title', 'LearnUP')
+
 @section('content')
     <!-- Navbar -->
     <div class="fixed top-0 left-0 w-full bg-white shadow-md z-50">
@@ -7,10 +8,9 @@
     </div>
 
     <!-- Background Gradient -->
-    <div class="min-h-screen bg-gradient-to-b from-green-100 to-white pt-24">
-        <div class="container mx-auto px-4">
-            <div class="w-full max-w-3xl mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
-
+    <div class="h-screen flex flex-col justify-center items-center overflow-hidden">
+        <div class="container mx-auto px-4 flex-1 flex justify-center items-center">
+            <div class="w-full max-w-4xl bg-white shadow-lg rounded-xl p-6 border border-gray-200 h-[85vh] overflow-auto">   
                 <!-- ส่วนหัวโปรไฟล์ -->
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
@@ -45,15 +45,10 @@
                     </div>
                 </div>
 
-                <hr class="my-5 border-gray-300">
-
-                <!-- โพสต์ของผู้ใช้ -->
-                <h3 class="text-md font-semibold text-gray-900 text-center">📌 Posts by {{ $user->name }}</h3>
-
+                <!-- รายการโพสต์ -->
                 <div class="mt-4 space-y-4">
                     @forelse ($posts as $post)
-                        <div
-                            class="p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200">
+                        <div class="p-4 bg-gray-50 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-all duration-200">
                             <div class="flex justify-between items-center">
                                 <div>
                                     <h4 class="text-lg font-semibold text-gray-800">{{ $post->title }}</h4>
@@ -61,8 +56,7 @@
                                 </div>
 
                                 <!-- จำนวนไลค์, บุ๊คมาร์ค และ Read More -->
-                                <div class="flex items-center space-x-4 text-gray-600">
-                                    <!-- จำนวนไลค์ -->
+                                <div class="flex items-center space-x-2 text-gray-600">
                                     <div class="flex items-center space-x-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                             class="w-5 h-5 text-red-500" viewBox="0 0 24 24">
@@ -72,17 +66,14 @@
                                         <span class="text-sm font-medium">{{ optional($post->likes)->count() ?? 0 }}</span>
                                     </div>
 
-                                    <!-- จำนวนบุ๊คมาร์ค -->
                                     <div class="flex items-center space-x-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                             class="w-5 h-5 text-blue-500" viewBox="0 0 24 24">
                                             <path d="M6 2a2 2 0 00-2 2v18l8-5.5L20 22V4a2 2 0 00-2-2H6z" />
                                         </svg>
-                                        <span
-                                            class="text-sm font-medium">{{ optional($post->favorites)->count() ?? 0 }}</span>
+                                        <span class="text-sm font-medium">{{ optional($post->favorites)->count() ?? 0 }}</span>
                                     </div>
 
-                                    <!-- ปุ่ม Read More -->
                                     <a href="{{ route('user.posts.detail', $post->id) }}"
                                         class="text-green-600 hover:text-green-800 flex items-center space-x-1 text-sm font-medium">
                                         <span>Read More</span>
@@ -101,7 +92,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-5 flex justify-center">
+                <div class="mt-5">
                     {{ $posts->links() }}
                 </div>
             </div>

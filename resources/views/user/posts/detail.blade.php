@@ -35,7 +35,9 @@
             <a href="{{ route('profile.show', $post->user->id) }}" class="font-semibold text-gray-700 hover:underline">
                 {{ $post->user->name }}
             </a>
-
+            <span class="ml-2 text-xs px-2 py-1 bg-gray-200 text-gray-700 rounded">
+                {{ ucfirst($post->user->role) }}
+            </span>
         </p>
 
 

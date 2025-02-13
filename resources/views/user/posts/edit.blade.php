@@ -68,18 +68,22 @@
             </div>
 
             <!-- 🔹 PDF Upload -->
+            <!-- 🔹 PDF Upload -->
             <div class="mb-3">
                 <label for="pdf_file" class="block text-gray-700">Replace PDF (Optional)</label>
-                <input type="file" id="pdf_file" name="pdf_file" class="w-full p-3 border rounded-lg">
+                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
+                    class="w-full p-3 border rounded-lg">
+
                 @if ($post->pdf_file)
                     <p class="mt-2 pt-2">
                         <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 ">
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                             📄 View PDF
                         </a>
                     </p>
                 @endif
             </div>
+
 
             <!-- 🔹 Update Button (Centered) -->
             <div class="flex justify-center mt-4">
@@ -91,6 +95,8 @@
         </form>
     </div>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- ✅ Quill.js Script -->
     <script>
         var quill = new Quill('#editor', {
@@ -110,18 +116,29 @@
                 ]
             }
         });
-
-        // ✅ ตั้งค่าเริ่มต้นของ Quill.js
         quill.root.innerHTML = {!! json_encode($post->content) !!};
 
-        // ✅ บันทึกค่าลง input hidden ก่อนส่ง form
         quill.on('text-change', function() {
             document.getElementById('content').value = quill.root.innerHTML;
         });
 
-        // ✅ ป้องกันกรณีที่ Quill ไม่ได้แก้ไขอะไร แต่ต้องส่งค่าไปด้วย
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('content').value = quill.root.innerHTML;
+        });
+
+        document.getElementById('pdf_file').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File to large!',
+                        text: 'Please select a file that is no larger than 10MB.',
+                    });
+                    event.target.value = ''; // ล้างค่าที่เลือก
+                }
+            }
         });
     </script>
 

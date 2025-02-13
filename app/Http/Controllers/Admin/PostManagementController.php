@@ -28,6 +28,10 @@ class PostManagementController extends Controller
             'totalPosts', 'approvedCount', 'pendingCount', 'rejectedCount'
         ));
     }
+    public function detail(Post $post)
+    {
+        return view('admin.manage.detail', compact('post'));
+    }
 
     public function show($id)
     {

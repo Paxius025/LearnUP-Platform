@@ -45,20 +45,20 @@
 
 <body class="bg-gray-100 min-h-screen font-sans antialiased">
     @include('components.navbar')
-    <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-xl">
+    <div class="max-w-4xl mx-auto mt-5 bg-white p-8 rounded-xl shadow-xl">
         <h2 class="text-3xl font-bold text-gray-800 mb-6">Create New Post</h2>
 
         <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data"
             onsubmit="return validateForm()">
             @csrf
-            <div class="mb-6">
+            <div class="mb-3">
                 <label for="title" class="block text-gray-700 text-lg font-semibold">Title</label>
                 <input type="text" id="title" name="title"
                     class="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                     required>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-3">
                 <label class="block text-gray-700 text-lg font-semibold">Content</label>
                 <div id="editor" class="bg-white border border-gray-300 rounded-lg p-4 min-h-[500px] shadow-md">
                 </div>
@@ -66,7 +66,7 @@
                 <div id="content-error" class="text-red-500 text-sm mt-2 hidden">Please fill out this field</div>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-3">
                 <label for="pdf_file" class="block text-gray-700 text-lg font-semibold">Upload PDF (Optional)</label>
                 <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
                     class="w-full p-4 border border-gray-300 rounded-lg shadow-sm">

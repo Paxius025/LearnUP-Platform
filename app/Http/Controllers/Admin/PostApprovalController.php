@@ -36,7 +36,7 @@ class PostApprovalController extends Controller
         // ✅ เก็บ Log การอนุมัติ
         logAction('approve_post', "Admin approve post: {$post->title}");
     
-        return redirect()->route('admin.manage.posts')->with('success', 'Post approved successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
     }
 
     public function reject(Post $post)

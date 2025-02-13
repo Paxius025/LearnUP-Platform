@@ -36,11 +36,11 @@ use App\Http\Controllers\User\ProfileController;
 // Posts Management Controller
 use App\Http\Controllers\Admin\PostManagementController;
 
-// Guest
-Route::get('/guest', function () {
-    return view('guest');
-})->name('guest');
+// Guest Controller 
+use App\Http\Controllers\GuestController;
 
+// Guest
+Route::get('/guest', [GuestController::class, 'index'])->name('guest');
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');

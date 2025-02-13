@@ -5,18 +5,35 @@
         @include('components.navbar')
     </div>
 
-    <div class="flex justify-center items-center mt-2  py-10">
-        <div class="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
+    <div class="flex justify-center items-center mt-2 py-10">
+        <div class="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg relative">
+
+            <!-- 🏷️ Role Badge -->
+            <div class="absolute top-0 right-0 mt-4 mr-4">
+                <span
+                    class="px-3 py-1 text-xs font-bold text-white rounded-full
+                    {{ $user->role === 'admin' ? 'bg-green-500' : ($user->role === 'writer' ? 'bg-blue-500' : 'bg-gray-500') }}">
+                    {{ ucfirst($user->role) }}
+                </span>
+            </div>
+
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Edit Profile</h2>
 
+            <!-- SweetAlert2 for success notification -->
             @if (session('success'))
-                <div class="bg-green-100 text-green-700 p-3 rounded-md text-center mb-4">
-                    {{ session('success') }}
-                </div>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Profile Updated!',
+                        text: "{{ session('success') }}",
+                        timer: 3000, // Auto close after 3 seconds
+                        showConfirmButton: false
+                    });
+                </script>
             @endif
 
             <!-- Avatar Section -->
-            <div class="flex justify-center mb-6">
+            <div class="flex justify-center mb-6 relative">
                 <div class="relative w-32 h-32">
                     @if ($user->avatar)
                         <img src="{{ asset('storage/avatars/' . $user->avatar) }}" alt="Avatar"
@@ -44,7 +61,8 @@
                 <!-- Bio -->
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-700">Bio</label>
-                    <textarea name="bio" rows="4" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 h-25 resize-none">{{ old('bio', $user->bio) }}</textarea>
+                    <textarea name="bio" rows="4"
+                        class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400 h-25 resize-none">{{ old('bio', $user->bio) }}</textarea>
                     @error('bio')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -53,7 +71,7 @@
                 <!-- Profile Picture -->
                 <div class="mb-4">
                     <label class="block font-semibold text-gray-700">Upload picture</label>
-                    <input type="file" name="avatar"
+                    <input type="file" name="avatar" id="avatarInput"
                         class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-400">
                     @error('avatar')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -74,13 +92,30 @@
                         </a>
                     @endif
 
-
                     <button type="submit"
                         class="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition font-semibold">
-                        save change
+                        Save Changes
                     </button>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Check file size not to exceed 10MB
+        document.getElementById('avatarInput').addEventListener('change', function() {
+            var file = this.files[0];
+            if (file && file.size > 10 * 1024 * 1024) { // 10MB
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File too large!',
+                    text: 'The uploaded image must be less than 10MB.',
+                });
+                this.value = ''; // Clear file input
+            }
+        });
+    </script>
 @endsection

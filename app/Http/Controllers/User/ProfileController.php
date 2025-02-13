@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     /**
-     * แสดงหน้าแก้ไขโปรไฟล์
+     * Show the profile edit page
      */
     public function edit()
     {
@@ -23,7 +23,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * อัปเดตข้อมูลโปรไฟล์
+     * Update profile information
      */
     public function update(Request $request)
     {
@@ -32,33 +32,37 @@ class ProfileController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:500'],
-            'avatar' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'], // รองรับไฟล์ภาพสูงสุด 2MB
+            'avatar' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif', 'max:10240'], // 10MB
         ]);
 
-        // อัปเดตข้อมูลทั่วไป
-        $user->name = $request->input('name');
-        $user->bio = $request->input('bio');
-
-        // จัดการอัปโหลดไฟล์ avatar
         if ($request->hasFile('avatar')) {
-            // ลบรูปเก่า (ถ้ามี)
+            $file = $request->file('avatar');
+
+            // Check file size (10MB)
+            if ($file->getSize() > 10 * 1024 * 1024) {
+                return redirect()->route('profile.edit')->with('error', 'The uploaded image must be less than 10MB.');
+            }
+
+            // Delete old avatar (if exists)
             if ($user->avatar && Storage::disk('public')->exists('avatars/' . $user->avatar)) {
                 Storage::disk('public')->delete('avatars/' . $user->avatar);
             }
 
-            // อัปโหลดรูปใหม่
-            $file = $request->file('avatar');
+            // Upload new avatar
             $filename = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('avatars', $filename, 'public'); // จัดเก็บใน storage/app/public/avatars
+            $file->storeAs('avatars', $filename, 'public');
 
-            // บันทึกชื่อไฟล์ลงฐานข้อมูล
+            // Save filename to database
             $user->avatar = $filename;
         }
 
+        $user->name = $request->input('name');
+        $user->bio = $request->input('bio');
         $user->save();
+
         logAction('update_profile', "User {$user->username} updated profile");
 
-        return redirect()->route('profile.edit')->with('success', 'Updated Successfully');
+        return redirect()->route('profile.edit')->with('success', 'Your profile has been updated successfully!');
     }
 
     public function show($id)
@@ -76,6 +80,4 @@ class ProfileController extends Controller
 
         return view('user.profile.show', compact('user', 'posts', 'totalLikes', 'totalBookmarks'));
     }
-
-    
 }

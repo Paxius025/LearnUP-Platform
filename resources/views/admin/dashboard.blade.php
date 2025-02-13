@@ -13,7 +13,7 @@
 
     @include('components.navbar')
 
-    <div class="max-w-6xl mx-auto mt-10">
+    <div class="container mx-auto p-6">
         <h2 class="text-3xl font-bold text-green-700">Admin Dashboard</h2>
 
         <!-- Section: Summary -->

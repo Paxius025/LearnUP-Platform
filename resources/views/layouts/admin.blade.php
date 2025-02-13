@@ -16,7 +16,7 @@
         }
     </style>
 </head>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <body class="h-screen flex flex-col">
 
     <!-- Navbar -->

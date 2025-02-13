@@ -1,5 +1,6 @@
 import './bootstrap';
 
+import Swal from 'sweetalert2';
 import axios from "axios";
 
 window.toggleBookmark = function (postId) {

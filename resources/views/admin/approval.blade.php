@@ -62,7 +62,7 @@
                 onsubmit="showToast('✅ Post Approved!', 'bg-green-500')">
                 @csrf
                 <button type="submit"
-                    class="bg-green-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300">
+                    class="confirm-action bg-green-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300">
                     ✅ Approve
                 </button>
             </form>
@@ -71,7 +71,7 @@
                 onsubmit="showToast('❌ Post Rejected!', 'bg-red-500')">
                 @csrf
                 <button type="submit"
-                    class="bg-red-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300">
+                    class="confirm-action bg-red-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300">
                     ❌ Reject
                 </button>
             </form>
@@ -87,5 +87,30 @@
     </div>
 
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.confirm-action').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                let form = this.closest("form"); // Get the form that the button belongs to
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you really want to proceed with this action?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4CAF50', // Changed color to green
+                    cancelButtonColor: '#F44336', // Changed color to red
+                    confirmButtonText: 'Yes, proceed!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // If "Yes" is clicked, submit the form
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 </html>

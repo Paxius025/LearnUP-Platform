@@ -54,7 +54,7 @@
                         @csrf
                         @method('PATCH')
                         <button type="submit"
-                            class="w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ✅ Approve
                         </button>
                     </form>
@@ -63,7 +63,7 @@
                         @csrf
                         @method('PATCH')
                         <button type="submit"
-                            class="w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ❌ Reject
                         </button>
                     </form>
@@ -72,7 +72,7 @@
                         @csrf
                         @method('PATCH')
                         <button type="submit"
-                            class="w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ❌ Reject
                         </button>
                     </form>
@@ -81,7 +81,7 @@
                         @csrf
                         @method('PATCH')
                         <button type="submit"
-                            class="w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             ✅ Approve
                         </button>
                     </form>
@@ -89,4 +89,31 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.confirm-action').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    let form = this.closest("form"); // Get the form that the button belongs to
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Do you really want to proceed with this action?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4CAF50', // Changed color to green
+                        cancelButtonColor: '#F44336', // Changed color to red
+                        confirmButtonText: 'Yes, proceed!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // If "Yes" is clicked, submit the form
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 @endsection

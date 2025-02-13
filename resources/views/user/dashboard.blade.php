@@ -18,9 +18,9 @@
     <!-- Content -->
     <div class="max-w-[800px] mx-auto mt-[60px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 pt-10">
 
-        <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
+        <form action="{{ route('user.posts.search') }}" method="GET" class="mb-1">
             <div
-                class="flex items-center border border-gray-300 rounded-xl p-2 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                class="flex items-center border border-gray-300 rounded-xl p-2 bg-white">
 
                 <div class="relative w-full">
                     <input type="text" name="query" placeholder="Search posts..."
@@ -50,7 +50,7 @@
         </form>
 
         @foreach ($posts as $post)
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
+            <div class="bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
 
                 <!-- 🔹 ปุ่ม Bookmark (มุมขวาบน) -->
                 <x-bookmark-button :post="$post" />

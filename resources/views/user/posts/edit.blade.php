@@ -12,17 +12,13 @@
     <style>
         #editor {
             min-height: 120px;
-            /* ลดความสูงขั้นต่ำของ Editor */
             height: 250px;
-            /* ลดความสูงของ Editor */
             max-height: 350px;
-            /* ลดความสูงสูงสุด */
         }
 
         .ql-container {
             min-height: 120px !important;
             height: 250px !important;
-            max-height: 350px !important;
             overflow: hidden !important;
         }
 
@@ -33,13 +29,17 @@
             padding: 10px !important;
             overflow-y: auto !important;
         }
+
+        body {
+            padding-top: 120px;
+        }
     </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
     @include('components.navbar')
 
-    <div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold">Edit Post</h2>
 
         <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
@@ -67,7 +67,6 @@
                 <input type="hidden" name="content" id="content">
             </div>
 
-            <!-- 🔹 PDF Upload -->
             <!-- 🔹 PDF Upload -->
             <div class="mb-3">
                 <label for="pdf_file" class="block text-gray-700">Replace PDF (Optional)</label>

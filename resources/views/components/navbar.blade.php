@@ -2,17 +2,11 @@
 
 <nav class="bg-green-600 p-4 text-white flex items-center shadow-lg relative">
 
-    <!-- Logo / Back Button -->
+    <!-- Logo -->
     <div class="flex-1 flex items-center space-x-4">
-        @if (!request()->routeIs('user.dashboard') && !request()->routeIs('admin.dashboard'))
-            <a href="{{ url()->previous() }}" class="text-white px-6 py-2 rounded-lg font-semibold flex items-center">
-                <i data-lucide="arrow-left"></i> <span class="ml-2">Back</span>
-            </a>
-        @else
-            <a href="#" class="text-white px-6 py-2 rounded-lg font-semibold flex items-center">
-                <i data-lucide="book-open"></i> <span class="ml-2">LearnUP</span>
-            </a>
-        @endif
+        <a href="#" class="text-white px-6 py-2 rounded-lg font-semibold flex items-center">
+            <i data-lucide="book-open"></i> <span class="ml-2">LearnUP</span>
+        </a>
     </div>
 
     <!-- Navigation Links -->
@@ -81,7 +75,7 @@
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit"
-                class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-opacity-100 transition duration-300 transform hover:scale-105 font-semibold">
+                class="text-white text-opacity-50 px-4 py-2 rounded-lg font-semibold flex items-center transition duration-300 transform hover:text-opacity-100 hover:scale-105">
                 <i data-lucide="log-out"></i>
                 <span class="ml-1">Logout</span>
             </button>

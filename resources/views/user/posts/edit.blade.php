@@ -85,7 +85,7 @@
 
             <!-- 🔹 Update Button (Centered) -->
             <div class="flex justify-center mt-4">
-                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                <button type="submit" class="confirm-action bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
                     Update Post
                 </button>
             </div>
@@ -137,6 +137,30 @@
                     event.target.value = ''; // ล้างค่าที่เลือก
                 }
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.confirm-action').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    let form = this.closest("form"); // Get the form that the button belongs to
+
+                    Swal.fire({
+                        title: 'Editing',
+                        text: "the post will revert its status to Pending Approval",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4CAF50', // Changed color to green
+                        cancelButtonColor: '#F44336', // Changed color to red
+                        confirmButtonText: 'Yes, proceed!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // If "Yes" is clicked, submit the form
+                        }
+                    });
+                });
+            });
         });
     </script>
 

@@ -7,6 +7,9 @@
     <title>Post List - Learn Up</title>
     @vite('resources/css/app.css')
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="Sat, 01 Jan 2000 00:00:00 GMT">
 </head>
 
 <body class="bg-gray-100">

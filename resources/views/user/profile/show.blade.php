@@ -8,7 +8,7 @@
     </div>
 
     <!-- Background Gradient -->
-    <div class="h-screen flex flex-col justify-center items-center overflow-hidden mt-[120px]">
+    <div class="h-screen flex flex-col justify-center items-center overflow-hidden mt-[100px]">
         <div class="container mx-auto px-4 flex-1 flex justify-center items-center">
             <div class="w-full max-w-4xl bg-white shadow-lg rounded-xl p-6 border border-gray-200 h-[85vh] overflow-auto">   
                 <!-- ส่วนหัวโปรไฟล์ -->

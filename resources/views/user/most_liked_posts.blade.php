@@ -11,8 +11,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-[800px] mx-auto mt-[120px]">
-        <h2 class="text-2xl font-semibold mb-6">Most Liked Posts</h2>
+    <div class="max-w-[800px] mx-auto mt-[100px]">
 
         @foreach ($mostLikedPosts as $post)
             <div class="bg-white shadow-lg rounded-lg overflow-hidden mb-6">

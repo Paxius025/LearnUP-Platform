@@ -40,12 +40,16 @@
             overflow-y: auto !important;
             /* ให้ Scroll ถ้ามีเนื้อหาเยอะ */
         }
+
+        body {
+            padding-top: 80px;
+        }
     </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen font-sans antialiased">
     @include('components.navbar')
-    <div class="max-w-4xl mx-auto mt-5 bg-white p-6 rounded-xl shadow-xl mt-[120px]">
+    <div class="max-w-4xl mx-auto mt-5 bg-white p-6 rounded-xl shadow-xl">
         <h2 class="text-3xl font-bold text-gray-800 mb-3">Create New Post</h2>
 
         <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data"
@@ -81,153 +85,122 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.getElementById('pdf_file').addEventListener('change', function(event) {
-            var file = event.target.files[0];
-            if (file) {
-                var maxSize = 10 * 1024 * 1024; // 10MB
-                if (file.size > maxSize) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'File too large!',
-                        text: 'The file size must be less than 10MB.',
-                        confirmButtonColor: '#d33'
-                    });
-                    event.target.value = ""; // รีเซ็ตค่า input file
+        document.addEventListener("DOMContentLoaded", function() {
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{
+                            'header': [1, 2, false]
+                        }],
+                        ['bold', 'italic', 'underline'],
+                        ['image', 'link'],
+                        [{
+                            'list': 'ordered'
+                        }, {
+                            'list': 'bullet'
+                        }]
+                    ]
                 }
-            }
-        });
+            });
 
-        input.onchange = async () => {
-            var file = input.files[0];
-            if (file) {
-                var maxSize = 10 * 1024 * 1024; // 10MB
-                if (file.size > maxSize) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Image too large!',
-                        text: 'The image size must be less than 10MB.',
-                        confirmButtonColor: '#d33'
-                    });
-                    return;
-                }
-                showCropper(file);
-            }
-        };
+            quill.on('text-change', function() {
+                document.getElementById('content').value = quill.root.innerHTML;
+            });
 
+            // Handle Image Upload with Crop
+            quill.getModule('toolbar').addHandler('image', function() {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+                input.click();
 
-        var quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{
-                        'header': [1, 2, false]
-                    }],
-                    ['bold', 'italic', 'underline'],
-                    ['image', 'link'],
-                    [{
-                        'list': 'ordered'
-                    }, {
-                        'list': 'bullet'
-                    }]
-                ]
-            }
-        });
+                input.onchange = async () => {
+                    var file = input.files[0];
+                    if (file) {
+                        showCropper(file);
+                    }
+                };
+            });
 
-        quill.on('text-change', function() {
-            document.getElementById('content').value = quill.root.innerHTML;
-        });
+            function showCropper(file) {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(event) {
+                    var image = document.createElement('img');
+                    image.src = event.target.result;
+                    image.id = 'cropper-image';
+                    image.style.maxWidth = '100%';
 
-        // Handle Image Upload with Crop
-        quill.getModule('toolbar').addHandler('image', function() {
-            var input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.click();
-
-            input.onchange = async () => {
-                var file = input.files[0];
-                if (file) {
-                    showCropper(file);
-                }
-            };
-        });
-
-        function showCropper(file) {
-            var reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                var image = document.createElement('img');
-                image.src = event.target.result;
-                image.id = 'cropper-image';
-                image.style.maxWidth = '100%';
-
-                var modal = document.createElement('div');
-                modal.id = 'cropper-modal';
-                modal.style.position = 'fixed';
-                modal.style.top = '0';
-                modal.style.left = '0';
-                modal.style.width = '100vw';
-                modal.style.height = '100vh';
-                modal.style.background = 'rgba(0, 0, 0, 0.7)';
-                modal.style.display = 'flex';
-                modal.style.alignItems = 'center';
-                modal.style.justifyContent = 'center';
-                modal.innerHTML = `
-                    <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
-                        <h2>Crop Image</h2>
-                        <div id="crop-container" style="max-width: 500px; max-height: 400px; overflow: hidden;">
+                    var modal = document.createElement('div');
+                    modal.id = 'cropper-modal';
+                    modal.style.position = 'fixed';
+                    modal.style.top = '0';
+                    modal.style.left = '0';
+                    modal.style.width = '100vw';
+                    modal.style.height = '100vh';
+                    modal.style.background = 'rgba(0, 0, 0, 0.7)';
+                    modal.style.display = 'flex';
+                    modal.style.alignItems = 'center';
+                    modal.style.justifyContent = 'center';
+                    modal.innerHTML = `
+                        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+                            <h2>Crop Image</h2>
+                            <div id="crop-container" style="max-width: 500px; max-height: 400px; overflow: hidden;">
+                            </div>
+                            <button id="crop-btn" class="bg-green-500 text-white px-6 py-2 rounded-md mt-4">Crop & Upload</button>
+                            <button id="cancel-btn" class="bg-red-500 text-white px-6 py-2 rounded-md mt-4">Cancel</button>
                         </div>
-                        <button id="crop-btn" class="bg-green-500 text-white px-6 py-2 rounded-md mt-4">Crop & Upload</button>
-                        <button id="cancel-btn" class="bg-red-500 text-white px-6 py-2 rounded-md mt-4">Cancel</button>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-                document.getElementById('crop-container').appendChild(image);
+                    `;
+                    document.body.appendChild(modal);
+                    document.getElementById('crop-container').appendChild(image);
 
-                var cropper = new Cropper(image, {
-                    aspectRatio: 16 / 9, // Adjust as needed (1:1, 4:3, etc.)
-                    viewMode: 2,
-                });
+                    var cropper = new Cropper(image, {
+                        aspectRatio: 16 / 9,
+                        viewMode: 2,
+                    });
 
-                document.getElementById('crop-btn').onclick = async function() {
-                    var canvas = cropper.getCroppedCanvas();
-                    canvas.toBlob(async function(blob) {
-                        var formData = new FormData();
-                        formData.append("image", blob, "cropped_" + file.name);
+                    document.getElementById('crop-btn').onclick = async function() {
+                        var canvas = cropper.getCroppedCanvas();
+                        canvas.toBlob(async function(blob) {
+                            var formData = new FormData();
+                            formData.append("image", blob, "cropped_" + file.name);
 
-                        const res = await fetch("{{ route('posts.upload.image') }}", {
-                            method: "POST",
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            const res = await fetch("{{ route('posts.upload.image') }}", {
+                                method: "POST",
+                                body: formData,
+                                headers: {
+                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                }
+                            });
+
+                            const data = await res.json();
+                            if (data.url) {
+                                var range = quill.getSelection();
+                                quill.insertEmbed(range.index, 'image', data.url);
                             }
-                        });
 
-                        const data = await res.json();
-                        if (data.url) {
-                            var range = quill.getSelection();
-                            quill.insertEmbed(range.index, 'image', data.url);
-                        }
+                            document.body.removeChild(modal);
+                        }, 'image/jpeg', 0.8);
+                    };
 
+                    document.getElementById('cancel-btn').onclick = function() {
                         document.body.removeChild(modal);
-                    }, 'image/jpeg', 0.8); // Quality 80%
+                    };
                 };
-
-                document.getElementById('cancel-btn').onclick = function() {
-                    document.body.removeChild(modal);
-                };
-            };
-        }
-
-        function validateForm() {
-            var content = document.getElementById('content').value;
-            if (!content.trim()) {
-                document.getElementById('content-error').classList.remove('hidden');
-                return false;
             }
-            return true;
-        }
+
+            function validateForm() {
+                var content = document.getElementById('content').value;
+                if (!content.trim()) {
+                    document.getElementById('content-error').classList.remove('hidden');
+                    return false;
+                }
+                return true;
+            }
+        });
     </script>
+
 </body>
 
 </html>

@@ -13,7 +13,7 @@
 
     @include('components.navbar')
 
-    <div class="relative max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow mt-[120px]">
+    <div class="relative max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow mt-[100px]">
 
         <div class="flex items-center justify-end w-full">
             <!-- แสดงจำนวนไลค์ -->

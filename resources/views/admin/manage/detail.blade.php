@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mx-auto p-4 md:p-6">
+    <div class="container mx-auto p-4 md:p-6 mt-[100px]">
         <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg border border-gray-200 max-w-3xl mx-auto">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-700 mb-4 md:mb-6 flex items-center">
                 📌 <span class="ml-2">Post Details</span>

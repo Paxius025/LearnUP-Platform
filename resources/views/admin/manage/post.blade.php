@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mx-auto p-6">
+    <div class="container mx-auto p-6 mt-[80px]">
         {{-- Post Statistics --}}
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
             <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />
@@ -76,7 +76,7 @@
                                         <td class="p-3 text-center">
                                             <a href="{{ route('admin.manage.posts.detail', $post->id) }}"
                                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
-                                                🔍 View Details
+                                                🔍 View
                                             </a>
                                         </td>
                                     </tr>

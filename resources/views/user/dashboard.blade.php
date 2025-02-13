@@ -16,7 +16,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-[800px] mx-auto mt-10 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+    <div class="max-w-[800px] mx-auto mt-[70px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 pt-10">
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-6">
             <div

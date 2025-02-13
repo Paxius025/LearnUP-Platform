@@ -11,7 +11,7 @@
 
     @include('components.navbar')
 
-    <div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
+    <div class="max-w-6xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg mt-[120px]">
         <h2 class="text-2xl font-bold text-green-700">System Logs</h2>
 
         <table class="w-full mt-4 border-collapse border border-gray-300 rounded-lg overflow-hidden">

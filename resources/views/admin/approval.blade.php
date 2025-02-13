@@ -25,7 +25,7 @@
         @include('components.navbar')
     </div>
 
-    <div class="max-w-4xl w-full mt-10 bg-white p-8 rounded-lg shadow-xl border border-gray-200">
+    <div class="max-w-4xl w-full mt-10 bg-white p-8 rounded-lg shadow-xl border border-gray-200 mt-[120px]">
         <!-- Badge for Post Status -->
         <div class="flex justify-between items-center">
             <h2 class="text-3xl font-bold text-green-700">{{ $post->title }}</h2>

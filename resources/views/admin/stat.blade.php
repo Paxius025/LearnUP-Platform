@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="mt-5 container mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div class="mt-5 container mx-auto p-6 bg-white shadow-md rounded-lg mt-[100px] ">
 
         <h1 class="text-2xl font-semibold mb-4 text-green-700 flex items-center justify-between">
             <span>📊 Log Statistics</span>

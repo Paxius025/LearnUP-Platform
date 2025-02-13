@@ -11,7 +11,7 @@
 
     @include('components.navbar')
 
-    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow mt-[120px]">
         <!-- 🔹 แสดงชื่อผู้เขียน -->
         <div class="text-sm text-gray-500 mb-4">
             <p>By <strong>{{ $post->user->name }}</strong></p> <!-- ชื่อผู้เขียน -->

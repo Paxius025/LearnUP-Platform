@@ -13,7 +13,7 @@
 
     @include('components.navbar')
 
-    <div class="max-w-6xl mx-auto mt-10 px-4">
+    <div class="max-w-6xl mx-auto mt-[120px] px-4">
 
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" action="{{ route('admin.users') }}" method="GET"

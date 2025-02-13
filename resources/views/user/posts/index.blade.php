@@ -15,7 +15,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-screen-lg mx-auto mt-5 overflow-x-auto">
+    <div class="max-w-screen-lg mx-auto mt-5 overflow-x-auto mt-[120px]">
         <table class="table-auto w-full bg-white border border-gray-300 rounded-lg shadow-md">
             <thead class="bg-gray-100">
                 <tr>

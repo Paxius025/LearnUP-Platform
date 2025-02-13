@@ -5,7 +5,7 @@
         @include('components.navbar')
     </div>
 
-    <div class="flex justify-center items-center mt-2 py-10">
+    <div class="flex justify-center items-center py-10 mt-[120px]">
         <div class="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg relative">
 
             <!-- 🏷️ Role Badge -->

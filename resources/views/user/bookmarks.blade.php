@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
-<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
-    <h2 class="text-3xl font-bold mb-4">📌 Bookmarked Posts</h2>
+<div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow mt-[120px]">
+    <h2 class="text-3xl font-bold mb-4 ">📌 Bookmarked Posts</h2>
 
     @if ($bookmarkedPosts->isEmpty())
         <p class="text-gray-500">You haven't bookmarked any posts yet.</p>

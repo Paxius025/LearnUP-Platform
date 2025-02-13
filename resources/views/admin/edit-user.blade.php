@@ -16,7 +16,7 @@
         @include('components.navbar')
     </div>
 
-    <div class="max-w-4xl w-full mt-10 bg-white p-8 rounded-xl shadow-xl border border-gray-200">
+    <div class="max-w-4xl w-full mt-10 bg-white p-8 rounded-xl shadow-xl border border-gray-200 mt-[120px]">
         <h2 class="text-3xl font-bold text-green-700 flex items-center">
             ✏️ Edit User Role
         </h2>

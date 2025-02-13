@@ -1,7 +1,6 @@
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
-<nav class="bg-green-600 p-4 text-white flex items-center relative">
-
+<nav class="bg-green-600 p-4 text-white flex items-center fixed top-0 w-full z-50 shadow-lg">
     <!-- Logo -->
     <div class="flex-1 flex items-center space-x-4">
         <a href="#" class="text-white px-6 py-2 rounded-lg font-semibold flex items-center">

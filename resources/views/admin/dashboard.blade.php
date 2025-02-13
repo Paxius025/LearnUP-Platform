@@ -9,11 +9,11 @@
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
 </head>
 
-<body class="bg-green-50 min-h-screen">
+<body class="bg-green-50 min-h-screen mt-[80px]">
 
     @include('components.navbar')
 
-    <div class="container mx-auto p-6">
+    <div class="container mx-auto p-6 ">
         <!-- Section: Summary -->
         <div class="grid grid-cols-4 gap-6 mt-6">
             <x-dashboard-stat-card title="Total Posts" count="{{ $totalPosts }}" color="green" icon="📌" />

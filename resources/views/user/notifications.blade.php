@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="max-w-4xl w-full mx-auto bg-white shadow-md rounded-lg p-6">
+    <div class="max-w-4xl w-full mx-auto bg-white shadow-md rounded-lg p-6 mt-[120px]">
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-2xl font-bold">🔔 Notifications</h2>
 

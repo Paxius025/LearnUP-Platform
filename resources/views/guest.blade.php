@@ -12,6 +12,7 @@
             padding-top: 100px;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body class="min-h-screen flex items-center justify-center bg-gray-50 px-6">
@@ -20,8 +21,7 @@
     <div class="max-w-[800px] mx-auto grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 ">
 
         @foreach ($posts as $post)
-            <div
-                class="bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
+            <div class="bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
 
                 <div class="p-4">
                     <h3 class="text-lg font-bold line-clamp-2">{{ $post->title }}</h3>
@@ -60,10 +60,11 @@
                     </button>
 
 
-                    <a href="#"
+                    <button onclick="showLoginAlert()"
                         class="text-blue-600 hover:text-blue-800 hover:underline font-semibold py-2 px-4 rounded-lg border-2 border-blue-600 hover:bg-blue-100 transition duration-300 ease-in-out">
                         Read More
-                    </a>
+                    </button>
+
                 </div>
             </div>
         @endforeach
@@ -75,5 +76,23 @@
         @endif
     </div>
 </body>
+<script>
+    function showLoginAlert() {
+        Swal.fire({
+            title: "Please Login",
+            text: "You need to login to read more of this post.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Login Now",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{ route('login') }}"; // ไปที่หน้า Login
+            }
+        });
+    }
+</script>
 
 </html>

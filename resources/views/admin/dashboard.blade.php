@@ -28,25 +28,29 @@
         <h3 class="text-2xl font-bold text-green-700 mt-10">📝 Pending Posts</h3>
 
         <div class="mt-6">
-            <table class="w-full bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+            <table class="table-fixed w-full bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
                 <thead class="bg-green-200">
                     <tr class="text-left text-gray-700 font-semibold">
-                        <th class="p-4 w-12">#</th>
-                        <th class="p-4">Title</th>
-                        <th class="p-4">Author</th>
-                        <th class="p-4">Submitted On</th>
-                        <th class="p-4 text-center w-32">Actions</th>
+                        <th class="p-4 w-16 text-center">#</th>
+                        <th class="p-4 w-64">Title</th>
+                        <th class="p-4 w-40">Author</th>
+                        <th class="p-4 w-40">Date Submitted</th>
+                        <th class="p-4 w-32">Time Submitted</th>
+                        <th class="p-4 w-32 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($pendingCount as $index => $post)
                         <tr class="border-b border-gray-300 hover:bg-green-50 transition-all duration-300">
                             <td class="p-4 text-center font-semibold text-gray-600">
-                                {{ ($pendingCount->currentPage() - 1) *$pendingCount->perPage() + $loop->iteration }}
+                                {{ ($pendingCount->currentPage() - 1) * $pendingCount->perPage() + $loop->iteration }}
                             </td>
-                            <td class="p-4 font-bold text-green-700">{{ $post->title }}</td>
+                            <td class="p-4 font-bold text-green-700 truncate max-w-[250px]">
+                                {{ $post->title }}
+                            </td>
                             <td class="p-4 text-gray-600">{{ $post->user->name }}</td>
                             <td class="p-4 text-gray-500">{{ $post->created_at->format('M d, Y') }}</td>
+                            <td class="p-4 text-gray-500">{{ $post->created_at->format('h:i A') }}</td>
                             <td class="p-4 text-center w-32">
                                 <a href="{{ route('admin.posts.detail', $post->id) }}"
                                     class="inline-flex items-center justify-center bg-green-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300 whitespace-nowrap">
@@ -58,7 +62,7 @@
 
                     @if ($pendingCount->isEmpty())
                         <tr>
-                            <td colspan="5" class="text-center text-gray-500 p-6">
+                            <td colspan="6" class="text-center text-gray-500 p-6">
                                 😴 No posts pending approval.
                             </td>
                         </tr>
@@ -71,7 +75,7 @@
                 {{ $pendingCount->links('pagination::tailwind') }}
             </div>
         </div>
-
+    </div>
 
 </body>
 

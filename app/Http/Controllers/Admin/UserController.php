@@ -11,10 +11,28 @@ use App\Models\Notification;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::where('role', '!=', 'admin')->get(); // ไม่แสดง Admin
-        return view('admin.users', compact('users'));
+        $query = User::query();
+
+        // Request from search form
+        $selectedRoles = $request->input('roles', []);  
+        $search = $request->input('search'); 
+
+        // if selectedRoles is not empty, filter by selected roles
+        if (!empty($selectedRoles)) {
+            $query->whereIn('role', $selectedRoles);
+        }
+
+        // if search is not empty, filter by search keyword
+        if (!empty($search)) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        //  Get all users with pagination
+        $users = $query->paginate(7);
+
+        return view('admin.users', compact('users', 'selectedRoles', 'search'));
     }
 
     public function edit(User $user)
@@ -34,7 +52,7 @@ class UserController extends Controller
             'role' => $request->role,  
         ]);
 
-        // ส่งการแจ้งเตือนเมื่อมีการเปลี่ยน Role
+        // Send notification to user if role is updated
         if ($oldRole !== $user->role) {
             Notification::create([
                 'user_id' => $user->id,

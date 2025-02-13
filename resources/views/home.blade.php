@@ -32,6 +32,11 @@
             🚀 Create an Account
         </a>
 
+        <!-- Guest Button -->
+        <a href="{{ route('guest') }}" class="mt-6 px-10 py-5 text-xl md:text-2xl bg-gray-500 text-white rounded-full shadow-xl hover:bg-gray-600 hover:scale-105 transition-all duration-300 font-[Poppins] block w-full max-w-md mx-auto">
+            👤 Continue as Guest
+        </a>
+
         <!-- Login Section -->
         <p class="text-lg md:text-xl text-gray-800 mt-6 font-[Poppins] flex items-center justify-center">
             Already have an account? 
@@ -39,4 +44,5 @@
         </p>        
     </div>
   
-</body
+</body>
+</html>

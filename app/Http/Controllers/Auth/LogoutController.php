@@ -8,24 +8,24 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
+
 class LogoutController extends Controller
 {
     public function logout(Request $request)
     {
-        // ดึงข้อมูล User ก่อน Logout
+        // Retrieve the User before logging out
         $user = Auth::user();
     
-        // บันทึก Log ก่อนออกจากระบบ
+        // Save log before logging out
         logAction('logout', "User {$user->name} ({$user->email}) logged out.");
     
-        // ออกจากระบบ
+        // Log out
         Auth::logout();
     
-        // ล้าง session เพื่อป้องกัน session hijacking
+        // Clear session to prevent session hijacking
         $request->session()->invalidate();
         $request->session()->regenerateToken();
     
         return redirect()->route('home');
     }
-    
 }

@@ -36,6 +36,12 @@ use App\Http\Controllers\User\ProfileController;
 // Posts Management Controller
 use App\Http\Controllers\Admin\PostManagementController;
 
+// Guest
+Route::get('/guest', function () {
+    return view('guest');
+})->name('guest');
+
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 

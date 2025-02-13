@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container mx-auto p-4 md:p-6 mt-[80px]">
+    <div class="container mx-auto mt-[100px]">
         <div class="bg-white p-4 md:p-6 rounded-2xl shadow-lg border border-gray-200 max-w-3xl mx-auto">
             <h1 class="text-2xl md:text-3xl font-bold text-gray-700 mb-4 md:mb-6 flex items-center">
                 📌 <span class="ml-2">Post Details</span>
@@ -34,10 +34,11 @@
                     @endif
                 </div>
 
-                <p class="text-base md:text-lg font-semibold text-gray-600"><strong>Posted by:</strong> {{ $post->user->name }}</p>
+                <p class="text-base md:text-lg font-semibold text-gray-600"><strong>Posted by:</strong>
+                    {{ $post->user->name }}</p>
                 <p class="text-base md:text-lg font-semibold text-gray-600"><strong>Created at:</strong>
                     {{ $post->created_at->format('d/m/Y H:i') }}</p>
-                    @if ($post->pdf_file)
+                @if ($post->pdf_file)
                     <div class="mt-6">
                         <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank"
                             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">

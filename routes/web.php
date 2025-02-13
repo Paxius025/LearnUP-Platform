@@ -99,8 +99,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/manage/posts', [\App\Http\Controllers\Admin\PostManagementController::class, 'index'])->name('manage.posts');
     Route::get('/manage/posts/{id}', [\App\Http\Controllers\Admin\PostManagementController::class, 'show'])->name('manage.posts.detail');
     Route::get('/posts/{post}/approval', [\App\Http\Controllers\Admin\PostManagementController::class, 'detail'])->name('posts.detail');
-    Route::patch('/posts/{post}/approve', [\App\Http\Controllers\Admin\PostManagementController::class, 'approve'])->name('posts.approve');
-    Route::patch('/posts/{post}/reject', [\App\Http\Controllers\Admin\PostManagementController::class, 'reject'])->name('posts.reject');
+    Route::patch('/posts/{post}/approve', [\App\Http\Controllers\Admin\PostManagementController::class, 'approve'])->name('admin.posts.approve');
+    Route::patch('/posts/{post}/reject', [\App\Http\Controllers\Admin\PostManagementController::class, 'reject'])->name('admin.posts.reject');
 });
 
 // Favorite Post

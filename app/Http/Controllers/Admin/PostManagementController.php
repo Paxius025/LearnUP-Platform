@@ -12,12 +12,12 @@ class PostManagementController extends Controller
 {
     public function index()
     {
-        // ตรวจสอบว่ามีโพสต์อยู่จริง
+        // Check if there are any posts
         $pendingPosts = Post::where('status', 'pending')->latest()->get() ?? collect([]);
         $approvedPosts = Post::where('status', 'approved')->latest()->paginate(8, ['*'], 'approved_page');
         $rejectedPosts = Post::where('status', 'rejected')->latest()->paginate(8, ['*'], 'rejected_page');
 
-        // คำนวณจำนวนโพสต์แต่ละประเภท
+        // Calculate the number of posts for each status
         $totalPosts = Post::count();
         $approvedCount = Post::where('status', 'approved')->count();
         $pendingCount = Post::where('status', 'pending')->count();
@@ -28,6 +28,7 @@ class PostManagementController extends Controller
             'totalPosts', 'approvedCount', 'pendingCount', 'rejectedCount'
         ));
     }
+
     public function detail(Post $post)
     {
         return view('admin.manage.detail', compact('post'));
@@ -43,17 +44,17 @@ class PostManagementController extends Controller
     {
         $post->update(['status' => 'approved']);
     
-        // ✅ แจ้งเตือน User ว่าโพสต์ของเขาถูกอนุมัติ
+        // Notify the user that their post has been approved
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_approved',
             'message' => "Your post has been approved \"{$post->title}\"",
-            'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
-            'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
+            'is_user_read' => false,  // Change to 'is_user_read'
+            'is_admin_read' => false, // Or 'is_admin_read' if you want Admin to read
         ]);
     
-        // ✅ เก็บ Log การอนุมัติ
-        logAction('approve_post', "Admin approve post: {$post->title}");
+        // Log the approval action
+        logAction('approve_post', "Admin approved post: {$post->title}");
     
         return redirect()->route('admin.manage.posts')->with('success', 'Post approved successfully.');
     }
@@ -62,17 +63,17 @@ class PostManagementController extends Controller
     {
         $post->update(['status' => 'rejected']);
 
-        // ✅ แจ้งเตือน User ว่าโพสต์ของเขาถูกปฏิเสธ
+        // Notify the user that their post has been rejected
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
-            'message' => "Post \"{$post->title}\" rejeted",
-            'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
-            'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
+            'message' => "Post \"{$post->title}\" rejected",
+            'is_user_read' => false,  // Change to 'is_user_read'
+            'is_admin_read' => false, // Or 'is_admin_read' if you want Admin to read
         ]);
 
-        // ✅ เก็บ Log การปฏิเสธโพสต์
-        logAction('reject_post', "Admin reject: {$post->title}");
+        // Log the rejection action
+        logAction('reject_post', "Admin rejected post: {$post->title}");
 
         return redirect()->route('admin.manage.posts')->with('success', 'Post rejected successfully.');
     }

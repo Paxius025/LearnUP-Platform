@@ -45,8 +45,8 @@
 
 <body class="bg-gray-100 min-h-screen font-sans antialiased">
     @include('components.navbar')
-    <div class="max-w-4xl mx-auto mt-5 bg-white p-8 rounded-xl shadow-xl">
-        <h2 class="text-3xl font-bold text-gray-800 mb-6">Create New Post</h2>
+    <div class="max-w-4xl mx-auto mt-5 bg-white p-6 rounded-xl shadow-xl">
+        <h2 class="text-3xl font-bold text-gray-800 mb-3">Create New Post</h2>
 
         <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data"
             onsubmit="return validateForm()">

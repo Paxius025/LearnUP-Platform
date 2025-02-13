@@ -11,30 +11,27 @@
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <style>
         #editor {
-            min-height: 150px;
-            /* เพิ่มขนาดขั้นต่ำของ Editor */
-            height: 300px;
-            /* เพิ่มความสูงของ Editor */
-            max-height: 500px;
-            /* เพิ่มความสูงสูงสุด */
+            min-height: 120px;
+            /* ลดความสูงขั้นต่ำของ Editor */
+            height: 250px;
+            /* ลดความสูงของ Editor */
+            max-height: 350px;
+            /* ลดความสูงสูงสุด */
         }
 
         .ql-container {
-            min-height: 150px !important;
-            height: 300px !important;
-            max-height: 400px !important;
-            /* ปรับให้พอดีกับ Layout */
+            min-height: 120px !important;
+            height: 250px !important;
+            max-height: 350px !important;
             overflow: hidden !important;
-            /* ป้องกันล้น */
         }
 
         .ql-editor {
-            min-height: 150px !important;
-            height: 300px !important;
-            max-height: 400px !important;
+            min-height: 120px !important;
+            height: 250px !important;
+            max-height: 350px !important;
             padding: 10px !important;
             overflow-y: auto !important;
-            /* ให้ Scroll ถ้ามีเนื้อหาเยอะ */
         }
     </style>
 </head>
@@ -42,7 +39,7 @@
 <body class="bg-gray-100 min-h-screen">
     @include('components.navbar')
 
-    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <div class="max-w-3xl mx-auto mt-10 bg-white p-6 rounded shadow">
         <h2 class="text-2xl font-bold">Edit Post</h2>
 
         <!-- ⚠️ แสดงข้อความเตือนถ้าโพสต์เคยได้รับการอนุมัติ -->
@@ -57,38 +54,40 @@
             @method('PUT')
 
             <!-- 🔹 Title -->
-            <div class="mb-4">
+            <div class="mb-3">
                 <label for="title" class="block text-gray-700">Title</label>
                 <input type="text" id="title" name="title" value="{{ old('title', $post->title) }}"
                     class="w-full p-3 border rounded-lg" required>
             </div>
 
             <!-- 🔹 Content -->
-            <div class="mb-4">
+            <div class="mb-3">
                 <label class="block text-gray-700">Content</label>
                 <div id="editor">{!! old('content', $post->content) !!}</div>
                 <input type="hidden" name="content" id="content">
             </div>
 
             <!-- 🔹 PDF Upload -->
-            <div class="mb-4">
+            <div class="mb-3">
                 <label for="pdf_file" class="block text-gray-700">Replace PDF (Optional)</label>
                 <input type="file" id="pdf_file" name="pdf_file" class="w-full p-3 border rounded-lg">
                 @if ($post->pdf_file)
-                    <p class="mt-2">
-                        Current PDF :
+                    <p class="mt-2 pt-2">
                         <a href="{{ asset('storage/' . $post->pdf_file) }}" target="_blank"
-                            class="text-blue-600 hover:underline">
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 ">
                             📄 View PDF
                         </a>
                     </p>
                 @endif
             </div>
 
-            <!-- 🔹 Update Button -->
-            <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-                Update Post
-            </button>
+            <!-- 🔹 Update Button (Centered) -->
+            <div class="flex justify-center mt-4">
+                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                    Update Post
+                </button>
+            </div>
+
         </form>
     </div>
 

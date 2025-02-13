@@ -18,39 +18,40 @@
 
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" action="{{ route('admin.users') }}" method="GET"
-            class="bg-white p-4 rounded-lg shadow flex flex-wrap items-center gap-4">
+            class="bg-white p-4 rounded-lg shadow flex flex-wrap items-center gap-2 justify-start">
 
             <!-- 🔎 Search Input -->
-            <div class="relative w-full sm:max-w-4xl">
+            <div class="relative flex-shrink-0 w-full sm:w-auto sm:w-[760px]">
                 <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                     placeholder="Search by name..."
                     class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300">
             </div>
 
             <!-- 🏷️ Role Filter -->
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center gap-2">
                 @foreach (['user', 'writer', 'admin'] as $role)
                     <label class="flex items-center space-x-2 cursor-pointer">
                         <input type="checkbox" name="roles[]" value="{{ $role }}"
                             {{ in_array($role, request('roles', [])) ? 'checked' : '' }} class="role-filter">
-                        <span class="text-gray-700">{{ ucfirst($role) }}</span>
+                        <span class="text-gray-700 text-sm">{{ ucfirst($role) }}</span>
                     </label>
                 @endforeach
             </div>
 
-            <!-- Show "Clear Filters" Button If Search or Filter Is Applied -->
-            @if (request('search') || request('roles'))
-                <button type="button" onclick="clearFilters()"
-                    class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition">
-                    ❌ Clear Filters
-                </button>
-            @else
-                <!-- Show Filter Button Only When No Search/Filters Are Applied -->
-                <button type="submit"
-                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                    🔍 Filter
-                </button>
-            @endif
+            <!-- 🛠️ Filter & Clear Button -->
+            <div class="flex items-center gap-2">
+                @if (request('search') || request('roles'))
+                    <button type="button" onclick="clearFilters()"
+                        class="bg-gray-400 text-white px-3 py-2 rounded-lg text-sm hover:bg-gray-500 transition">
+                        ❌ Clear
+                    </button>
+                @else
+                    <button type="submit"
+                        class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition">
+                        🔍 Filter
+                    </button>
+                @endif
+            </div>
         </form>
 
         <div class="mt-6">

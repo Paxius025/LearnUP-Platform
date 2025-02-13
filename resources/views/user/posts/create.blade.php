@@ -79,7 +79,42 @@
         </form>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        document.getElementById('pdf_file').addEventListener('change', function(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File too large!',
+                        text: 'The file size must be less than 10MB.',
+                        confirmButtonColor: '#d33'
+                    });
+                    event.target.value = ""; // รีเซ็ตค่า input file
+                }
+            }
+        });
+
+        input.onchange = async () => {
+            var file = input.files[0];
+            if (file) {
+                var maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Image too large!',
+                        text: 'The image size must be less than 10MB.',
+                        confirmButtonColor: '#d33'
+                    });
+                    return;
+                }
+                showCropper(file);
+            }
+        };
+
+
         var quill = new Quill('#editor', {
             theme: 'snow',
             modules: {

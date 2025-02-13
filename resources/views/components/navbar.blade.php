@@ -15,43 +15,38 @@
         @endif
     </div>
 
-    <!-- Navigation Links - ใช้ absolute + transform เพื่อให้ตรงกลาง -->
+    <!-- Navigation Links -->
     <div class="absolute left-1/2 transform -translate-x-1/2 flex space-x-6 text-base">
-        @if (auth()->user()->role === 'admin')
-            <a href="{{ route('admin.dashboard') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="home" class="mb-1"></i> <span>Admin Dashboard</span>
-            </a>
-            <a href="{{ route('admin.users') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="users" class="mb-1"></i> <span>Manage Users</span>
-            </a>
-            <a href="{{ route('admin.manage.posts') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="file-text" class="mb-1"></i> <span>Manage Posts</span>
-            </a>
-            <a href="{{ route('admin.stat') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="bar-chart" class="mb-1"></i> <span>Statistics</span>
-            </a>
-        @else
-            <a href="{{ route('user.dashboard') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="home" class="mb-1"></i> <span>Dashboard</span>
-            </a>
-            <a href="{{ route('most.liked.posts') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="heart" class="mb-1"></i> <span>Most Liked Posts</span>
-            </a>
-            <a href="{{ route('user.posts.create') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="pencil" class="mb-1"></i> <span>Create Post</span>
-            </a>
-            <a href="{{ route('user.posts.index') }}"
-                class="flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
-                <i data-lucide="book" class="mb-1"></i> <span>My Posts</span>
-            </a>
-        @endif
+        @php
+            $navLinks = [
+                'admin.dashboard' => ['icon' => 'home', 'label' => 'Admin Dashboard'],
+                'admin.users' => ['icon' => 'users', 'label' => 'Manage Users'],
+                'admin.manage.posts' => ['icon' => 'file-text', 'label' => 'Manage Posts'],
+                'admin.stat' => ['icon' => 'bar-chart', 'label' => 'Statistics'],
+                'user.dashboard' => ['icon' => 'home', 'label' => 'Dashboard'],
+                'most.liked.posts' => ['icon' => 'heart', 'label' => 'Most Liked Posts'],
+                'user.posts.create' => ['icon' => 'pencil', 'label' => 'Create Post'],
+                'user.posts.index' => ['icon' => 'book', 'label' => 'My Posts'],
+            ];
+        @endphp
+
+        @foreach ($navLinks as $route => $data)
+            @if (auth()->user()->role === 'admin' && str_starts_with($route, 'admin'))
+                <a href="{{ route($route) }}"
+                    class="flex flex-col items-center transition duration-300 transform hover:scale-105 font-semibold
+                        {{ request()->routeIs($route) ? 'text-white font-bold' : 'text-white text-opacity-50 hover:text-opacity-100' }}">
+                    <i data-lucide="{{ $data['icon'] }}" class="mb-1"></i>
+                    <span>{{ $data['label'] }}</span>
+                </a>
+            @elseif (auth()->user()->role !== 'admin' && !str_starts_with($route, 'admin'))
+                <a href="{{ route($route) }}"
+                    class="flex flex-col items-center transition duration-300 transform hover:scale-105 font-semibold
+                        {{ request()->routeIs($route) ? 'text-white font-bold' : 'text-white text-opacity-50 hover:text-opacity-100' }}">
+                    <i data-lucide="{{ $data['icon'] }}" class="mb-1"></i>
+                    <span>{{ $data['label'] }}</span>
+                </a>
+            @endif
+        @endforeach
 
         <!-- Notification Badge -->
         @php
@@ -64,7 +59,8 @@
         @endphp
 
         <a href="{{ route('notifications.index') }}"
-            class="relative flex flex-col items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
+            class="relative flex flex-col items-center hover:text-opacity-100 transition duration-300 transform hover:scale-105 font-semibold
+                {{ request()->routeIs('notifications.index') ? 'text-white font-bold' : 'text-white text-opacity-50' }}">
             <i data-lucide="bell" class="mb-1"></i> <span>Notifications</span>
             @if ($unreadCount > 0)
                 <span
@@ -78,13 +74,14 @@
     <!-- Profile and Logout Section -->
     <div class="flex-1 flex justify-end space-x-2">
         <a href="{{ route('profile.edit') }}"
-            class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
+            class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-opacity-100 transition duration-300 transform hover:scale-105 font-semibold
+                {{ request()->routeIs('profile.edit') ? 'text-white font-bold' : 'text-white text-opacity-50' }}">
             <i data-lucide="settings"></i> <span class="ml-1">Profile</span>
         </a>
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit"
-                class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-teal-200 transition duration-300 transform hover:scale-105 font-semibold">
+                class="text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:text-opacity-100 transition duration-300 transform hover:scale-105 font-semibold">
                 <i data-lucide="log-out"></i>
                 <span class="ml-1">Logout</span>
             </button>

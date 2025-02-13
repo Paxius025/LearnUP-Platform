@@ -11,11 +11,12 @@ use Intervention\Image\Facades\Image;
 use App\Models\Log;
 use App\Models\Notification;
 use App\Models\User;
+
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('user_id', Auth::id())->paginate(10);
+        $posts = Post::where('user_id', Auth::id())->paginate(9);
         return view('user.posts.index', compact('posts'));
     }
 
@@ -26,7 +27,7 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        // ตรวจสอบว่าผู้ใช้เป็นเจ้าของโพสต์หรือไม่
+        // Check if the user is the owner of the post
         if ($post->user_id !== Auth::id()) {
             abort(403);
         }
@@ -35,35 +36,35 @@ class PostController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'content' => 'required',
-        'pdf_file' => 'nullable|mimes:pdf|max:5120', // รองรับไฟล์ PDF ไม่เกิน 5MB
-    ]);
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required',
+            'pdf_file' => 'nullable|mimes:pdf|max:5120', // Support PDF files up to 5MB
+        ]);
 
-    $pdfPath = null;
-    if ($request->hasFile('pdf_file')) {
-        $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
-    }
+        $pdfPath = null;
+        if ($request->hasFile('pdf_file')) {
+            $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
+        }
 
-    $status = Auth::user()->role === 'user' ? 'pending' : 'approved';
+        $status = Auth::user()->role === 'user' ? 'pending' : 'approved';
 
-    // 🔹 ดึง path ของรูปภาพจาก content
-    preg_match_all('/<img.*?src=["\'](.*?storage\/posts\/.*?)["\'].*?>/i', $request->content, $matches);
+        // Extract image paths from content
+        preg_match_all('/<img.*?src=["\'](.*?storage\/posts\/.*?)["\'].*?>/i', $request->content, $matches);
 
 $imagePaths = array_map(function ($path) {
 return ltrim(str_replace(asset('storage/'), '', $path), '/');
 }, $matches[1] ?? []);
 
-// 🔹 แปลงให้เป็น JSON ก่อนบันทึก
+// Convert to JSON before saving
 $imagePathsJson = !empty($imagePaths) ? json_encode($imagePaths) : null;
 
 $post = Post::create([
 'user_id' => Auth::id(),
 'title' => $request->title,
-'content' => $request->content, // เก็บ HTML เต็มรูปแบบ
-'image' => $imagePathsJson, // ✅ บันทึกเป็น JSON array
+'content' => $request->content, // Store full HTML content
+'image' => $imagePathsJson, // Save as JSON array
 'pdf_file' => $pdfPath,
 'status' => $status,
 ]);
@@ -71,95 +72,90 @@ $post = Post::create([
 logAction('create_post', "Created post: {$post->title}");
 
 if ($status === 'pending') {
-/// ให้ทุกโพสต์ที่สร้างใหม่จะส่งแจ้งเตือนให้ Admin
+// Notify all admins about the new post
 $admins = \App\Models\User::where('role', 'admin')->get();
 foreach ($admins as $admin) {
 Notification::create([
 'user_id' => $post->user->id,
 'type' => 'new_post',
-'message' => "\"{$post->title}\" จาก " . $post->user->name,
+'message' => "\"{$post->title}\" by " . $post->user->name,
 'created_at' => now(),
 'is_user_read' => false,
 'is_admin_read' => false,
 ]);
 }
 logAction('notify_admin', "Notified admins about new post: {$post->title}");
-
 }
-
-
 
 return redirect()->route('user.posts.index')->with('success', 'Post created successfully.');
 }
 
-
 public function update(Request $request, Post $post)
 {
-// ตรวจสอบว่าโพสต์นี้เป็นของผู้ใช้งานที่ล็อกอินอยู่หรือไม่
+// Check if the post belongs to the logged-in user
 if ($post->user_id !== Auth::id()) {
-abort(403); // ถ้าไม่ใช่เจ้าของโพสต์ให้หยุดการทำงาน
+abort(403); // If not the owner, stop the process
 }
 
-// ทำการ validate ข้อมูลที่ได้รับจากฟอร์ม
+// Validate the data received from the form
 $request->validate([
 'title' => 'required|string|max:255',
 'content' => 'required',
 'pdf_file' => 'nullable|mimes:pdf|max:5120',
 ]);
 
-$pdfPath = $post->pdf_file; // เก็บ path ของไฟล์ PDF เก่า
-// ถ้ามีการอัปโหลดไฟล์ PDF ใหม่
+$pdfPath = $post->pdf_file; // Store the old PDF file path
+// If a new PDF file is uploaded
 if ($request->hasFile('pdf_file')) {
-// ลบไฟล์ PDF เก่าหากมี
+// Delete the old PDF file if it exists
 if ($pdfPath) {
 Storage::delete("public/{$pdfPath}");
 }
-// อัปโหลดไฟล์ PDF ใหม่
+// Upload the new PDF file
 $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
 }
 
-// ตั้งค่า status เป็น 'pending' หาก role เป็น 'user' และ 'approved' สำหรับ role อื่น
+// Set status to 'pending' if role is 'user' and 'approved' for other roles
 $newStatus = Auth::user()->role === 'user' ? 'pending' : 'approved';
 
-// ดึง path ของรูปภาพจาก content ใหม่
+// Extract image paths from the new content
 preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->content, $matches);
     $imagePaths = array_map(function ($path) {
     return ltrim(str_replace(asset('storage/'), '', $path), '/');
     }, $matches[1] ?? []);
 
-    // แปลงให้เป็น String ไม่ใช่ JSON array
+    // Convert to String, not JSON array
     $imagePath = count($imagePaths) > 0 ? $imagePaths[0] : null;
 
-    // อัปเดตโพสต์
+    // Update the post
     $post->update([
     'title' => $request->title,
-    'content' => $request->content, // เก็บ HTML เต็มรูปแบบ
-    'image' => $imagePath, // ✅ บันทึกเฉพาะ path เดียว ไม่ใช่ JSON array
+    'content' => $request->content, // Store full HTML content
+    'image' => $imagePath, // Save only one path, not JSON array
     'pdf_file' => $pdfPath,
-    'status' => $newStatus, // อัปเดตสถานะตาม role
+    'status' => $newStatus, // Update status based on role
     ]);
 
     logAction('update_post', "Updated post: {$post->title}");
 
-    // แจ้งเตือน Admin เมื่อโพสต์ถูกแก้ไขและรอการอนุมัติ
+    // Notify Admin when the post is edited and pending approval
     if ($newStatus === 'pending') {
-    // ส่งแจ้งเตือนเฉพาะ Admin เท่านั้น
+    // Notify only Admins
     $admins = \App\Models\User::where('role', 'admin')->get();
     foreach ($admins as $admin) {
     Notification::create([
     'user_id' => $post->user->id,
     'type' => 'updated_post',
-    'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " และรอการอนุมัติ",
-    'is_user_read' => false, // ผู้ใช้ยังไม่ได้อ่าน
-    'is_admin_read' => false, // Admin ยังไม่ได้อ่าน
+    'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " and is pending approval",
+    'is_user_read' => false,
+    'is_admin_read' => false,
     ]);
-    logAction('notify_admin', "แจ้งเตือน Admin ว่ามีโพสต์ถูกแก้ไข: {$post->title}");
+    logAction('notify_admin', "Notified Admin about edited post: {$post->title}");
     }
     }
 
     return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }
-
 
     public function uploadImage(Request $request)
     {
@@ -169,10 +165,9 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
 
     $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();
     $path = $request->file('image')->storeAs('posts', $filename, 'public');
-    logAction('upload_Image', "Uploaded image: {$filename}");
+    logAction('upload_image', "Uploaded image: {$filename}");
     return response()->json(['url' => asset("storage/{$path}")]);
     }
-
 
     public function show(Post $post)
     {
@@ -185,14 +180,12 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
 
     public function detail(Post $post)
     {
-    // ตรวจสอบว่าโพสต์ถูกอนุมัติหรือเป็นเจ้าของโพสต์
+    // Check if the post is approved or the user is the owner
     if ($post->status !== 'approved' && $post->user_id !== Auth::user()->id) {
     abort(403, 'You are not authorized to view this post.');
     }
 
-    logAction('create_post', "Created post: {$post->title}");
-
-
+    logAction('view_post', "Viewed post: {$post->title}");
 
     return view('user.posts.detail', compact('post'));
     }
@@ -206,5 +199,4 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
 
     return view('user.dashboard', compact('posts'));
     }
-
     }

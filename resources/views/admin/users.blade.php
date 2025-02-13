@@ -13,8 +13,7 @@
 
     @include('components.navbar')
 
-    <div class="max-w-6xl mx-auto mt-5">
-        <h2 class="text-3xl font-bold text-green-700 text-center mb-6">Manage Users</h2>
+    <div class="max-w-6xl mx-auto mt-10 px-4">
 
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" action="{{ route('admin.users') }}" method="GET"

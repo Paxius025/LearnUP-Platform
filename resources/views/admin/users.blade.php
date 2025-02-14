@@ -28,13 +28,20 @@
                 <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                     placeholder="Search by name or email..."
                     class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300 focus:outline-none text-gray-700 transition-all duration-300">
+
+                <button id="clearButton"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-500 text-white px-3 py-1 rounded-full text-sm hidden transition hover:bg-red-600">
+                    ✖
+                </button>
             </div>
+
 
             <!-- 🏷️ Role Filter -->
             <div class="flex items-center gap-4 pr-12">
                 @foreach (['user', 'writer', 'admin'] as $role)
                     <label class="flex items-center space-x-1 cursor-pointer">
-                        <input type="checkbox" name="roles[]" value="{{ $role }}" class="role-filter flex-shrink-0 w-4 h-4 border-gray-400 rounded-md focus:ring-green-400">
+                        <input type="checkbox" name="roles[]" value="{{ $role }}"
+                            class="role-filter flex-shrink-0 w-4 h-4 border-gray-400 rounded-md focus:ring-green-400">
                         <span class="text-gray-700 text-sm">{{ ucfirst($role) }}</span>
                     </label>
                 @endforeach
@@ -89,7 +96,7 @@
 
     <!-- JavaScript -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const searchInput = document.getElementById("searchInput");
             const roleFilters = document.querySelectorAll(".role-filter");
             const userTable = document.getElementById("userTable");
@@ -111,7 +118,8 @@
                         paginationDiv.innerHTML = "";
 
                         if (data.users.length === 0) {
-                            userTable.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">No users found.</td></tr>';
+                            userTable.innerHTML =
+                                '<tr><td colspan="5" class="text-center p-6 text-gray-500">No users found.</td></tr>';
                             return;
                         }
 
@@ -142,10 +150,23 @@
                     });
             }
 
-            searchInput.addEventListener("input", fetchUsers);
-            roleFilters.forEach(filter => filter.addEventListener("change", fetchUsers));
+            searchInput.addEventListener("input", function() {
+                if (searchInput.value.length > 0) {
+                    clearButton.classList.remove("hidden"); // Show button
+                } else {
+                    clearButton.classList.add("hidden"); // Hide button
+                }
+                fetchUsers();
+            });
 
-            fetchUsers(); 
+            // When the clear button is clicked
+            clearButton.addEventListener("click", function() {
+                searchInput.value = ""; // Clear search value
+                clearButton.classList.add("hidden"); // Hide button
+                fetchUsers(); // Reload data
+            });
+
+            fetchUsers(); // Load initial data
         });
     </script>
 

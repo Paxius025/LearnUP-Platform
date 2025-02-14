@@ -14,8 +14,8 @@ class PostManagementController extends Controller
     {
         // Check if there are any posts
         $pendingPosts = Post::where('status', 'pending')->latest()->get() ?? collect([]);
-        $approvedPosts = Post::where('status', 'approved')->latest()->paginate(8, ['*'], 'approved_page');
-        $rejectedPosts = Post::where('status', 'rejected')->latest()->paginate(8, ['*'], 'rejected_page');
+        $approvedPosts = Post::where('status', 'approved')->latest()->paginate(9, ['*'], 'approved_page');
+        $rejectedPosts = Post::where('status', 'rejected')->latest()->paginate(9, ['*'], 'rejected_page');
 
         // Calculate the number of posts for each status
         $totalPosts = Post::count();

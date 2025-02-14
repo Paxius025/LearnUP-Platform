@@ -126,6 +126,13 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
+        Notification::create([
+            'user_id' => $user->id,
+            'type' => 'create_user',
+            'message' => "New user created: {$user->name} ({$user->role})", 
+            'is_admin_read' => false, 
+        ]);
+
         // Log action
         logAction('create_user', "Created new user: {$user->name} ({$user->role})");
 

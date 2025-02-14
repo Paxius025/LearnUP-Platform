@@ -14,7 +14,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.users.store') }}" method="POST">
+        <form id="createUserForm" action="{{ route('admin.users.store') }}" method="POST">
             @csrf
 
             <div class="mb-4">
@@ -56,7 +56,7 @@
             </div>
 
             <div class="flex justify-end">
-                <button type="submit"
+                <button type="submit" id="submitButton"
                     class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-200 transform hover:scale-105">
                     ✅ Create User
                 </button>
@@ -64,4 +64,29 @@
         </form>
     </div>
 </div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('submitButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to create this user?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#38a169",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, create it!",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('createUserForm').submit();
+            }
+        });
+    });
+</script>
+
 @endsection

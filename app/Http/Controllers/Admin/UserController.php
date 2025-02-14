@@ -80,14 +80,28 @@ class UserController extends Controller
 
     public function search(Request $request)
     {
+        $query = User::query();
         $search = $request->input('search');
+        $roles = $request->input('roles') ? explode(',', $request->input('roles')) : [];
 
-        $users = User::where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('email', 'LIKE', "%{$search}%")
-                    ->limit(10) 
-                    ->get();
+        // Search by name and email
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
 
-        return response()->json($users);
+        // Filter by role
+        if (!empty($roles)) {
+            $query->whereIn('role', $roles);
+        }
+
+        $users = $query->paginate(8);
+
+        return response()->json([
+            'users' => $users->items(),
+            'pagination' => $users->links()->render() // Send pagination back as well
+        ]);
     }
-
 }

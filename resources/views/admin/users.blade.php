@@ -158,6 +158,10 @@
                 fetchUsers();
             });
 
+            roleFilters.forEach(checkbox => {
+                checkbox.addEventListener("change", fetchUsers);
+            });
+
             // When the clear button is clicked
             clearButton.addEventListener("click", function() {
                 searchInput.value = ""; // Clear search value

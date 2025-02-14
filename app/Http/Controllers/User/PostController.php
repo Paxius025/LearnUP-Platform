@@ -56,7 +56,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
-            'pdf_file' => 'nullable|mimes:pdf|max:5120', // Support PDF files up to 5MB
+            'pdf_file' => 'nullable|mimes:pdf|max:10000', // Support PDF files up to 10MB
         ]);
 
         $pdfPath = null;
@@ -117,7 +117,7 @@ abort(403); // If not the owner, stop the process
 $request->validate([
 'title' => 'required|string|max:255',
 'content' => 'required',
-'pdf_file' => 'nullable|mimes:pdf|max:5120',
+'pdf_file' => 'nullable|mimes:pdf|max:10000',
 ]);
 
 $pdfPath = $post->pdf_file; // Store the old PDF file path

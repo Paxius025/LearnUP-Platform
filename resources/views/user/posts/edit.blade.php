@@ -14,24 +14,28 @@
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <style>
         #editor {
-            min-height: 120px;
-            height: 250px;
-            max-height: 350px;
+            min-height: 150px;
+            height: auto;
+            /* ปรับความสูงอัตโนมัติ */
         }
 
         .ql-container {
-            min-height: 120px !important;
-            height: 250px !important;
-            overflow: hidden !important;
+            min-height: 150px !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow-y: hidden !important;
+            /* ปิด Scroll */
         }
 
         .ql-editor {
-            min-height: 120px !important;
-            height: 250px !important;
-            max-height: 350px !important;
+            min-height: 150px !important;
+            height: auto !important;
+            max-height: none !important;
             padding: 10px !important;
-            overflow-y: auto !important;
+            overflow-y: hidden !important;
+            /* ปิด Scroll */
         }
+
 
         body {
             padding-top: 120px;
@@ -88,7 +92,8 @@
 
             <!-- 🔹 Update Button (Centered) -->
             <div class="flex justify-center mt-4">
-                <button type="submit" class="confirm-action bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                <button type="submit"
+                    class="confirm-action bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
                     Update Post
                 </button>
             </div>

@@ -19,29 +19,25 @@
     <style>
         #editor {
             min-height: 150px;
-            /* เพิ่มขนาดขั้นต่ำของ Editor */
-            height: 300px;
-            /* เพิ่มความสูงของ Editor */
-            max-height: 500px;
-            /* เพิ่มความสูงสูงสุด */
+            height: auto;
+            /* ปรับความสูงอัตโนมัติ */
         }
 
         .ql-container {
             min-height: 150px !important;
-            height: 300px !important;
-            max-height: 400px !important;
-            /* ปรับให้พอดีกับ Layout */
-            overflow: hidden !important;
-            /* ป้องกันล้น */
+            height: auto !important;
+            max-height: none !important;
+            overflow-y: hidden !important;
+            /* ปิด Scroll */
         }
 
         .ql-editor {
             min-height: 150px !important;
-            height: 300px !important;
-            max-height: 400px !important;
+            height: auto !important;
+            max-height: none !important;
             padding: 10px !important;
-            overflow-y: auto !important;
-            /* ให้ Scroll ถ้ามีเนื้อหาเยอะ */
+            overflow-y: hidden !important;
+            /* ปิด Scroll */
         }
 
         body {

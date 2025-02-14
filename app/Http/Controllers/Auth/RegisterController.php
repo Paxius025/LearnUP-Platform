@@ -17,23 +17,21 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // Validate user input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users|max:255',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        // Store new user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-         
-        // Auto login after registration
+
         auth()->login($user);
         logAction('register', "Registered: {$user->email}");
-        return redirect()->route('user.dashboard');
+
+        return back()->with('success', 'Registration successful! Welcome to LearnUP.');
     }
 }

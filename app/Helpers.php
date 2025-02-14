@@ -6,11 +6,7 @@ use Illuminate\Support\Facades\Auth;
 if (!function_exists('logAction')) {
     function logAction($action, $description)
     {
-        if (Auth::check()) {
-            $userId = Auth::id();
-        } else {
-            $userId = null;
-        }
+        $userId = Auth::id() ?? null;
 
         // บันทึก log ลงในฐานข้อมูล
         Log::create([

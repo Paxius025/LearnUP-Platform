@@ -141,25 +141,55 @@
                     modal.style.display = 'flex';
                     modal.style.alignItems = 'center';
                     modal.style.justifyContent = 'center';
+                    modal.style.zIndex = '1000';
+
                     modal.innerHTML = `
-                        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
-                            <h2>Crop Image</h2>
-                            <div id="crop-container" style="max-width: 500px; max-height: 400px; overflow: hidden;">
-                            </div>
-                            <button id="crop-btn" class="bg-green-500 text-white px-6 py-2 rounded-md mt-4">Crop & Upload</button>
-                            <button id="cancel-btn" class="bg-red-500 text-white px-6 py-2 rounded-md mt-4">Cancel</button>
-                        </div>
-                    `;
+            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 90%; max-height: 90%; overflow: auto;">
+                <h2 class="text-lg font-semibold mb-2">Crop & Resize Image</h2>
+                <select id="aspect-ratio" class="mb-2 p-2 border border-gray-300 rounded">
+                    <option value="free">Free</option>
+                    <option value="16/9">16:9</option>
+                    <option value="4/3">4:3</option>
+                    <option value="1/1">1:1</option>
+                </select>
+                <div id="crop-container" style="max-width: 500px; max-height: 400px; overflow: hidden; margin-bottom: 10px;"></div>
+                <label>Width: <input type="number" id="resize-width" value="500" class="p-1 border border-gray-300 rounded w-20"></label>
+                <label>Height: <input type="number" id="resize-height" value="300" class="p-1 border border-gray-300 rounded w-20"></label>
+                <br>
+                <button id="crop-btn" class="bg-green-500 text-white px-6 py-2 rounded-md mt-4">Crop & Upload</button>
+                <button id="cancel-btn" class="bg-red-500 text-white px-6 py-2 rounded-md mt-4">Cancel</button>
+            </div>
+        `;
+
                     document.body.appendChild(modal);
                     document.getElementById('crop-container').appendChild(image);
 
                     var cropper = new Cropper(image, {
-                        aspectRatio: 16 / 9,
+                        aspectRatio: NaN, // Default เป็น Free
                         viewMode: 2,
+                        autoCropArea: 1,
+                        movable: true,
+                        zoomable: true,
+                        scalable: true
+                    });
+
+                    // เปลี่ยน Aspect Ratio ตามที่ User เลือก
+                    document.getElementById('aspect-ratio').addEventListener('change', function() {
+                        let ratio = this.value === 'free' ? NaN : parseFloat(this.value);
+                        cropper.setAspectRatio(ratio);
                     });
 
                     document.getElementById('crop-btn').onclick = async function() {
-                        var canvas = cropper.getCroppedCanvas();
+                        let resizeWidth = parseInt(document.getElementById('resize-width').value) ||
+                        500;
+                        let resizeHeight = parseInt(document.getElementById('resize-height').value) ||
+                            300;
+
+                        var canvas = cropper.getCroppedCanvas({
+                            width: resizeWidth,
+                            height: resizeHeight
+                        });
+
                         canvas.toBlob(async function(blob) {
                             var formData = new FormData();
                             formData.append("image", blob, "cropped_" + file.name);
@@ -187,6 +217,7 @@
                     };
                 };
             }
+
 
             function validateForm() {
                 var content = document.getElementById('content').value;

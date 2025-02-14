@@ -142,7 +142,7 @@
                         title: 'File to large!',
                         text: 'Please select a file that is no larger than 10MB.',
                     });
-                    event.target.value = ''; // ล้างค่าที่เลือก
+                    event.target.value = ''; // Reset the input
                 }
             }
         });

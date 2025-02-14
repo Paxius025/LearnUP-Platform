@@ -57,7 +57,7 @@
                 <i data-lucide="bell" class="mb-1"></i> <span>Notifications</span>
                 @if ($unreadCount > 0)
                     <span
-                        class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full -mr-2 -mt-2">
+                        class="absolute ml-5 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full -mr-2 -mt-2">
                         {{ $unreadCount }}
                     </span>
                 @endif

@@ -77,4 +77,17 @@ class UserController extends Controller
         logAction('delete_user', "Deleted user: {$user->name}");
         return redirect()->route('admin.users')->with('success', 'User deleted successfully.');
     }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        $users = User::where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->limit(10) 
+                    ->get();
+
+        return response()->json($users);
+    }
+
 }

@@ -55,7 +55,7 @@
                         <th class="p-4 text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="userTable">
                     @foreach ($users as $index => $user)
                         <tr class="border-b border-gray-300 hover:bg-green-50 transition">
                             <td class="p-4">{{ ($users->currentPage() - 1) * $users->perPage() + $index + 1 }}</td>
@@ -100,16 +100,78 @@
 
     <!-- JavaScript -->
     <script>
-        // Automatically submit the form when a role checkbox is selected
         document.querySelectorAll('.role-filter').forEach((checkbox) => {
             checkbox.addEventListener('change', () => {
                 document.getElementById('filterForm').submit();
             });
         });
 
-        // Function to clear all filters and reload the page
-        function clearFilters() {
-            window.location.href = "{{ route('admin.users') }}";
+        // Live Search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let query = this.value;
+            let resultsContainer = document.getElementById('searchResults');
+
+            if (query.length < 2) {
+                resultsContainer.innerHTML = '';
+                resultsContainer.classList.add('hidden');
+                return;
+            }
+
+            fetch(`{{ route('admin.users.search') }}?search=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.classList.remove('hidden');
+
+                    if (data.length === 0) {
+                        resultsContainer.innerHTML = '<li class="p-2 text-gray-600">No results found.</li>';
+                        return;
+                    }
+
+                    data.forEach(user => {
+                        let li = document.createElement('li');
+                        li.classList.add('p-2', 'border-b', 'cursor-pointer', 'hover:bg-gray-100');
+                        li.textContent = `${user.name} (${user.email})`;
+
+                        li.addEventListener('click', function() {
+                            document.getElementById('searchInput').value = user.name;
+                            resultsContainer.classList.add('hidden');
+                            fetchUsers(user.name);
+                        });
+
+                        resultsContainer.appendChild(li);
+                    });
+                });
+        });
+
+        function fetchUsers(query) {
+            fetch(`{{ route('admin.users.search') }}?search=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let userTable = document.getElementById('userTable');
+                    userTable.innerHTML = '';
+
+                    if (data.length === 0) {
+                        userTable.innerHTML =
+                            '<tr><td colspan="5" class="text-center p-6 text-gray-500">No users found.</td></tr>';
+                        return;
+                    }
+
+                    data.forEach((user, index) => {
+                        let row = `
+                            <tr class="border-b border-gray-300 hover:bg-green-50 transition">
+                                <td class="p-4">${index + 1}</td>
+                                <td class="p-4 font-bold">${user.name}</td>
+                                <td class="p-4">${user.email}</td>
+                                <td class="p-4">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</td>
+                                <td class="p-4 flex justify-center space-x-6">
+                                    <a href="/admin/users/${user.id}/edit" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition">✏️ Edit</a>
+                                </td>
+                            </tr>
+                        `;
+                        userTable.innerHTML += row;
+                    });
+                });
         }
     </script>
 

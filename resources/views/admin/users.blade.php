@@ -30,11 +30,10 @@
                     class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300 focus:outline-none text-gray-700 transition-all duration-300">
 
                 <button id="clearButton"
-                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-500 text-white px-3 py-1 rounded-full text-sm hidden transition hover:bg-red-600">
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition hidden">
                     ✖
                 </button>
             </div>
-
 
             <!-- 🏷️ Role Filter -->
             <div class="flex items-center gap-4 pr-12">

@@ -30,7 +30,7 @@ class UserController extends Controller
         }
 
         //  Get all users with pagination
-        $users = $query->paginate(7);
+        $users = $query->paginate(8);
 
         return view('admin.users', compact('users', 'selectedRoles', 'search'));
     }

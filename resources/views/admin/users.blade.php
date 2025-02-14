@@ -18,43 +18,29 @@
 
     @include('components.navbar')
 
-    <div class="max-w-6xl mx-auto mt-[80px] px-4">
+    <div class="max-w-5xl mx-auto mt-[80px] px-4">
 
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" action="{{ route('admin.users') }}" method="GET"
-            class="bg-white p-4 rounded-lg shadow flex flex-wrap items-center gap-2 justify-start">
+            class="bg-white p-2 rounded-lg flex items-center gap-2 justify-between flex-wrap">
 
             <!-- 🔎 Search Input -->
-            <div class="relative flex-shrink-0 w-full sm:w-auto sm:w-[760px]">
+            <div class="relative flex-shrink-0 w-full sm:w-[640px]">
                 <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
-                    placeholder="Search by name..."
-                    class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300">
+                    placeholder="🔍 Search by name..."
+                    class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300 focus:outline-none text-gray-700 shadow-md transition-all duration-300">
             </div>
 
             <!-- 🏷️ Role Filter -->
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center gap-4 pr-12">
                 @foreach (['user', 'writer', 'admin'] as $role)
-                    <label class="flex items-center space-x-2 cursor-pointer">
+                    <label class="flex items-center space-x-1 cursor-pointer">
                         <input type="checkbox" name="roles[]" value="{{ $role }}"
-                            {{ in_array($role, request('roles', [])) ? 'checked' : '' }} class="role-filter">
+                            {{ in_array($role, request('roles', [])) ? 'checked' : '' }}
+                            class="role-filter flex-shrink-0 w-4 h-4 border-gray-400 rounded-md focus:ring-green-400">
                         <span class="text-gray-700 text-sm">{{ ucfirst($role) }}</span>
                     </label>
                 @endforeach
-            </div>
-
-            <!-- 🛠️ Filter & Clear Button -->
-            <div class="flex items-center gap-2">
-                @if (request('search') || request('roles'))
-                    <button type="button" onclick="clearFilters()"
-                        class="bg-gray-400 text-white px-3 py-2 rounded-lg text-sm hover:bg-gray-500 transition">
-                        ❌ Clear
-                    </button>
-                @else
-                    <button type="submit"
-                        class="bg-green-600 text-white px-3 py-2 rounded-lg text-sm hover:bg-green-700 transition">
-                        🔍 Filter
-                    </button>
-                @endif
             </div>
         </form>
 

@@ -19,17 +19,17 @@ class LogController extends Controller
     }
     public function stat(Request $request)
     {
-        // ค่า default ของ range คือ 7 วัน
+        // Default range is 7 days
         $range = $request->input('range', 7);
 
-        // ดึงสถิติหลัก
+        // Fetch main statistics
         $totalPosts = Post::count();
         $totalUsers = User::count();
         $totalWriters = User::where('role', 'writer')->count();
         $totalAdmins = User::where('role', 'admin')->count();
         $totalLogs = Log::count();
 
-        // ✅ ปรับปรุงการจัดกลุ่ม Log
+        // ✅ Improved Log grouping
         $logStats = Log::selectRaw("
             CASE 
                 WHEN action IN ('approve_post', 'create_post', 'update_post', 'delete_post', 'reject_post') THEN 'post_actions'
@@ -48,7 +48,7 @@ class LogController extends Controller
         ->orderByDesc('count')
         ->get();
 
-        // ✅ ปรับปรุงการดึงข้อมูลแนวโน้ม Log ตามช่วงเวลา
+        // ✅ Improved Log trend fetching by time range
         $logTrends = Log::selectRaw("
             DATE(created_at) as date,
             CASE 

@@ -12,7 +12,7 @@ class PostApprovalController extends Controller
 {
     public function detail(Post $post)
     {
-        // ตรวจสอบว่าโพสต์อยู่ในสถานะรออนุมัติ
+        // Check if the post is in pending status
         if ($post->status !== 'pending') {
             return redirect()->route('admin.dashboard')->with('error', 'This post is already processed.');
         }
@@ -24,16 +24,16 @@ class PostApprovalController extends Controller
     {
         $post->update(['status' => 'approved']);
     
-        // ✅ แจ้งเตือน User ว่าโพสต์ของเขาถูกอนุมัติ
+        // Notify the user that their post has been approved
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_approved',
             'message' => "Your post has been approved \"{$post->title}\"",
-            'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
-            'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
+            'is_user_read' => false,  // Change to 'is_user_read'
+            'is_admin_read' => false, // Or 'is_admin_read' if you want the admin to read
         ]);
     
-        // ✅ เก็บ Log การอนุมัติ
+        // Log the approval action
         logAction('approve_post', "Admin approve post: {$post->title}");
     
         return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
@@ -43,16 +43,16 @@ class PostApprovalController extends Controller
     {
         $post->update(['status' => 'rejected']);
 
-        // ✅ แจ้งเตือน User ว่าโพสต์ของเขาถูกปฏิเสธ
+        // Notify the user that their post has been rejected
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
-            'message' => "Post \"{$post->title}\" rejeted",
-            'is_user_read' => false,  // เปลี่ยนเป็น 'is_user_read'
-            'is_admin_read' => false, // หรือ 'is_admin_read' หากต้องการให้ Admin อ่าน
+            'message' => "Post \"{$post->title}\" rejected",
+            'is_user_read' => false,  // Change to 'is_user_read'
+            'is_admin_read' => false, // Or 'is_admin_read' if you want the admin to read
         ]);
 
-        // ✅ เก็บ Log การปฏิเสธโพสต์
+        // Log the rejection action
         logAction('reject_post', "Admin reject: {$post->title}");
 
         return redirect()->route('admin.dashboard')->with('success', 'Post rejected successfully.');

@@ -20,7 +20,7 @@
         }
 
         .ql-container {
-            min-height: 150px !important;
+            min-height: 450px !important;
             height: auto !important;
             max-height: none !important;
             overflow-y: hidden !important;

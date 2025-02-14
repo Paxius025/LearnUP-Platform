@@ -24,7 +24,7 @@
         }
 
         .ql-container {
-            min-height: 150px !important;
+            min-height: 450px !important;
             height: auto !important;
             max-height: none !important;
             overflow-y: hidden !important;
@@ -181,7 +181,7 @@
 
                     document.getElementById('crop-btn').onclick = async function() {
                         let resizeWidth = parseInt(document.getElementById('resize-width').value) ||
-                        500;
+                            500;
                         let resizeHeight = parseInt(document.getElementById('resize-height').value) ||
                             300;
 
@@ -229,19 +229,19 @@
             }
 
             document.getElementById('pdf_file').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const maxSize = 10 * 1024 * 1024; // 10MB
-                if (file.size > maxSize) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'File to large!',
-                        text: 'Please select a file that is no larger than 10MB.',
-                    });
-                    event.target.value = ''; // Reset the input
+                const file = event.target.files[0];
+                if (file) {
+                    const maxSize = 10 * 1024 * 1024; // 10MB
+                    if (file.size > maxSize) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File to large!',
+                            text: 'Please select a file that is no larger than 10MB.',
+                        });
+                        event.target.value = ''; // Reset the input
+                    }
                 }
-            }
-        });
+            });
         });
     </script>
 

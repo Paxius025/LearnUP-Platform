@@ -28,7 +28,7 @@
                     <a href="{{ route($route) }}"
                         class="flex flex-col items-center transition duration-300 transform hover:scale-105 font-semibold
             {{ request()->routeIs($route) ||
-            ($route === 'admin.users' && request()->routeIs('admin.users.create')) ||
+            ($route === 'admin.users' && (request()->routeIs('admin.users.create') || request()->routeIs('admin.users.edit'))) ||
             ($route === 'admin.stat' && (request()->routeIs('admin.logs') || request()->routeIs('admin.stat')))
                 ? 'text-white font-bold'
                 : 'text-white text-opacity-50 hover:text-opacity-100' }}">

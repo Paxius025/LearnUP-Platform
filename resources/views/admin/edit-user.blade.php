@@ -38,7 +38,7 @@
                 <div class="mb-6">
                     <label for="role" class="block text-sm font-medium text-gray-700">Change Role</label>
                     <select id="role" name="role"
-                        class="w-full border border-gray-300 p-3 rounded-lg bg-white focus:ring-2 focus:ring-green-500 focus:outline-none transition-all duration-200 shadow-md">
+                        class="w-full border border-gray-300 p-3 rounded-lg bg-white focus:ring-2 focus:ring-green-500 focus:outline-none transition-all duration-200">
                         <option value="user" {{ $user->role === 'user' ? 'selected' : '' }}>User</option>
                         <option value="writer" {{ $user->role === 'writer' ? 'selected' : '' }}>Writer</option>
                         <option value="admin" {{ $user->role === 'admin' ? 'selected' : '' }}>Admin</option>

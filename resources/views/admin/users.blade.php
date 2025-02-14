@@ -20,6 +20,16 @@
 
     <div class="max-w-5xl mx-auto mt-[80px] px-4">
 
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-semibold text-gray-800">Manage Users</h2>
+
+            <a href="{{ route('admin.users.create') }}"
+                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                ➕ Create User
+            </a>
+        </div>
+
+
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" class="bg-white p-2 rounded-lg flex items-center gap-2 justify-between flex-wrap">
 

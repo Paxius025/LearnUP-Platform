@@ -104,4 +104,32 @@ class UserController extends Controller
             'pagination' => $users->links()->render() // Send pagination back as well
         ]);
     }
+    
+    public function create()
+    {
+        return view('admin.manage.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
+            'role' => 'required|in:user,writer,admin',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => $request->role,
+        ]);
+
+        // Log action
+        logAction('create_user', "Created new user: {$user->name} ({$user->role})");
+
+        return redirect()->route('admin.users')->with('success', 'User created successfully.');
+    }
+
 }

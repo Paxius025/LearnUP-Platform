@@ -14,11 +14,27 @@ use App\Models\User;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::where('user_id', Auth::id())->paginate(9);
+        $query = Post::where('user_id', Auth::id());
+    
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+    
+        if ($request->filled('status')) {
+            $query->whereIn('status', $request->status);
+        }
+    
+        $posts = $query->paginate(9);
+    
+        if ($request->ajax()) {
+            return view('user.posts.partials.post_table', compact('posts'))->render();
+        }
+    
         return view('user.posts.index', compact('posts'));
     }
+    
 
     public function create()
     {

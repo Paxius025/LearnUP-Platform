@@ -227,6 +227,21 @@
                 }
                 return true;
             }
+
+            document.getElementById('pdf_file').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const maxSize = 10 * 1024 * 1024; // 10MB
+                if (file.size > maxSize) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File to large!',
+                        text: 'Please select a file that is no larger than 10MB.',
+                    });
+                    event.target.value = ''; // Reset the input
+                }
+            }
+        });
         });
     </script>
 

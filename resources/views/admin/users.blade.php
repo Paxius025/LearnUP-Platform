@@ -81,7 +81,7 @@
                                     ✏️ Edit
                                 </a>
                                 <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
-                                    class="inline-block"
+                                    class="inline-block delete-form"
                                     onsubmit="return confirm('Are you sure you want to delete this user?');">
                                     @csrf
                                     @method('DELETE')
@@ -103,7 +103,8 @@
         </div>
     </div>
 
-    <!-- JavaScript -->
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const searchInput = document.getElementById("searchInput");
@@ -180,6 +181,31 @@
             });
 
             fetchUsers(); // Load initial data
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const deleteForms = document.querySelectorAll(".delete-form");
+
+            deleteForms.forEach((form) => {
+                form.addEventListener("submit", function(event) {
+                    event.preventDefault();
+
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "This user will be permanently deleted!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Yes, delete it!",
+                        cancelButtonText: "Cancel"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
         });
     </script>
 

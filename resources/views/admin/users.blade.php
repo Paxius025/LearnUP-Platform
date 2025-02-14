@@ -27,8 +27,8 @@
             <!-- 🔎 Search Input -->
             <div class="relative flex-shrink-0 w-full sm:w-[640px]">
                 <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
-                    placeholder="🔍 Search by name..."
-                    class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300 focus:outline-none text-gray-700 shadow-md transition-all duration-300">
+                    placeholder="Search by name or email..."
+                    class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300 focus:outline-none text-gray-700 transition-all duration-300">
             </div>
 
             <!-- 🏷️ Role Filter -->

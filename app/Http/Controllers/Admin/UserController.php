@@ -26,9 +26,11 @@ class UserController extends Controller
 
         // if search is not empty, filter by search keyword
         if (!empty($search)) {
-            $query->where('name', 'LIKE', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
         }
-
         //  Get all users with pagination
         $users = $query->paginate(8);
 

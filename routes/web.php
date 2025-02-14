@@ -92,6 +92,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}/update', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}/delete', [UserController::class, 'destroy'])->name('users.delete');
+    Route::get('/admin/users/search', [UserController::class, 'search'])->name('users.search');
     
     Route::get('/posts/{post}', [PostApprovalController::class, 'detail'])->name('posts.detail');
     Route::post('/posts/{post}/approve', [PostApprovalController::class, 'approve'])->name('posts.approve');

@@ -10,8 +10,7 @@ LearnUP is a platform designed to **share knowledge** through **PDF files** and 
 - ✅ Upload and attach **PDF files** to posts
 - ✅ Preview PDF files using **PDF.js**
 - ✅ Like/unlike posts (**toggle system**)
-- ✅ Comment and reply to posts with real-time notifications
-- ✅ Persistent login (**Remember Me Token + Cookies**)
+- ✅ Comment and reply to posts with notifications
 - ✅ Elegant UI with **TailwindCSS**
 
 ### **Admin Features**

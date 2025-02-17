@@ -12,10 +12,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('notifications', function (Blueprint $table) {
-            // ลบคอลัมน์ is_read
             $table->dropColumn('is_read');
             
-            // เพิ่มคอลัมน์ is_user_read และ is_admin_read
+            // Add is_user_read and is_admin_read columns 
             $table->boolean('is_user_read')->default(false);
             $table->boolean('is_admin_read')->default(false);
         });

@@ -14,7 +14,7 @@
     </style>
 </head>
 
-<body class="bg-green-50 min-h-screen">
+<body class="min-h-screen">
 
     @include('components.navbar')
 

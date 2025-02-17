@@ -8,9 +8,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar')->nullable()->after('password'); // รูปโปรไฟล์
-            $table->text('bio')->nullable()->after('avatar'); // ข้อมูลเกี่ยวกับตัวเอง
-            $table->string('phone')->nullable()->after('bio'); // เบอร์โทรศัพท์
+            $table->string('avatar')->nullable()->after('password'); 
+            $table->text('bio')->nullable()->after('avatar'); 
+            $table->string('phone')->nullable()->after('bio'); 
         });
     }
 

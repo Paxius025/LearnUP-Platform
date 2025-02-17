@@ -109,9 +109,10 @@ Ensure you have the following installed on your system:
    ```
    - Update `.env` with database credentials.
 
-4. **Migrate Database**
+4. **Migrate Database & Link Local Storage**
    ```sh
    php artisan migrate --seed
+   php artisan storage:link
    ```
 
 5. **Build Assets**

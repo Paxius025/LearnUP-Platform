@@ -5,9 +5,8 @@
 
         <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-8">
             <h2 class="text-2xl font-semibold mb-6 text-green-700 flex items-center">
-                ✏️ Edit User Role
+                Edit User Role
             </h2>
-
             @if (session('success'))
                 <div class="bg-green-500 text-white p-3 rounded mb-4 shadow-md">
                     {{ session('success') }}

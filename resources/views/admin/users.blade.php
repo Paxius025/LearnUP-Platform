@@ -19,22 +19,11 @@
     @include('components.navbar')
 
     <div class="max-w-5xl mx-auto mt-[80px] px-4">
-
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-2xl font-semibold text-gray-800">Manage Users</h2>
-
-            <a href="{{ route('admin.users.create') }}"
-                class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
-                ➕ Create User
-            </a>
-        </div>
-
-
         <!-- 🔍 Search and Role Filter Form -->
         <form id="filterForm" class="bg-white p-2 rounded-lg flex items-center gap-2 justify-between flex-wrap">
 
             <!-- 🔎 Search Input -->
-            <div class="relative flex-shrink-0 w-full sm:w-[640px]">
+            <div class="relative flex-shrink-0 w-full sm:w-[570px]">
                 <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                     placeholder="Search by name or email..."
                     class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring focus:ring-green-300 focus:outline-none text-gray-700 transition-all duration-300">
@@ -46,7 +35,7 @@
             </div>
 
             <!-- 🏷️ Role Filter -->
-            <div class="flex items-center gap-4 pr-12">
+            <div class="justify-between flex items-center gap-4 pr-12">
                 @foreach (['user', 'writer', 'admin'] as $role)
                     <label class="flex items-center space-x-1 cursor-pointer">
                         <input type="checkbox" name="roles[]" value="{{ $role }}"
@@ -54,6 +43,10 @@
                         <span class="text-gray-700 text-sm">{{ ucfirst($role) }}</span>
                     </label>
                 @endforeach
+                <a href="{{ route('admin.users.create') }}"
+                    class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                    Create User
+                </a>
             </div>
         </form>
 

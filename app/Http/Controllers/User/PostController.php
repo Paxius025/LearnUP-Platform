@@ -215,4 +215,16 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
 
     return view('user.dashboard', compact('posts'));
     }
+
+    public function destroy($id)
+    {
+    $post = Post::findOrFail($id);
+
+    if (auth()->user()->id !== $post->user_id) {
+    return redirect()->back()->with('error', 'You do not have permission to delete this post.');
+    }
+    $post->delete();
+
+    return redirect()->route('user.posts.index')->with('success', 'Post deleted successfully.');
+    }
     }

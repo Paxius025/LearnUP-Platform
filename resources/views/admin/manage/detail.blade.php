@@ -48,72 +48,77 @@
                 @endif
             </div>
 
-            <div class="mt-6 flex space-x-3 md:space-x-4 justify-center">
-                @if ($post->status == 'pending')
-                    <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit"
-                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                            ✅ Approve
-                        </button>
-                    </form>
+            <div class="mt-6 flex flex-col items-center space-y-4">
+                <div class="flex space-x-3 md:space-x-4">
+                    @if ($post->status == 'pending')
+                        <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                ✅ Approve
+                            </button>
+                        </form>
 
-                    <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit"
-                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                            ❌ Reject
-                        </button>
-                    </form>
-                @elseif ($post->status == 'approved')
-                    <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit"
-                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                            ❌ Reject
-                        </button>
-                    </form>
-                @elseif ($post->status == 'rejected')
-                    <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit"
-                            class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                            ✅ Approve
-                        </button>
-                    </form>
-                @endif
+                        <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                ❌ Reject
+                            </button>
+                        </form>
+                    @elseif ($post->status == 'approved')
+                        <form action="{{ route('admin.posts.reject', $post->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                ❌ Reject
+                            </button>
+                        </form>
+                    @elseif ($post->status == 'rejected')
+                        <form action="{{ route('admin.posts.approve', $post->id) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit"
+                                class="confirm-action w-32 md:w-40 px-4 py-2 text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                                ✅ Approve
+                            </button>
+                        </form>
+                    @endif
+                </div>
+
+                <a href="{{ route('admin.dashboard') }}"
+                    class="w-50 px-5 py-3 bg-gray-100 text-green-700 rounded-lg  hover:bg-gray-200 transition-all duration-300 flex items-center">
+                    back to Dashboard
+                </a>
             </div>
         </div>
-    </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.confirm-action').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        let form = this.closest("form"); // Get the form that the button belongs to
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.confirm-action').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    let form = this.closest("form"); // Get the form that the button belongs to
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "Do you really want to proceed with this action?",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#4CAF50', // Changed color to green
-                        cancelButtonColor: '#F44336', // Changed color to red
-                        confirmButtonText: 'Yes, proceed!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit(); // If "Yes" is clicked, submit the form
-                        }
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "Do you really want to proceed with this action?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#4CAF50', // Changed color to green
+                            cancelButtonColor: '#F44336', // Changed color to red
+                            confirmButtonText: 'Yes, proceed!',
+                            cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit(); // If "Yes" is clicked, submit the form
+                            }
+                        });
                     });
                 });
             });
-        });
-    </script>
-@endsection
+        </script>
+    @endsection

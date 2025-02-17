@@ -1,7 +1,7 @@
 # 📷 Project Images
 
 ## 🏠 Home & Dashboard
-![Homepage](assets/images/1-homepage.png)
+![Homepage](./asset/images/1-homepage.png)
 ![Dashboard](assets/images/2-dashboard.png)
 
 ## 🔍 Explore & Search

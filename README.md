@@ -82,6 +82,11 @@ LearnUP is a platform designed to **share knowledge** through **PDF files** and 
 - **Persistent login enabled** (Users don’t need to log in frequently)
 - **Likes are recorded in `user_id, post_id` (toggle like/unlike)**
 
+## 📸 Additional Images
+
+For more images, see [README_IMAGES.md](README_IMAGES.md)
+
+
 ## 🚧 Installation Guide
 
 ### **Prerequisites**

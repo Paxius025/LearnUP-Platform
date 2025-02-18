@@ -20,15 +20,13 @@
         #editor {
             min-height: 150px;
             height: auto;
-            /* ปรับความสูงอัตโนมัติ */
         }
 
         .ql-container {
-            min-height: 450px !important;
+            min-height: 400px !important;
             height: auto !important;
             max-height: none !important;
             overflow-y: hidden !important;
-            /* ปิด Scroll */
         }
 
         .ql-editor {
@@ -37,7 +35,6 @@
             max-height: none !important;
             padding: 10px !important;
             overflow-y: hidden !important;
-            /* ปิด Scroll */
         }
 
         body {
@@ -103,47 +100,60 @@
             });
 
             quill.on('text-change', function() {
-                document.getElementById('content').value = quill.root.innerHTML;
+                var htmlContent = quill.root.innerHTML.trim();
+                document.getElementById('content').value = htmlContent;
+
+                if (htmlContent !== '' && htmlContent !== '<p><br></p>') {
+                    document.getElementById('content-error').classList.add('hidden');
+                }
             });
 
-            // Handle Image Upload with Crop
-            quill.getModule('toolbar').addHandler('image', function() {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-                input.click();
-
-                input.onchange = async () => {
-                    var file = input.files[0];
-                    if (file) {
-                        showCropper(file);
-                    }
-                };
+            document.querySelector("form").addEventListener("submit", function(event) {
+                var contentValue = document.getElementById("content").value.trim();
+                if (!contentValue || contentValue === '<p><br></p>' || contentValue.length === 0) {
+                    document.getElementById("content-error").classList.remove("hidden");
+                    event.preventDefault();
+                }
             });
+        });
 
-            function showCropper(file) {
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function(event) {
-                    var image = document.createElement('img');
-                    image.src = event.target.result;
-                    image.id = 'cropper-image';
-                    image.style.maxWidth = '100%';
+        quill.getModule('toolbar').addHandler('image', function() {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
 
-                    var modal = document.createElement('div');
-                    modal.id = 'cropper-modal';
-                    modal.style.position = 'fixed';
-                    modal.style.top = '0';
-                    modal.style.left = '0';
-                    modal.style.width = '100vw';
-                    modal.style.height = '100vh';
-                    modal.style.background = 'rgba(0, 0, 0, 0.7)';
-                    modal.style.display = 'flex';
-                    modal.style.alignItems = 'center';
-                    modal.style.justifyContent = 'center';
-                    modal.style.zIndex = '1000';
+            input.onchange = async () => {
+                var file = input.files[0];
+                if (file) {
+                    showCropper(file);
+                }
+            };
+        });
 
-                    modal.innerHTML = `
+        function showCropper(file) {
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                var image = document.createElement('img');
+                image.src = event.target.result;
+                image.id = 'cropper-image';
+                image.style.maxWidth = '100%';
+
+                var modal = document.createElement('div');
+                modal.id = 'cropper-modal';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100vw';
+                modal.style.height = '100vh';
+                modal.style.background = 'rgba(0, 0, 0, 0.7)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '1000';
+
+                modal.innerHTML = `
             <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 90%; max-height: 90%; overflow: auto;">
                 <h2 class="text-lg font-semibold mb-2">Crop & Resize Image</h2>
                 <select id="aspect-ratio" class="mb-2 p-2 border border-gray-300 rounded">
@@ -161,87 +171,97 @@
             </div>
         `;
 
-                    document.body.appendChild(modal);
-                    document.getElementById('crop-container').appendChild(image);
+                document.body.appendChild(modal);
+                document.getElementById('crop-container').appendChild(image);
 
-                    var cropper = new Cropper(image, {
-                        aspectRatio: NaN, // Default เป็น Free
-                        viewMode: 2,
-                        autoCropArea: 1,
-                        movable: true,
-                        zoomable: true,
-                        scalable: true
+                var cropper = new Cropper(image, {
+                    aspectRatio: NaN, // Default เป็น Free
+                    viewMode: 2,
+                    autoCropArea: 1,
+                    movable: true,
+                    zoomable: true,
+                    scalable: true
+                });
+
+                document.getElementById('aspect-ratio').addEventListener('change', function() {
+                    let ratio = this.value === 'free' ? NaN : parseFloat(this.value);
+                    cropper.setAspectRatio(ratio);
+                });
+
+                document.getElementById('crop-btn').onclick = async function() {
+                    let resizeWidth = parseInt(document.getElementById('resize-width').value) ||
+                        500;
+                    let resizeHeight = parseInt(document.getElementById('resize-height').value) ||
+                        300;
+
+                    var canvas = cropper.getCroppedCanvas({
+                        width: resizeWidth,
+                        height: resizeHeight
                     });
 
-                    // เปลี่ยน Aspect Ratio ตามที่ User เลือก
-                    document.getElementById('aspect-ratio').addEventListener('change', function() {
-                        let ratio = this.value === 'free' ? NaN : parseFloat(this.value);
-                        cropper.setAspectRatio(ratio);
-                    });
+                    canvas.toBlob(async function(blob) {
+                        var formData = new FormData();
+                        formData.append("image", blob, "cropped_" + file.name);
 
-                    document.getElementById('crop-btn').onclick = async function() {
-                        let resizeWidth = parseInt(document.getElementById('resize-width').value) ||
-                            500;
-                        let resizeHeight = parseInt(document.getElementById('resize-height').value) ||
-                            300;
-
-                        var canvas = cropper.getCroppedCanvas({
-                            width: resizeWidth,
-                            height: resizeHeight
-                        });
-
-                        canvas.toBlob(async function(blob) {
-                            var formData = new FormData();
-                            formData.append("image", blob, "cropped_" + file.name);
-
-                            const res = await fetch("{{ route('posts.upload.image') }}", {
-                                method: "POST",
-                                body: formData,
-                                headers: {
-                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                                }
-                            });
-
-                            const data = await res.json();
-                            if (data.url) {
-                                var range = quill.getSelection();
-                                quill.insertEmbed(range.index, 'image', data.url);
+                        const res = await fetch("{{ route('posts.upload.image') }}", {
+                            method: "POST",
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
                             }
-
-                            document.body.removeChild(modal);
-                        }, 'image/jpeg', 0.8);
-                    };
-
-                    document.getElementById('cancel-btn').onclick = function() {
-                        document.body.removeChild(modal);
-                    };
-                };
-            }
-
-
-            function validateForm() {
-                var content = document.getElementById('content').value;
-                if (!content.trim()) {
-                    document.getElementById('content-error').classList.remove('hidden');
-                    return false;
-                }
-                return true;
-            }
-
-            document.getElementById('pdf_file').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const maxSize = 10 * 1024 * 1024; // 10MB
-                    if (file.size > maxSize) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'File to large!',
-                            text: 'Please select a file that is no larger than 10MB.',
                         });
-                        event.target.value = ''; // Reset the input
-                    }
-                }
-            });
+
+                        const data = await res.json();
+                        if (data.url) {
+                            var range = quill.getSelection();
+                            quill.insertEmbed(range.index, 'image', data.url);
+                        }
+
+                        document.body.removeChild(modal);
+                    }, 'image/jpeg', 0.8);
+                };
+
+                document.getElementById('cancel-btn').onclick = function() {
+                    document.body.removeChild(modal);
+                };
+            };
+        }
+
+        function validateForm() {
+            var title = document.getElementById('title').value.trim();
+            var content = document.getElementById('content').value.trim();
+
+            var contentError = document.getElementById('content-error');
+            var isValid = true;
+
+            if (!content || content === '<p><br></p>' || content.length === 0) {
+                contentError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                contentError.classList.add('hidden');
+            }
+
+            if (!title) {
+                return false;
+            }
+
+            return isValid;
+        }
+
+
+        document.getElementById('pdf_file').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            if (file.size > maxSize) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'File to large!',
+                    text: 'Please select a file that is no larger than 10MB.',
+                });
+                event.target.value = ''; // Reset the input
+            }
+        }
         });
     </script>
 

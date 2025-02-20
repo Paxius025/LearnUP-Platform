@@ -1,5 +1,8 @@
 # LearnUP - Knowledge Sharing Platform
 
+[🇺🇸 English](./README.md) | [🇹🇭 ภาษาไทย](./README_th.md)
+
+
 ## ✨ Overview
 LearnUP is a platform designed to **share knowledge** through **PDF files** and **blog posts**. It provides an intuitive and collaborative environment to facilitate learning.
 

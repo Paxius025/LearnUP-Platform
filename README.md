@@ -3,6 +3,8 @@
 ## ✨ Overview
 LearnUP is a platform designed to **share knowledge** through **PDF files** and **blog posts**. It provides an intuitive and collaborative environment to facilitate learning.
 
+#### 📸 [Additional Images](README_IMAGES.md)
+
 ## 🚀 Features
 
 ### **User Features**
@@ -53,7 +55,7 @@ LearnUP is a platform designed to **share knowledge** through **PDF files** and 
 - **Line charts for post creation, comments, and registrations (Last 7 Days)**
 - **Bar charts for logs categorized by actions (login, create, comment, etc.)**
 
-## 💀 Flow of Operations
+## 📑 Flow of Operations
 
 📌 **User**
 1. **Login → Dashboard**
@@ -82,9 +84,6 @@ LearnUP is a platform designed to **share knowledge** through **PDF files** and 
 - **Persistent login enabled** (Users don’t need to log in frequently)
 - **Likes are recorded in `user_id, post_id` (toggle like/unlike)**
 
-## 📸 Additional Images
-
-For more images, see [README_IMAGES.md](README_IMAGES.md)
 
 
 ## 🚧 Installation Guide

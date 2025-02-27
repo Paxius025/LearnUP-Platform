@@ -9,6 +9,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
+    <style>
+        body {
+            padding-top: 55px;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -16,11 +21,10 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-[800px] mx-auto mt-[60px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 pt-10">
+    <div class="max-w-[800px] mx-auto mt-[40px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-1">
-            <div
-                class="flex items-center border border-gray-300 rounded-xl p-2 bg-white">
+            <div class="flex items-center border border-gray-300 rounded-xl p-2 bg-white">
 
                 <div class="relative w-full">
                     <input type="text" name="query" placeholder="Search posts..."
@@ -43,14 +47,25 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v18l7-5 7 5V3z" />
                     </svg>
-                    
+
                 </a>
 
             </div>
         </form>
 
         @foreach ($posts as $post)
-            <div class="bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col min-h-[500px] relative">
+            @php
+                $hasImage =
+                    !empty($post->image) &&
+                    is_array(json_decode($post->image, true)) &&
+                    count(json_decode($post->image, true)) > 0;
+                $firstImage = $hasImage ? json_decode($post->image, true)[0] : null;
+                $isLiked = \App\Models\Like::where('user_id', Auth::id())->where('post_id', $post->id)->exists();
+            @endphp
+
+            <div
+                class="bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col relative
+        {{ $hasImage ? 'min-h-[500px]' : 'min-h-[100px]' }}">
 
                 <!-- 🔹 ปุ่ม Bookmark (มุมขวาบน) -->
                 <x-bookmark-button :post="$post" />
@@ -59,27 +74,10 @@
                     <h3 class="text-lg font-bold line-clamp-2">{{ $post->title }}</h3>
                 </div>
 
-                @if (!empty($post->image))
-                    @php
-                        $images = json_decode($post->image, true);
-                        $firstImage = !empty($images) && is_array($images) ? $images[0] : null;
-                    @endphp
-                    @if ($firstImage)
-                        <img src="{{ asset('storage/' . ltrim($firstImage, '/')) }}" alt="Post Image"
-                            class="max-w-[800px] h-50 object-cover">
-                    @else
-                        <div class="flex justify-center items-center h-[450px] bg-gray-100">
-                            <p class="text-black font-bold text-xl">No Image Available</p>
-                        </div>
-                    @endif
-                @else
-                    <div class="flex justify-center items-center h-[450px] bg-gray-100">
-                        <p class="text-black font-bold text-xl">No Image Available</p>
-                    </div>
+                @if ($hasImage && $firstImage)
+                    <img src="{{ asset('storage/' . ltrim($firstImage, '/')) }}" alt="Post Image"
+                        class="max-w-[800px] h-50 object-cover">
                 @endif
-                @php
-                    $isLiked = \App\Models\Like::where('user_id', Auth::id())->where('post_id', $post->id)->exists();
-                @endphp
 
                 <!-- 🔹 Like & Read More Button -->
                 <div class="p-4 mt-auto flex justify-between items-center">
@@ -103,6 +101,7 @@
                 </div>
             </div>
         @endforeach
+
 
 
 

@@ -50,6 +50,7 @@ class LikeController extends Controller
     {
         // คำนวณโพสต์ที่ถูกไลค์มากที่สุด (เรียงลำดับตามจำนวนไลค์)
         $mostLikedPosts = Post::withCount('likes')  // ใช้ withCount เพื่อดึงจำนวนไลค์
+            ->where('status', 'approved')    
             ->orderBy('likes_count', 'desc')  // เรียงจากมากไปหาน้อย
             ->take(10)  // ดึงมาแค่ 10 โพสต์ที่มีจำนวนไลค์มากที่สุด
             ->get();

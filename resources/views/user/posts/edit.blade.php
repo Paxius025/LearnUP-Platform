@@ -112,6 +112,9 @@
                     [{
                         'header': [1, 2, false]
                     }],
+                    [{
+                        'size': ['small', 'normal', 'large']
+                    }],
                     ['bold', 'italic', 'underline'],
                     ['image', 'link'],
                     [{

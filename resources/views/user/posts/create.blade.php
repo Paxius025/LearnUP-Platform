@@ -12,15 +12,10 @@
     <link rel="icon" href="{{ asset('bookshelf.ico') }}" type="image/x-icon">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <!-- Cropper.js CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
-    <!-- Cropper.js JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <style>
         #editor {
             min-height: 150px;
             height: auto;
-            /* ปรับความสูงอัตโนมัติ */
         }
 
         .ql-container {
@@ -28,7 +23,6 @@
             height: auto !important;
             max-height: none !important;
             overflow-y: hidden !important;
-            /* ปิด Scroll */
         }
 
         .ql-editor {
@@ -37,7 +31,6 @@
             max-height: none !important;
             padding: 10px !important;
             overflow-y: hidden !important;
-            /* ปิด Scroll */
         }
 
         body {
@@ -49,23 +42,19 @@
 <body class="bg-gray-100 min-h-screen font-sans antialiased">
     @include('components.navbar')
     <div class="max-w-5xl mx-auto mt-5 bg-white p-6 rounded-xl border border-gray-200">
-
-        <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data"
-            onsubmit="return validateForm()">
+        <form action="{{ route('user.posts.store') }}" method="POST" enctype="multipart/form-data" id="postForm">
             @csrf
             <div class="mb-3">
                 <label for="title" class="block text-gray-700 text-lg font-semibold">Title</label>
                 <input type="text" id="title" name="title"
-                    class="w-full p-4 border border-gray-300 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    required>
+                    class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="Please fill out this field" required>
             </div>
 
             <div class="mb-3">
                 <label class="block text-gray-700 text-lg font-semibold">Content</label>
-                <div id="editor" class="bg-white border border-gray-200 rounded-lg p-4 min-h-[500px] ">
-                </div>
+                <div id="editor" class="bg-white border border-gray-200 rounded-lg p-4 min-h-[500px]"></div>
                 <input type="hidden" name="content" id="content" required>
-                <div id="content-error" class="text-red-500 text-sm mt-2 hidden">Please fill out this field</div>
             </div>
 
             <div class="mb-3">
@@ -75,8 +64,9 @@
             </div>
 
             <div class="flex justify-center">
-                <button type="submit"
-                    class="bg-blue-600 text-white px-8 py-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105">Publish</button>
+                <button type="submit" id="publishBtn"
+                    class="bg-blue-600 text-white px-8 py-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    disabled>Publish</button>
             </div>
         </form>
     </div>
@@ -91,6 +81,9 @@
                         [{
                             'header': [1, 2, false]
                         }],
+                        [{
+                            'size': ['small', 'normal', 'large']
+                        }],
                         ['bold', 'italic', 'underline'],
                         ['image', 'link'],
                         [{
@@ -99,14 +92,47 @@
                             'list': 'bullet'
                         }]
                     ]
+                },
+                placeholder: 'Please fill out this field'
+            });
+
+            const titleInput = document.getElementById('title');
+            const contentInput = document.getElementById('content');
+            const publishBtn = document.getElementById('publishBtn');
+
+            // Set initial empty content
+            contentInput.value = '';
+
+            // Function to check form validity
+            function checkFormValidity() {
+                const titleValue = titleInput.value.trim();
+                const contentValue = contentInput.value.trim();
+
+                const isTitleValid = titleValue.length > 0;
+                const isContentValid = contentValue && contentValue !== '<p><br></p>' && contentValue !== '<p></p>';
+
+                publishBtn.disabled = !(isTitleValid && isContentValid);
+            }
+
+            // Initial content setup
+            quill.on('text-change', function() {
+                contentInput.value = quill.root.innerHTML.trim();
+                checkFormValidity();
+            });
+
+            // Title input listener
+            titleInput.addEventListener('input', checkFormValidity);
+
+            // Form submission
+            document.getElementById('postForm').addEventListener('submit', function(event) {
+                const contentValue = contentInput.value.trim();
+                if (!titleInput.value.trim() || !contentValue || contentValue === '<p><br></p>') {
+                    event.preventDefault();
+                    checkFormValidity();
                 }
             });
 
-            quill.on('text-change', function() {
-                document.getElementById('content').value = quill.root.innerHTML;
-            });
-
-            // Handle Image Upload with Crop
+            // Handle Image Upload
             quill.getModule('toolbar').addHandler('image', function() {
                 var input = document.createElement('input');
                 input.setAttribute('type', 'file');
@@ -116,135 +142,46 @@
                 input.onchange = async () => {
                     var file = input.files[0];
                     if (file) {
-                        showCropper(file);
+                        var formData = new FormData();
+                        formData.append("image", file);
+
+                        const res = await fetch("{{ route('posts.upload.image') }}", {
+                            method: "POST",
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            }
+                        });
+
+                        const data = await res.json();
+                        if (data.url) {
+                            var range = quill.getSelection();
+                            quill.insertEmbed(range.index, 'image', data.url);
+                        }
                     }
                 };
             });
 
-            function showCropper(file) {
-                var reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function(event) {
-                    var image = document.createElement('img');
-                    image.src = event.target.result;
-                    image.id = 'cropper-image';
-                    image.style.maxWidth = '100%';
-
-                    var modal = document.createElement('div');
-                    modal.id = 'cropper-modal';
-                    modal.style.position = 'fixed';
-                    modal.style.top = '0';
-                    modal.style.left = '0';
-                    modal.style.width = '100vw';
-                    modal.style.height = '100vh';
-                    modal.style.background = 'rgba(0, 0, 0, 0.7)';
-                    modal.style.display = 'flex';
-                    modal.style.alignItems = 'center';
-                    modal.style.justifyContent = 'center';
-                    modal.style.zIndex = '1000';
-
-                    modal.innerHTML = `
-            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 90%; max-height: 90%; overflow: auto;">
-                <h2 class="text-lg font-semibold mb-2">Crop & Resize Image</h2>
-                <select id="aspect-ratio" class="mb-2 p-2 border border-gray-300 rounded">
-                    <option value="free">Free</option>
-                    <option value="16/9">16:9</option>
-                    <option value="4/3">4:3</option>
-                    <option value="1/1">1:1</option>
-                </select>
-                <div id="crop-container" style="max-width: 500px; max-height: 400px; overflow: hidden; margin-bottom: 10px;"></div>
-                <label>Width: <input type="number" id="resize-width" value="500" class="p-1 border border-gray-300 rounded w-20"></label>
-                <label>Height: <input type="number" id="resize-height" value="300" class="p-1 border border-gray-300 rounded w-20"></label>
-                <br>
-                <button id="crop-btn" class="bg-green-500 text-white px-6 py-2 rounded-md mt-4">Crop & Upload</button>
-                <button id="cancel-btn" class="bg-red-500 text-white px-6 py-2 rounded-md mt-4">Cancel</button>
-            </div>
-        `;
-
-                    document.body.appendChild(modal);
-                    document.getElementById('crop-container').appendChild(image);
-
-                    var cropper = new Cropper(image, {
-                        aspectRatio: NaN, // Default เป็น Free
-                        viewMode: 2,
-                        autoCropArea: 1,
-                        movable: true,
-                        zoomable: true,
-                        scalable: true
-                    });
-
-                    // เปลี่ยน Aspect Ratio ตามที่ User เลือก
-                    document.getElementById('aspect-ratio').addEventListener('change', function() {
-                        let ratio = this.value === 'free' ? NaN : parseFloat(this.value);
-                        cropper.setAspectRatio(ratio);
-                    });
-
-                    document.getElementById('crop-btn').onclick = async function() {
-                        let resizeWidth = parseInt(document.getElementById('resize-width').value) ||
-                            500;
-                        let resizeHeight = parseInt(document.getElementById('resize-height').value) ||
-                            300;
-
-                        var canvas = cropper.getCroppedCanvas({
-                            width: resizeWidth,
-                            height: resizeHeight
-                        });
-
-                        canvas.toBlob(async function(blob) {
-                            var formData = new FormData();
-                            formData.append("image", blob, "cropped_" + file.name);
-
-                            const res = await fetch("{{ route('posts.upload.image') }}", {
-                                method: "POST",
-                                body: formData,
-                                headers: {
-                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                                }
-                            });
-
-                            const data = await res.json();
-                            if (data.url) {
-                                var range = quill.getSelection();
-                                quill.insertEmbed(range.index, 'image', data.url);
-                            }
-
-                            document.body.removeChild(modal);
-                        }, 'image/jpeg', 0.8);
-                    };
-
-                    document.getElementById('cancel-btn').onclick = function() {
-                        document.body.removeChild(modal);
-                    };
-                };
-            }
-
-
-            function validateForm() {
-                var content = document.getElementById('content').value;
-                if (!content.trim()) {
-                    document.getElementById('content-error').classList.remove('hidden');
-                    return false;
-                }
-                return true;
-            }
-
+            // PDF file size validation
             document.getElementById('pdf_file').addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 if (file) {
-                    const maxSize = 10 * 1024 * 1024; // 10MB
+                    const maxSize = 10 * 1024 * 1024;
                     if (file.size > maxSize) {
                         Swal.fire({
                             icon: 'error',
-                            title: 'File to large!',
+                            title: 'File too large!',
                             text: 'Please select a file that is no larger than 10MB.',
                         });
-                        event.target.value = ''; // Reset the input
+                        event.target.value = '';
                     }
                 }
             });
+
+            // Initial validation check
+            checkFormValidity();
         });
     </script>
-
 </body>
 
 </html>

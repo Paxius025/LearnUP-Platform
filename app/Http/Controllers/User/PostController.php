@@ -56,7 +56,7 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
-            'pdf_file' => 'nullable|mimes:pdf|max:10000', // Support PDF files up to 10MB
+            'pdf_file' => 'nullable|mimes:pdf|max:51200', // Support PDF files up to 10MB
         ]);
 
         $pdfPath = null;
@@ -117,7 +117,7 @@ abort(403); // If not the owner, stop the process
 $request->validate([
 'title' => 'required|string|max:255',
 'content' => 'required',
-'pdf_file' => 'nullable|mimes:pdf|max:10000',
+'pdf_file' => 'nullable|mimes:pdf|max:20480',
 ]);
 
 $pdfPath = $post->pdf_file; // Store the old PDF file path
@@ -176,7 +176,7 @@ preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->
     public function uploadImage(Request $request)
     {
     $request->validate([
-    'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:20480', // Max 20MB
     ]);
 
     $filename = time() . '.' . $request->file('image')->getClientOriginalExtension();

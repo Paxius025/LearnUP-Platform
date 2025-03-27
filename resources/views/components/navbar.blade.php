@@ -50,9 +50,9 @@
             @php
                 $unreadCount =
                     auth()->user()->role === 'admin'
-                        ? \App\Models\Notification::where('is_admin_read', false)->count()
+                        ? \App\Models\Notification::where('is_read', false)->count()
                         : \App\Models\Notification::where('user_id', auth()->id())
-                            ->where('is_user_read', false)
+                            ->where('is_read', false)
                             ->count();
             @endphp
 

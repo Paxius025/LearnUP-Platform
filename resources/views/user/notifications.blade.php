@@ -25,8 +25,8 @@
                 @foreach ($notifications as $notification)
                     <li class="p-4 border rounded-lg flex justify-between items-center notification-item"
                         data-id="{{ $notification->id }}"
-                        data-read="{{ $notification->is_user_read || $notification->is_admin_read ? 'true' : 'false' }}"
-                        style="background-color: {{ $notification->is_user_read || $notification->is_admin_read ? '#e0e7ff' : '#c3daf8' }};">
+                        data-read="{{ $notification->is_read  ? 'true' : 'false' }}"
+                        style="background-color: {{ $notification->is_read  ? '#e0e7ff' : '#c3daf8' }};">
 
                         <span class="text-gray-800 font-semibold">
                             {{ $notification->user->name }} ({{ ucfirst($notification->type) }})
@@ -35,7 +35,7 @@
 
                         <div class="space-x-2">
                             @if (Auth::user()->role === 'admin')
-                                @if (!$notification->is_admin_read)
+                                @if (!$notification->is_read)
                                     <button onclick="markAsReadAdmin({{ $notification->id }})"
                                         class="bg-red-500 text-white px-3 py-1 rounded">
                                         ❌ Unread
@@ -46,7 +46,7 @@
                                     </button>
                                 @endif
                             @else
-                                @if (!$notification->is_user_read)
+                                @if (!$notification->is_read)
                                     <button onclick="markAsRead({{ $notification->id }})"
                                         class="bg-red-500 text-white px-3 py-1 rounded">
                                         ❌ Unread

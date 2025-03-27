@@ -28,13 +28,13 @@ class CommentController extends Controller
         
         logAction('create_comment', "User ID " . Auth::id() . " commented on Post ID {$post->id}");
 
-        return redirect()->back()->with('success', 'คอมเมนต์ถูกเพิ่มเรียบร้อยแล้ว');
+        return redirect()->back()->with('success', 'Comment created');
     }
 
     public function update(Request $request, Comment $comment)
     {
         if (Auth::id() !== $comment->user_id) {
-            abort(403, 'คุณไม่มีสิทธิ์แก้ไขคอมเมนต์นี้');
+            abort(403, 'You do not have permission to update this comment');
         }
 
         $request->validate([
@@ -56,13 +56,13 @@ class CommentController extends Controller
     public function destroy(Comment $comment)
     {
         if (Auth::id() !== $comment->user_id && Auth::user()->role !== 'admin') {
-            abort(403, 'คุณไม่มีสิทธิ์ลบคอมเมนต์นี้');
+            abort(403, 'You do not have permission to delete this comment');
         }
 
         $comment->delete();
 
         logAction('delete_comment', "User ID " . Auth::id() . " deleted Comment ID {$comment->id}");
 
-        return redirect()->back()->with('success', 'คอมเมนต์ถูกลบเรียบร้อยแล้ว');
+        return redirect()->back()->with('success', 'comment deleted');
     }
 }

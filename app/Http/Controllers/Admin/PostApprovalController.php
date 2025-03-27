@@ -32,17 +32,15 @@ class PostApprovalController extends Controller
             'user_id' => $post->user_id,
             'type' => 'post_approved',
             'message' => "Your post \"{$post->title}\" has been approved.",
-            'is_user_read' => false,
-            'is_admin_read' => false,
+            'is_read' => false,
         ]);
 
         // Notify the admin who approved the post
         Notification::create([
-            'user_id' => $authAdmin->id, // Notify the admin who approved
+            'user_id' => $authAdmin->id, 
             'type' => 'admin_post_approved',
             'message' => "You approved the post: \"{$post->title}\".",
-            'is_user_read' => false,
-            'is_admin_read' => false,
+            'is_read' => false           
         ]);
 
         // Log the approval action
@@ -63,8 +61,7 @@ class PostApprovalController extends Controller
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
             'message' => "Your post \"{$post->title}\" has been rejected.",
-            'is_user_read' => false,
-            'is_admin_read' => false,
+            'is_read' => false,
         ]);
 
         // Notify the admin who rejected the post
@@ -72,8 +69,7 @@ class PostApprovalController extends Controller
             'user_id' => $authAdmin->id, // Notify the admin who rejected
             'type' => 'admin_post_rejected',
             'message' => "You rejected the post: \"{$post->title}\".",
-            'is_user_read' => false,
-            'is_admin_read' => false,
+            'is_ead' => false,
         ]);
 
         // Log the rejection action

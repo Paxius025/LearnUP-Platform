@@ -60,8 +60,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
                 'type' => 'role_updated',
                 'message' => "Your role has changed from {$oldRole} to {$user->role}",
-                'is_user_read' => false,  
-                'is_admin_read' => false, 
+                'is_read' => false,  
             ]);
         }
 
@@ -130,7 +129,7 @@ class UserController extends Controller
             'user_id' => $user->id,
             'type' => 'create_user',
             'message' => "New user created: {$user->name} ({$user->role})", 
-            'is_admin_read' => false, 
+            'is_read' => false, 
         ]);
 
         // Log action

@@ -161,9 +161,6 @@
                     }
                 };
             });
-        });
-
-            // PDF file size validation
             document.getElementById('pdf_file').addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 if (file) {
@@ -182,6 +179,7 @@
             // Initial validation check
             checkFormValidity();
         });
+            // PDF file size validation 
     </script>
 </body>
 

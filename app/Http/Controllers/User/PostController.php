@@ -93,8 +93,7 @@ Notification::create([
 'user_id' => $authUser->id, // Notify the user themselves
 'type' => 'New_post',
 'message' => "You have successfully created a post: \"{$post->title}\"",
-'is_user_read' => false,
-'is_admin_read' => false,
+'is_read' => false,
 ]);
 
 // Notify Admins that a new post is pending approval
@@ -105,8 +104,7 @@ Notification::create([
 'user_id' => $admin->id, // Notify Admins
 'type' => 'new_post',
 'message' => "New post \"{$post->title}\" by {$authUser->name} is pending approval.",
-'is_user_read' => false,
-'is_admin_read' => false,
+'is_read' => false,
 ]);
 }
 logAction('notify_admin', "Notified admins about new post: {$post->title}");
@@ -170,8 +168,7 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     'user_id' => $authUser->id,
     'type' => 'self_update_post',
     'message' => "You have successfully updated your post: \"{$post->title}\"",
-    'is_user_read' => false,
-    'is_admin_read' => false,
+    'is_read' => false,
     ]);
 
     // ✅ แจ้งเตือน **Admin** ว่ามีโพสต์ที่ถูกแก้ไขและรออนุมัติ
@@ -182,8 +179,7 @@ preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request
     'user_id' => $admin->id, // ✅ แจ้งเตือน Admin โดยใช้ `admin->id`
     'type' => 'updated_post',
     'message' => "Post \"{$post->title}\" was edited by {$authUser->name} and is pending approval",
-    'is_user_read' => false,
-    'is_admin_read' => false,
+    'is_read' => false,
     ]);
     }
     logAction('notify_admin', "Notified Admin about edited post: {$post->title}");

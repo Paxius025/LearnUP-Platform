@@ -31,8 +31,7 @@ class LikeController extends Controller
                 'user_id' => $postOwner->id,
                 'type' => 'toggle_like',
                 'message' => 'Your post has received a new like.',
-                'is_user_read' => false,
-                'is_admin_read' => false
+                'is_read' => false,
             ]);
         }
 

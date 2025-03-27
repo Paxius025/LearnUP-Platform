@@ -17,29 +17,27 @@ class NotificationController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'admin') {
-            // ✅ ดึงเฉพาะแจ้งเตือนของ Admin (ไม่ดึงของ User)
             $notifications = Notification::where('user_id', $user->id)
-                                        ->where('is_admin_read', false)
+                                        ->where('is_read', false)
                                         ->latest()
                                         ->get();
         } else {
             // ✅ ดึงเฉพาะแจ้งเตือนของ User (ไม่ดึงของ Admin)
             $notifications = Notification::where('user_id', $user->id)
-                                        ->where('is_user_read', false)
+                                        ->where('is_read', false)
                                         ->latest()
                                         ->get();
         }
 
         return view('user.notifications', compact('notifications'));
     }
-
     /**
      * ดึงรายการแจ้งเตือนที่ยังไม่ได้อ่านของ User
      */
     public function getUnreadNotificationsForUser()
     {
         $unreadNotifications = Notification::where('user_id', Auth::id())
-                                           ->where('is_user_read', false)
+                                           ->where('is_read', false)
                                            ->latest()
                                            ->get();
 
@@ -53,7 +51,7 @@ class NotificationController extends Controller
      */
     public function getUnreadNotificationsForAdmin()
     {
-        $unreadNotifications = Notification::where('is_admin_read', false)
+        $unreadNotifications = Notification::where('is_read', false)
                                            ->latest()
                                            ->get();
 
@@ -71,7 +69,7 @@ class NotificationController extends Controller
                                     ->where('user_id', Auth::id())
                                     ->firstOrFail();
 
-        $notification->is_user_read = true;
+        $notification->is_read = true;
         $notification->save();
 
         logAction('user_mark_read', "User " . Auth::user()->username . " marked notification as read: " . $notification->message);
@@ -85,7 +83,7 @@ class NotificationController extends Controller
     public function markNotificationAsReadForAdmin($id)
     {
         $notification = Notification::where('id', $id)
-                                    ->where('is_admin_read', false)
+                                    ->where('is_read', false)
                                     ->firstOrFail();
 
         $notification->is_admin_read = true;
@@ -102,8 +100,8 @@ class NotificationController extends Controller
     public function markAllNotificationsAsReadForUser()
     {
         $notifications = Notification::where('user_id', Auth::id())
-                                     ->where('is_user_read', false)
-                                     ->update(['is_user_read' => true]);
+                                     ->where('is_read', false)
+                                     ->update(['is_read' => true]);
 
         logAction('user_mark_all_read', "User " . Auth::user()->username . " marked all notifications as read.");
 
@@ -115,8 +113,8 @@ class NotificationController extends Controller
      */
     public function markAllNotificationsAsReadForAdmin()
     {
-        $notifications = Notification::where('is_admin_read', false)
-                                     ->update(['is_admin_read' => true]);
+        $notifications = Notification::where('is_read', false)
+                                     ->update(['is_read' => true]);
 
         logAction('admin_mark_all_read', "Admin " . Auth::user()->username . " marked all notifications as read.");
 

@@ -42,8 +42,7 @@ class FavoritePostController extends Controller
                     'user_id' => $postOwner->id,
                     'type' => 'toggle_bookmark',
                     'message' => 'Someone bookmarked your post.',
-                    'is_user_read' => false,
-                    'is_admin_read' => false
+                    'is_read' => false,
                 ]);
             }
             

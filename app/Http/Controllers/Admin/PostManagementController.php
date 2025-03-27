@@ -49,8 +49,7 @@ class PostManagementController extends Controller
             'user_id' => $post->user_id,
             'type' => 'post_approved',
             'message' => "Your post has been approved \"{$post->title}\"",
-            'is_user_read' => false,  // Change to 'is_user_read'
-            'is_admin_read' => false, // Or 'is_admin_read' if you want Admin to read
+            'is_read' => false,
         ]);
     
         // Log the approval action
@@ -68,8 +67,7 @@ class PostManagementController extends Controller
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
             'message' => "Post \"{$post->title}\" rejected",
-            'is_user_read' => false,  // Change to 'is_user_read'
-            'is_admin_read' => false, // Or 'is_admin_read' if you want Admin to read
+            'is_read' => false,  // Change to 'is_user_read'
         ]);
 
         // Log the rejection action

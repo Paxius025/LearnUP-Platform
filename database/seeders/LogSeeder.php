@@ -1,4 +1,5 @@
 <?php
+
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
@@ -9,44 +10,62 @@ class LogSeeder extends Seeder
 {
     public function run()
     {
-        // ลบข้อมูล log เก่าออกทั้งหมด
+        // Delete all old log data
         DB::table('logs')->truncate();
 
         $actions = [
             'approve_post', 'create_comment', 'create_post', 'delete_comment',
             'delete_notification', 'delete_post', 'login', 'logout',
             'notify_admin', 'read_notification', 'register', 'update_comment',
-            'update_post', 'upload_image', 'view_post'
+            'update_post', 'upload_image', 'view_post', 'toggle_like',
+            'admin_mark_read', 'admin_mark_all_read', 'user_mark_read', 'user_mark_all_read'
         ];
 
         $data = [];
+        $startDate = now()->subDays(6); // Start from 7 days ago to the present
 
-        // สุ่มข้อมูลด้วย for loop จำนวน 100 รายการ
-        for ($i = 0; $i < 100; $i++) {
-            // สุ่มวันที่ในช่วง 7 วันหลังสุด
-            $date = now()->subDays(rand(0, 6));  // สุ่มวันที่ในช่วง 7 วันที่ผ่านมา
-            // สุ่มเวลาในวันนั้น (จาก 00:00 ถึง 23:59)
-            $time = Carbon::createFromFormat('Y-m-d H:i:s', $date->format('Y-m-d') . ' 00:00:00')
-                ->addMinutes(rand(0, 1439));  // สุ่มเวลาในช่วง 24 ชั่วโมง
+        for ($day = 0; $day < 7; $day++) {
+            // Set the date sequentially
+            $currentDate = $startDate->copy()->addDays($day);
 
-            $action = $actions[array_rand($actions)];  // สุ่ม action จาก array
+            // Set the number of logs for that day randomly (but not duplicated)
+            $logCount = rand(5, 20) + ($day * 2); // The value will be different each day
+            $usedActions = []; // Store used actions
 
-            // สุ่มวันและเวลาให้กระจาย
-            $data[] = [
-                'date' => $time->format('Y-m-d H:i:s'),
-                'action' => $action
-            ];
+            for ($i = 0; $i < $logCount; $i++) {
+                // Random time of the day (from 00:00 to 23:59)
+                $time = Carbon::createFromFormat('Y-m-d H:i:s', $currentDate->format('Y-m-d') . ' 00:00:00')
+                    ->addMinutes(rand(0, 1439));  // Random time within 24 hours
+
+                $action = $actions[array_rand($actions)];  // Random action from array
+                $usedActions[] = $action;
+
+                $data[] = [
+                    'user_id' => rand(1, 15),  // Simulate multiple users
+                    'action' => $action,
+                    'description' => "{$action} action performed",
+                    'created_at' => $time->format('Y-m-d H:i:s'),
+                    'updated_at' => $time->format('Y-m-d H:i:s'),
+                ];
+            }
+
+            // 🔥 **Add actions that are not yet present for that day**
+            $missingActions = array_diff($actions, $usedActions);
+            foreach ($missingActions as $missingAction) {
+                $time = Carbon::createFromFormat('Y-m-d H:i:s', $currentDate->format('Y-m-d') . ' 00:00:00')
+                    ->addMinutes(rand(0, 1439));
+
+                $data[] = [
+                    'user_id' => rand(1, 5),
+                    'action' => $missingAction,
+                    'description' => "{$missingAction} action performed",
+                    'created_at' => $time->format('Y-m-d H:i:s'),
+                    'updated_at' => $time->format('Y-m-d H:i:s'),
+                ];
+            }
         }
 
-        // บันทึกข้อมูลลงฐานข้อมูล
-        foreach ($data as $item) {
-            DB::table('logs')->insert([
-                'user_id' => 1,  
-                'action' => $item['action'],
-                'description' => "{$item['action']} action performed",
-                'created_at' => $item['date'],
-                'updated_at' => $item['date'],
-            ]);
-        }
+        // Save data to the database
+        DB::table('logs')->insert($data);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
+
 class PostApprovalController extends Controller
 {
     public function detail(Post $post)
@@ -22,39 +23,63 @@ class PostApprovalController extends Controller
 
     public function approve(Post $post)
     {
+        $authAdmin = Auth::user(); // Get the admin who approved the post
+
         $post->update(['status' => 'approved']);
-    
-        // Notify the user that their post has been approved
+
+        // Notify the post owner that their post has been approved
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_approved',
-            'message' => "Your post has been approved \"{$post->title}\"",
-            'is_user_read' => false,  // Change to 'is_user_read'
-            'is_admin_read' => false, // Or 'is_admin_read' if you want the admin to read
+            'message' => "Your post \"{$post->title}\" has been approved.",
+            'is_user_read' => false,
+            'is_admin_read' => false,
         ]);
-    
+
+        // Notify the admin who approved the post
+        Notification::create([
+            'user_id' => $authAdmin->id, // Notify the admin who approved
+            'type' => 'admin_post_approved',
+            'message' => "You approved the post: \"{$post->title}\".",
+            'is_user_read' => false,
+            'is_admin_read' => false,
+        ]);
+
         // Log the approval action
-        logAction('approve_post', "Admin approve post: {$post->title}");
-    
+        logAction('approve_post', "Admin {$authAdmin->name} approved post: {$post->title}");
+        logAction('notify_admin', "Admin {$authAdmin->name} received notification: " . json_encode($notification));
+        dd($notification);
         return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
     }
 
     public function reject(Post $post)
     {
+        $authAdmin = Auth::user(); // Get the admin who rejected the post
+
         $post->update(['status' => 'rejected']);
 
-        // Notify the user that their post has been rejected
+        // Notify the post owner that their post has been rejected
         Notification::create([
             'user_id' => $post->user_id,
             'type' => 'post_rejected',
-            'message' => "Post \"{$post->title}\" rejected",
-            'is_user_read' => false,  // Change to 'is_user_read'
-            'is_admin_read' => false, // Or 'is_admin_read' if you want the admin to read
+            'message' => "Your post \"{$post->title}\" has been rejected.",
+            'is_user_read' => false,
+            'is_admin_read' => false,
+        ]);
+
+        // Notify the admin who rejected the post
+        Notification::create([
+            'user_id' => $authAdmin->id, // Notify the admin who rejected
+            'type' => 'admin_post_rejected',
+            'message' => "You rejected the post: \"{$post->title}\".",
+            'is_user_read' => false,
+            'is_admin_read' => false,
         ]);
 
         // Log the rejection action
-        logAction('reject_post', "Admin reject: {$post->title}");
+        logAction('reject_post', "Admin {$authAdmin->name} rejected post: {$post->title}");
 
         return redirect()->route('admin.dashboard')->with('success', 'Post rejected successfully.');
     }
+
 }

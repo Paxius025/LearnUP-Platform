@@ -19,7 +19,7 @@
         }
 
         .ql-container {
-            min-height: 450px !important;
+            min-height: 400px !important;
             height: auto !important;
             max-height: none !important;
             overflow-y: hidden !important;
@@ -161,6 +161,7 @@
                     }
                 };
             });
+        });
 
             // PDF file size validation
             document.getElementById('pdf_file').addEventListener('change', function(event) {

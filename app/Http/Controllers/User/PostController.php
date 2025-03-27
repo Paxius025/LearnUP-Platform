@@ -65,37 +65,46 @@ class PostController extends Controller
         }
 
         $status = Auth::user()->role === 'user' ? 'pending' : 'approved';
+        $authUser = Auth::user(); // Get the currently logged-in user
 
-        // Extract image paths from content
+        // Extract image paths from the post content
         preg_match_all('/<img.*?src=["\'](.*?storage\/posts\/.*?)["\'].*?>/i', $request->content, $matches);
 
 $imagePaths = array_map(function ($path) {
 return ltrim(str_replace(asset('storage/'), '', $path), '/');
 }, $matches[1] ?? []);
 
-// Convert to JSON before saving
 $imagePathsJson = !empty($imagePaths) ? json_encode($imagePaths) : null;
 
+// Create the post
 $post = Post::create([
-'user_id' => Auth::id(),
+'user_id' => $authUser->id, // Use the current logged-in user ID
 'title' => $request->title,
-'content' => $request->content, // Store full HTML content
-'image' => $imagePathsJson, // Save as JSON array
+'content' => $request->content,
+'image' => $imagePathsJson,
 'pdf_file' => $pdfPath,
 'status' => $status,
 ]);
 
 logAction('create_post', "Created post: {$post->title}");
 
+// Notify the user that the post was created successfully
+Notification::create([
+'user_id' => $authUser->id, // Notify the user themselves
+'type' => 'New_post',
+'message' => "You have successfully created a post: \"{$post->title}\"",
+'is_user_read' => false,
+'is_admin_read' => false,
+]);
+
+// Notify Admins that a new post is pending approval
 if ($status === 'pending') {
-// Notify all admins about the new post
-$admins = \App\Models\User::where('role', 'admin')->get();
+$admins = User::where('role', 'admin')->get();
 foreach ($admins as $admin) {
 Notification::create([
-'user_id' => $post->user->id,
+'user_id' => $admin->id, // Notify Admins
 'type' => 'new_post',
-'message' => "\"{$post->title}\" by " . $post->user->name,
-'created_at' => now(),
+'message' => "New post \"{$post->title}\" by {$authUser->name} is pending approval.",
 'is_user_read' => false,
 'is_admin_read' => false,
 ]);
@@ -108,8 +117,10 @@ return redirect()->route('user.posts.index')->with('success', 'Post created succ
 
 public function update(Request $request, Post $post)
 {
+$authUser = Auth::user(); // ✅ ดึงข้อมูล User ที่ล็อกอินจริง
+
 // Check if the post belongs to the logged-in user
-if ($post->user_id !== Auth::id()) {
+if ($post->user_id !== $authUser->id) {
 abort(403); // If not the owner, stop the process
 }
 
@@ -132,46 +143,55 @@ $pdfPath = $request->file('pdf_file')->store('pdfs', 'public');
 }
 
 // Set status to 'pending' if role is 'user' and 'approved' for other roles
-$newStatus = Auth::user()->role === 'user' ? 'pending' : 'approved';
+$newStatus = $authUser->role === 'user' ? 'pending' : 'approved';
 
 // Extract image paths from the new content
-preg_match_all('#<img.*?src=["\'](.*?storage /posts/.*?)["\'].*?>#i', $request->content, $matches);
+preg_match_all('/<img.*?src=["\'](.*?storage\ /posts\/.*?)["\'].*?>/i', $request->content, $matches);
     $imagePaths = array_map(function ($path) {
     return ltrim(str_replace(asset('storage/'), '', $path), '/');
     }, $matches[1] ?? []);
 
-    // Convert to String, not JSON array
-    $imagePath = count($imagePaths) > 0 ? $imagePaths[0] : null;
+    // Convert to JSON before saving
+    $imagePathsJson = !empty($imagePaths) ? json_encode($imagePaths) : null;
 
     // Update the post
     $post->update([
     'title' => $request->title,
     'content' => $request->content, // Store full HTML content
-    'image' => $imagePath, // Save only one path, not JSON array
+    'image' => $imagePathsJson, // Save as JSON array
     'pdf_file' => $pdfPath,
     'status' => $newStatus, // Update status based on role
     ]);
 
     logAction('update_post', "Updated post: {$post->title}");
 
-    // Notify Admin when the post is edited and pending approval
-    if ($newStatus === 'pending') {
-    // Notify only Admins
-    $admins = \App\Models\User::where('role', 'admin')->get();
-    foreach ($admins as $admin) {
+    // ✅ แจ้งเตือนตัวเองว่าโพสต์ถูกแก้ไขสำเร็จ
     Notification::create([
-    'user_id' => $post->user->id,
-    'type' => 'updated_post',
-    'message' => "Post \"{$post->title}\" was edited by " . $post->user->name . " and is pending approval",
+    'user_id' => $authUser->id,
+    'type' => 'self_update_post',
+    'message' => "You have successfully updated your post: \"{$post->title}\"",
     'is_user_read' => false,
     'is_admin_read' => false,
     ]);
-    logAction('notify_admin', "Notified Admin about edited post: {$post->title}");
+
+    // ✅ แจ้งเตือน **Admin** ว่ามีโพสต์ที่ถูกแก้ไขและรออนุมัติ
+    if ($newStatus === 'pending') {
+    $admins = \App\Models\User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+    Notification::create([
+    'user_id' => $admin->id, // ✅ แจ้งเตือน Admin โดยใช้ `admin->id`
+    'type' => 'updated_post',
+    'message' => "Post \"{$post->title}\" was edited by {$authUser->name} and is pending approval",
+    'is_user_read' => false,
+    'is_admin_read' => false,
+    ]);
     }
+    logAction('notify_admin', "Notified Admin about edited post: {$post->title}");
     }
 
     return redirect()->route('user.posts.index')->with('success', 'Post updated successfully.');
     }
+
 
     public function uploadImage(Request $request)
     {

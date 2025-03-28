@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('title');
-            $table->text('content');
+            $table->LongText('content');
             $table->string('image')->nullable();
             $table->string('pdf_file')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

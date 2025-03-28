@@ -19,7 +19,7 @@
         }
 
         .ql-container {
-            min-height: 400px !important;
+            min-height: 350px !important;
             height: auto !important;
             max-height: none !important;
             overflow-y: hidden !important;
@@ -52,15 +52,53 @@
             </div>
 
             <div class="mb-3">
+                <label for="image" class="block text-gray-700 text-lg font-semibold mb-2">Upload Cover Image</label>
+
+                <div class="relative">
+                    <input type="file" id="image" name="image" accept="image/*"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        onchange="storeImagePreview()" />
+                    <div
+                        class="w-full p-4 border border-gray-300 rounded-lg text-gray-500 text-center flex items-center justify-center bg-gray-50 hover:bg-gray-100 cursor-pointer">
+                        <span id="image_label_text" class="text-sm font-medium">Choose an image</span>
+                    </div>
+                </div>
+
+                <button id="previewButton"
+                    class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out hidden"
+                    onclick="openImagePopup()">Preview Image</button>
+            </div>
+
+            <!-- Pop-up Modal -->
+            <div id="imageModal"
+                class="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center hidden z-50">
+                <div
+                    class="bg-white p-6 rounded-lg shadow-2xl relative max-w-3xl max-h-[90vh] flex flex-col items-center">
+                    <button onclick="closeImagePopup()"
+                        class="absolute top-2 right-2 text-gray-700 text-2xl font-bold">&times;</button>
+                    <img id="preview" src="" alt="Image Preview" class="max-w-full max-h-[80vh] rounded-lg">
+                </div>
+            </div>
+            <div class="mb-3">
                 <label class="block text-gray-700 text-lg font-semibold">Content</label>
                 <div id="editor" class="bg-white border border-gray-200 rounded-lg p-4 min-h-[500px]"></div>
                 <input type="hidden" name="content" id="content" required>
             </div>
 
             <div class="mb-3">
-                <label for="pdf_file" class="block text-gray-700 text-lg font-semibold">Upload PDF (Optional)</label>
-                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
-                    class="w-full p-4 border border-gray-200 rounded-lg">
+                <label for="pdf_file" class="block text-gray-700 text-lg font-semibold mb-2">
+                    Upload PDF (Optional)
+                </label>
+
+                <div class="relative">
+                    <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        onchange="showFileName()" />
+                    <div
+                        class="w-full p-4 border border-gray-300 rounded-lg text-gray-500 text-center flex items-center justify-center bg-gray-50 hover:bg-gray-100 cursor-pointer">
+                        <span id="pdf_label_text" class="text-sm font-medium">Choose a PDF file</span>
+                    </div>
+                </div>
             </div>
 
             <div class="flex justify-center">
@@ -73,6 +111,41 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        function storeImagePreview() {
+            const fileInput = document.getElementById('image');
+            const previewButton = document.getElementById('previewButton');
+            const previewImage = document.getElementById('preview');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewButton.classList.remove('hidden'); // แสดงปุ่ม Preview
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+
+        function openImagePopup() {
+            document.getElementById('imageModal').classList.remove('hidden');
+        }
+
+        function closeImagePopup() {
+            document.getElementById('imageModal').classList.add('hidden');
+        }
+
+        function showFileName() {
+            const input = document.getElementById('pdf_file');
+            const label = document.getElementById('pdf_label_text');
+            const file = input.files[0];
+
+            if (file) {
+                label.textContent = `${file.name}`;
+            } else {
+                label.textContent = 'Choose a PDF file';
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             var quill = new Quill('#editor', {
                 theme: 'snow',
@@ -179,7 +252,7 @@
             // Initial validation check
             checkFormValidity();
         });
-            // PDF file size validation 
+        // PDF file size validation 
     </script>
 </body>
 

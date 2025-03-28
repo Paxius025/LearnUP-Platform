@@ -66,6 +66,24 @@
                     class="w-full p-3 border rounded-lg" required>
             </div>
 
+            <div class="mb-3">
+                <label for="image" class="block text-gray-700 text-lg font-semibold mb-2">Upload Cover Image</label>
+
+                <div class="relative">
+                    <input type="file" id="image" name="image" accept="image/*"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        onchange="storeImagePreview()" />
+                    <div
+                        class="w-full p-4 border border-gray-300 rounded-lg text-gray-500 text-center flex items-center justify-center bg-gray-50 hover:bg-gray-100 cursor-pointer">
+                        <span id="image_label_text" class="text-sm font-medium">Choose an image</span>
+                    </div>
+                </div>
+
+                <button id="previewButton"
+                    class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 ease-in-out hidden"
+                    onclick="openImagePopup()">Preview Image</button>
+            </div>
+
             <!-- 🔹 Content -->
             <div class="mb-3">
                 <label class="block text-gray-700">Content</label>

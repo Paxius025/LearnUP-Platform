@@ -21,7 +21,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-[800px] mx-auto mt-[40px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+    <div class="max-w-5xl mx-auto mt-[40px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-1">
             <div class="flex items-center border border-gray-300 rounded-xl p-2 bg-white">
@@ -55,11 +55,9 @@
 
         @foreach ($posts as $post)
             @php
-                $hasImage =
-                    !empty($post->image) &&
-                    is_array(json_decode($post->image, true)) &&
-                    count(json_decode($post->image, true)) > 0;
-                $firstImage = $hasImage ? json_decode($post->image, true)[0] : null;
+                $hasImage = !empty($post->image); 
+                $firstImage = $hasImage ? $post->image : null; 
+
                 $isLiked = \App\Models\Like::where('user_id', Auth::id())->where('post_id', $post->id)->exists();
             @endphp
 
@@ -75,8 +73,11 @@
                 </div>
 
                 @if ($hasImage && $firstImage)
+                <div class="flex justify-center items-center">
                     <img src="{{ asset('storage/' . ltrim($firstImage, '/')) }}" alt="Post Image"
-                        class="max-w-[800px] h-50 object-cover">
+                         class="max-w-[800px] h-50 object-cover">
+                </div>
+                
                 @endif
 
                 <!-- 🔹 Like & Read More Button -->

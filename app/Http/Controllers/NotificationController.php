@@ -52,6 +52,7 @@ class NotificationController extends Controller
     public function getUnreadNotificationsForAdmin()
     {
         $unreadNotifications = Notification::where('is_read', false)
+                                           ->whereNull('user_id')
                                            ->latest()
                                            ->get();
 

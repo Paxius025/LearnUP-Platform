@@ -13,7 +13,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-[800px] mx-auto mt-[100px]">
+    <div class="max-w-5xl mx-auto mt-[100px]">
 
         @foreach ($mostLikedPosts as $post)
             @if ($post->likes_count >= 1)
@@ -25,13 +25,17 @@
 
                     <!-- Image -->
                     @if (!empty($post->image))
-                        @php
-                            $images = json_decode($post->image, true);
-                            $firstImage = !empty($images) && is_array($images) ? $images[0] : null;
-                        @endphp
-                        @if ($firstImage)
+                    @php
+                        $hasImage = !empty($post->image); 
+                        $firstImage = $hasImage ? $post->image : null; 
+        
+                        $isLiked = \App\Models\Like::where('user_id', Auth::id())->where('post_id', $post->id)->exists();
+                    @endphp
+                        @if ($hasImage && $firstImage)
+                        <div class="flex justify-center items-center">
                             <img src="{{ asset('storage/' . ltrim($firstImage, '/')) }}" alt="Post Image"
-                                class="max-w-[800px] h-50 object-cover">
+                                 class="max-w-[800px] h-50 object-cover">
+                        </div>
                         @else
                             <div class="flex justify-center items-center h-[450px] bg-gray-100">
                                 <p class="text-black font-bold text-xl">No Image Available</p>

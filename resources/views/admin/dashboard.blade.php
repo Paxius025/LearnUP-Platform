@@ -28,7 +28,7 @@
         </div>
 
         <!-- Section: Pending Posts -->
-        <h3 class="text-2xl font-bold text-green-700 mt-10">📝 Pending Posts</h3>
+        <h3 class="text-2xl font-bold text-green-700 mt-10">Pending Posts</h3>
 
         <div class="mt-6">
             <table class="table-fixed w-full bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
@@ -57,7 +57,7 @@
                             <td class="p-4 text-center w-32">
                                 <a href="{{ route('admin.posts.detail', $post->id) }}"
                                     class="inline-flex items-center justify-center bg-green-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-green-700 transition-all duration-300 whitespace-nowrap">
-                                    🔍 Review
+                                    Review
                                 </a>
                             </td>
                         </tr>
@@ -66,7 +66,7 @@
                     @if ($pendingCount->isEmpty())
                         <tr>
                             <td colspan="6" class="text-center text-gray-500 p-6">
-                                😴 No posts pending approval.
+                                No posts pending approval.
                             </td>
                         </tr>
                     @endif

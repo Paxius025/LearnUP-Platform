@@ -12,7 +12,7 @@
             @endif
 
             @if ((!$notifications->isEmpty() && Auth::user()->role === 'user') || Auth::user()->role === 'writer')
-                <button onclick="markAllAsReadUser()" class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
+                <button onclick="markAllAsReadUser()" class=" bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
                     ✔️  Mark All as Read
                 </button>
             @endif

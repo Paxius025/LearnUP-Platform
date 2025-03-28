@@ -31,12 +31,12 @@
                                 @foreach ($approvedPosts as $post)
                                     <tr class="border-b hover:bg-gray-100 transition duration-200">
                                         <td class="p-3">{{ $post->id }}</td>
-                                        <td class="p-3">{{ Str::limit($post->title, 15, '...') }}</td>
+                                        <td class="p-3">{{ Str::limit($post->title, 25, '...') }}</td>
                                         <td class="p-3 text-center">{{ $post->created_at->format('d/m/Y') }}</td>
                                         <td class="p-3 text-center">
                                             <a href="{{ route('admin.manage.posts.detail', $post->id) }}"
                                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
-                                                🔍 View
+                                                View
                                             </a>
                                         </td>
                                     </tr>
@@ -71,12 +71,12 @@
                                 @foreach ($rejectedPosts as $post)
                                     <tr class="border-b hover:bg-gray-100 transition duration-200">
                                         <td class="p-3">{{ $post->id }}</td>
-                                        <td class="p-3">{{ Str::limit($post->title, 15, '...') }}</td>
+                                        <td class="p-3">{{ Str::limit($post->title, 25, '...') }}</td>
                                         <td class="p-3 text-center">{{ $post->created_at->format('d/m/Y') }}</td>
                                         <td class="p-3 text-center">
                                             <a href="{{ route('admin.manage.posts.detail', $post->id) }}"
                                                 class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition-all duration-300">
-                                                🔍 View
+                                                View
                                             </a>
                                         </td>
                                     </tr>

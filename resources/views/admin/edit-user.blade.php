@@ -48,11 +48,11 @@
                 <div class="flex justify-between items-center mt-6">
                     <a href="{{ route('admin.users') }}"
                         class="px-5 py-3 bg-gray-100 text-green-700 rounded-lg shadow-md hover:bg-gray-200 transition-all duration-300 flex items-center">
-                        ← Back to Users
+                        Back to Users
                     </a>
                     <button type="submit" id="submitEdit"
                         class="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all duration-200 transform hover:scale-105">
-                        ✅ Update Role
+                        Update Role
                     </button>
                 </div>
             </form>

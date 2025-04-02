@@ -21,7 +21,7 @@
     @include('components.navbar')
 
     <!-- Content -->
-    <div class="max-w-5xl mx-auto mt-[40px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+    <div class="max-w-5xl mx-auto mt-[40px] grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6 background-white">
 
         <form action="{{ route('user.posts.search') }}" method="GET" class="mb-1">
             <div class="flex items-center border border-gray-300 rounded-xl p-2 bg-white">
@@ -63,7 +63,7 @@
 
             <div
                 class="bg-white border border-gray-300 rounded-lg overflow-hidden flex flex-col relative
-        {{ $hasImage ? 'min-h-[500px]' : 'min-h-[100px]' }}">
+                {{ $hasImage ? 'min-h-[500px]' : 'min-h-[100px]' }}">
 
                 <!-- 🔹 ปุ่ม Bookmark (มุมขวาบน) -->
                 <x-bookmark-button :post="$post" />

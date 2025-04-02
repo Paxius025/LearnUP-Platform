@@ -84,21 +84,17 @@
                 <div id="editor" class="bg-white border border-gray-200 rounded-lg p-4 min-h-[500px]"></div>
                 <input type="hidden" name="content" id="content" required>
             </div>
+            
+             <!-- 🔹 PDF Upload -->
+             <div class="mb-3">
+                <label for="pdf_file" class="block text-gray-700 text-lg font-semibold">Upload PDF (Optional)</label>
+                <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
+                    class="w-full p-3 border rounded-lg">
+            </div>
 
-            <div class="mb-3">
-                <label for="pdf_file" class="block text-gray-700 text-lg font-semibold mb-2">
-                    Upload PDF (Optional)
-                </label>
-
-                <div class="relative">
-                    <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf"
-                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        onchange="showFileName()" />
-                    <div
-                        class="w-full p-4 border border-gray-300 rounded-lg text-gray-500 text-center flex items-center justify-center bg-gray-50 hover:bg-gray-100 cursor-pointer">
-                        <span id="pdf_label_text" class="text-sm font-medium">Choose a PDF file</span>
-                    </div>
-                </div>
+            <div id="pdf-preview" class="mt-4">
+                <button id="view_pdf_btn" class="px-4 py-2 bg-blue-500 text-white rounded-lg" style="display: none;" onclick="viewPDF()">View PDF</button>
+                <iframe id="pdf_viewer" style="display: none; width: 100%; height: 600px;" frameborder="0"></iframe>
             </div>
 
             <div class="flex justify-center">
@@ -111,21 +107,26 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
+        
+
         function storeImagePreview() {
             const fileInput = document.getElementById('image');
             const previewButton = document.getElementById('previewButton');
             const previewImage = document.getElementById('preview');
+            const labelText = document.getElementById('image_label_text');
 
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImage.src = e.target.result;
-                    previewButton.classList.remove('hidden'); // แสดงปุ่ม Preview
+                    previewButton.classList.remove('hidden');  
                 };
                 reader.readAsDataURL(fileInput.files[0]);
+
+                labelText.textContent = fileInput.files[0].name;
             }
         }
-
         function openImagePopup() {
             document.getElementById('imageModal').classList.remove('hidden');
         }

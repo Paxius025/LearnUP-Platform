@@ -1,18 +1,17 @@
 <div class="mt-10">
-    <h3 class="text-2xl font-semibold mb-4">💬 Comments</h3>
+    <h3 class="text-2xl font-semibold mb-4">Comments</h3>
 
-    <!-- 🔹 ฟอร์มเพิ่มคอมเมนต์ -->
     @auth
         <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mb-6">
             @csrf
             <textarea name="content" rows="3" class="w-full border rounded p-2" placeholder="Write a comment..." required></textarea>
             <button type="submit" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                💬 Post Comment
+                Post Comment
             </button>
         </form>
     @else
-        <p class="text-gray-500">กรุณา <a href="{{ route('login') }}" class="text-blue-500 hover:underline">เข้าสู่ระบบ</a>
-            เพื่อแสดงความคิดเห็น</p>
+        <p class="text-gray-500">Please <a href="{{ route('login') }}" class="text-blue-500 hover:underline">Login</a>
+            For add comment</p>
     @endauth
 
     <!-- 🔹 แสดงคอมเมนต์ -->
@@ -23,9 +22,9 @@
                     <div class="flex justify-between items-center w-full">
                         <div class="flex items-center space-x-2">
                             <p class="text-gray-800">
-                                <a href="{{ route('profile.show', $post->user->id) }}"
+                                <a href="{{ route('profile.show', $comment->user->id) }}"
                                     class="font-semibold text-gray-700 hover:underline">
-                                    {{ $post->user->name }}
+                                    {{ $comment->user->name }}
                                 </a>
                                 <span class="comment-content">{{ $comment->content }}</span>
                             </p>
@@ -36,11 +35,10 @@
                                 {{ $comment->created_at->diffForHumans() }}
                             </p>
 
-                            <!-- ปุ่มฟันเฟืองเพื่อแสดงเมนู -->
                             @if (auth()->id() === $comment->user_id || auth()->user()->role === 'admin')
                                 <button onclick="toggleMenu({{ $comment->id }})"
-                                    class="text-gray-600 hover:text-gray-800 text-xl">
-                                    ⚙️
+                                    class="text-gray-600 hover:text-gray-800 text-sm">
+                                    Edit
                                 </button>
                             @endif
                         </div>
@@ -53,7 +51,7 @@
                         <div class="px-4 py-2">
                             <button onclick="showEditForm({{ $comment->id }})"
                                 class="w-full text-left text-blue-500 hover:underline text-sm">
-                                ✏️ Edit
+                                Edit
                             </button>
                             <form action="{{ route('comments.destroy', $comment->id) }}" method="POST"
                                 class="inline w-full">
@@ -71,11 +69,11 @@
                         <div class="flex justify-end mt-2 space-x-2">
                             <button onclick="updateComment({{ $comment->id }})"
                                 class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
-                                💾 Save
+                                Save
                             </button>
                             <button onclick="hideEditForm({{ $comment->id }})"
                                 class="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600">
-                                ❌ Cancel
+                                Cancel
                             </button>
                         </div>
                     </div>

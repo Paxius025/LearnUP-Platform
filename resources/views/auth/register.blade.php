@@ -47,7 +47,7 @@
         <form action="{{ route('register') }}" method="POST">
             @csrf
             <div class="mb-6">
-                <label for="name" class="block text-gray-700 text-lg">Full Name</label>
+                <label for="name" class="block text-gray-700 text-lg">Username</label>
                 <input type="text" id="name" name="name"
                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:outline-none"
                     required>
@@ -60,18 +60,32 @@
                     required>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-6 relative">
                 <label for="password" class="block text-gray-700 text-lg">Password</label>
-                <input type="password" id="password" name="password"
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:outline-none"
-                    required>
+                <div class="relative">
+                    <input type="password" id="password" name="password" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:outline-none pr-10" required>
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-3 flex items-center text-gray-500">
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-6 relative">
                 <label for="password_confirmation" class="block text-gray-700 text-lg">Confirm Password</label>
-                <input type="password" id="password_confirmation" name="password_confirmation"
-                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:outline-none"
-                    required>
+                <div class="relative">
+                    <input type="password" id="password_confirmation" name="password_confirmation" 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:outline-none pr-10" required>
+                    <button type="button" id="toggleConfirmPassword" class="absolute inset-y-0 right-3 flex items-center text-gray-500">
+                        <svg id="eyeIconConfirm" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             <button type="submit"
@@ -86,5 +100,23 @@
     </div>
 
 </body>
+<script>
+    function togglePasswordVisibility(buttonId, inputId, iconId) {
+        document.getElementById(buttonId).addEventListener('click', function () {
+            const passwordField = document.getElementById(inputId);
+            const eyeIcon = document.getElementById(iconId);
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7 1.274-4.057 5.065-7 9.542-7 1.41 0 2.775.282 4.008.795m2.924 2.218a9.994 9.994 0 012.61 3.987M15 12a3 3 0 00-6 0m9 0a9 9 0 01-9 9c-1.41 0-2.775-.282-4.008-.795M3 3l18 18" />';
+            } else {
+                passwordField.type = 'password';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
+            }
+        });
+    }
+
+    togglePasswordVisibility('togglePassword', 'password', 'eyeIcon');
+    togglePasswordVisibility('toggleConfirmPassword', 'password_confirmation', 'eyeIconConfirm');
+</script>
 
 </html>

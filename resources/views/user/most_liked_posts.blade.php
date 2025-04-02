@@ -37,13 +37,13 @@
                                  class="max-w-[800px] h-50 object-cover">
                         </div>
                         @else
-                            <div class="flex justify-center items-center h-[450px] bg-gray-100">
-                                <p class="text-black font-bold text-xl">No Image Available</p>
+                            <div class="flex justify-center items-center  bg-gray-100">
+                            
                             </div>
                         @endif
                     @else
-                        <div class="flex justify-center items-center h-[450px] bg-gray-100">
-                            <p class="text-black font-bold text-xl">No Image Available</p>
+                        <div class="flex justify-center items-center  bg-gray-100">
+                            
                         </div>
                     @endif
 

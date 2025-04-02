@@ -17,7 +17,7 @@
                     </a>
                 </td>
                 <td class="px-6 py-4 text-center text-gray-700">
-                    {!! Str::limit(strip_tags($post->content), 50) !!}
+                    {!! Str::limit(strip_tags($post->content), 20) !!}
                 </td>
                 <td class="px-6 py-4 text-center text-gray-500 text-sm">
                     {{ $post->created_at->format('M d, Y') }}

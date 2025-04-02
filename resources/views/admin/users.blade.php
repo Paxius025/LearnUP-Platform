@@ -71,7 +71,7 @@
                             <td class="p-4 flex justify-center space-x-6">
                                 <a href="{{ route('admin.users.edit', $user->id) }}"
                                     class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition">
-                                    ✏️ Edit
+                                    Edit
                                 </a>
                                 <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
                                     class="inline-block delete-form"
@@ -80,7 +80,7 @@
                                     @method('DELETE')
                                     <button type="submit"
                                         class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-                                        🗑️ Delete
+                                        Delete
                                     </button>
                                 </form>
                             </td>

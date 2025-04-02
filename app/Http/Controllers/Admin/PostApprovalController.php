@@ -45,8 +45,6 @@ class PostApprovalController extends Controller
 
         // Log the approval action
         logAction('approve_post', "Admin {$authAdmin->name} approved post: {$post->title}");
-        logAction('notify_admin', "Admin {$authAdmin->name} received notification: " . json_encode($notification));
-        dd($notification);
         return redirect()->route('admin.dashboard')->with('success', 'Post approved successfully.');
     }
 
